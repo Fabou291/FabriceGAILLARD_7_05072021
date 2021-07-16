@@ -1,17 +1,17 @@
 <template>
     <form class="form-emoji">
         <div class="form-emoji__search-bar">
-            <div class="form-emoji__field" :class="{ 'form-emoji__field--active': value }">
+            <div class="form-emoji__field" :class="{ 'form-emoji__field--active': filterValue }">
                 <input
                     class="form-emoji__input"
                     type="text"
                     name="searchEmoji"
                     :placeholder="placeholder"
                     id="searchEmoji"
-                    v-model="value"
+                    v-model="filterValue"
                 />
 
-                <button type="button" class="form-emoji__btn" v-show="!value">
+                <button type="button" class="form-emoji__btn" v-show="!filterValue">
                     <svg aria-hidden="false" width="20" height="20" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -20,7 +20,7 @@
                     </svg>
                 </button>
 
-                <button type="button" class="form-emoji__btn" v-show="value" @click="deleteValue">
+                <button type="button" class="form-emoji__btn" v-show="filterValue" @click="deleteValue">
                     <svg aria-hidden="false" width="20" height="20" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -28,6 +28,17 @@
                         ></path>
                     </svg>
                 </button>
+            </div>
+
+            <div class="select-skin" :class="{'select-skin--active' : panelSkinShow }" >
+                <div class="select-skin__list-item">
+                    <img :src="require('@/assets/twemoji/svg/1f44f' + (selectedSkin != '' ? '-' : '') + selectedSkin + '.svg')" alt="" @click="switchPanelSkin()">
+                </div>
+                <ul class='select-skin__list' v-show="panelSkinShow">
+                    <li class='select-skin__list-item' v-for="skin in getListSkinUnicodeWithoutSelectedSkin" :key="skin" @click="updateSelectedSkin(skin)">
+                        <img :src="require('@/assets/twemoji/svg/1f44f' + (skin != '' ? '-' : '') + skin + '.svg')" alt=""  >
+                    </li>
+                </ul>
             </div>
 
         </div>
@@ -39,16 +50,39 @@ export default {
     name: "EmojiPanelSearch",
     data: function() {
         return {
-            value: null,
+            filterValue: '',
+            listSkinUnicode: ['','1f3fb','1f3fc','1f3fd','1f3fe'],
+            selectedSkin : '',
+            panelSkinShow : false
         };
+    },
+    watch : {
+        filterValue : function(){
+            this.$emit('updateFilterValue', this.filterValue);
+        }
+    },
+    computed :{
+        getListSkinUnicodeWithoutSelectedSkin(){
+            let a = [...this.listSkinUnicode]
+            a.splice(this.listSkinUnicode.indexOf(this.selectedSkin),1);
+            return a;
+        }
     },
     props: {
         placeholder: { type: String, required: true },
+
     },
     methods: {
         deleteValue() {
-            this.value = null;
+            this.filterValue = '';
         },
+        updateSelectedSkin(skin) {
+            this.switchPanelSkin();
+            this.selectedSkin = skin;
+        },
+        switchPanelSkin() {
+            this.panelSkinShow = !this.panelSkinShow;
+        }
     },
 };
 </script>
@@ -57,23 +91,22 @@ export default {
 .form-emoji {
     padding: 0px 19px 17px 19px;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 1px;
+
     &__search-bar {
         display: flex;
         align-items: center;
+        position: relative;
     }
 
-    &__chooses {
-       display: flex;
-    }
+
 
     &__field {
         display: flex;
-        flex : 1;
         align-items: center;
         background-color: $grey-21;
         border-radius: 4px;
         color: $grey-127;
-        width: 100%;
+        width: calc(100% - 40px);
 
         &--active {
             color: $grey-193;
@@ -96,6 +129,35 @@ export default {
         svg {
             vertical-align: bottom;
         }
+    }
+
+}
+
+.select-skin{
+    width: 36px;
+    border-radius: 3px;
+    border :1px solid transparent;
+    position : absolute;
+    top : 0;
+    right : 0;
+    z-index: 1;
+    &__list{
+    }
+
+    &__list-item{
+        padding : 5px;
+        cursor: pointer;
+
+    }
+
+    &--active{
+        border :1px solid black;
+        background-color : $grey-32;
+        .select-skin__list-item:hover{
+            background-color:$grey-47;
+            border-radius: 4px;           
+        }
+
     }
 }
 </style>

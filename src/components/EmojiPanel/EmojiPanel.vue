@@ -2,12 +2,12 @@
     <div class="emoji-panel" style=" margin : 50px auto">
         <EmojiPanelNav v-on:change="aze" />
         <div v-if="actived == 'Emoji'">
-            <EmojiPanelSearch placeholder="Trouve l'émoji parfait" />
+            <EmojiPanelSearch :filterValue="filterValue" placeholder="Trouve l'émoji parfait" @updateFilterValue="updateFilterValue" />
             <div class="emoji-panel__main">
                 <EmojiPanelCategorie :listGroupEmoji="svgPathsGroupIcon" :activeGroup="activeGroup" @scrollToGroup="scrollToGroup" />
                 <div class="emoji-panel__container">
                     <div class="emoji-panel__emojis" @scroll="checkGroupActive">
-                        <div class="emoji-group" v-for="(group, indexGroup) in emojiDatas" :key="group">
+                        <div class="emoji-group" v-for="(group, indexGroup) in getFilteredEmojis" :key="group" >
                             <!-- Header Group-->
                             <div class="emoji-group__header" @click="hide(indexGroup)">
                                 <svg aria-hidden="false" width="16" height="16" viewBox="0 0 24 24">
@@ -93,17 +93,11 @@ function getEmojiDatas() {
         };
 
         for (let ii=0; ii<emojiDatas[key].emojis.length; ii++) emojiDatas[key].emojis[ii].index = index++;
-
     }
-
     return emojiDatas;
 }
 
-/*const emojiDatas = { 
-    'Smiley & emotion' : getEmojiDatas()['Smiley & emotion'], 
-    "Animals & Nature" : getEmojiDatas()['Animals & Nature']
-};*/
-//let a = getEmojiDatas();
+
 const emojiDatas = getEmojiDatas();
 
 
@@ -125,19 +119,37 @@ export default {
             actived: "Emoji",
             activeGroup: 0,
             activeEmoji: 0,
-            emojiDatas: emojiDatas,
+            filterValue: '',
+            emojisData: emojiDatas,
             indexedEmojis: getIndexedEmojiDatas(),
             svgPathsGroupIcon: Object.values(svgPathsGroupIcon)
         };
     },
     computed: {
+        getFilteredEmojis(){
+            let emojisDataFiltered = JSON.parse(JSON.stringify(this.emojisData)); 
+
+
+            if(this.filterValue == '') return emojisDataFiltered;
+            else{
+                for (const key in emojisDataFiltered){
+
+                    emojisDataFiltered[key].emojis = emojisDataFiltered[key].emojis.filter(emojiData => {
+                        if(emojiData.shortCode == null) return false
+                        if(emojiData.shortCode.search(this.filterValue) == -1) return false
+                        return true;
+                    }) 
+                }
+            }
+            return emojisDataFiltered
+        }
     },
     methods: {
         aze: function(actived) {
             this.actived = actived;
         },
         hide: function(index) {
-            this.emojiDatas[index].hide = !this.emojiDatas[index].hide;
+            this.emojisData[index].hide = !this.emojisData[index].hide;
         },
         scrollToGroup: function(index) {
             document.querySelector(".emoji-panel__emojis").scrollTop = document.querySelectorAll(".emoji-group")[index].offsetTop;
@@ -162,6 +174,10 @@ export default {
         },
         updateActiveEmoji(index){
            this.activeEmoji = index; 
+        },
+        updateFilterValue(value){
+            console.log(value)
+            this.filterValue = value;
         }
     },
     components: {
