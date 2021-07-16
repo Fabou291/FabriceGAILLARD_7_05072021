@@ -1,0 +1,14 @@
+@mixin setCircularStdFontFace() {
+    $dir: "../../assets/fonts/circularStd/";
+
+    @each $style in $circularStd-styles {
+        $name : "CircularStd-" + $style ;
+        @font-face {
+            font-family: $name;
+            src: url($dir + $name + ".ttf");
+        }
+    }
+}
+
+
+@include setCircularStdFontFace();

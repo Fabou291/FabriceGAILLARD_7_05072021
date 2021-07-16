@@ -1,0 +1,19 @@
+/* 
+    setCircularStdFont
+    Permet de set la font-family CircularStdFont à partir du style désiré
+    @param {string} $style
+*/
+@mixin setCircularStdFont($style) {
+    font-family: 'CircularStd-' + $style;
+}
+
+/* 
+    setSize
+    Permet de set la size d'un element facilement
+    @param $width
+    @param $height
+*/
+@mixin setSize($width, $height : $width){
+    width : $width;
+    height : $height;
+}

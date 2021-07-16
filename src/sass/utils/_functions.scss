@@ -1,0 +1,3 @@
+@function getGreyRGB($int){
+    @return rgb($int, $int, $int);
+}
