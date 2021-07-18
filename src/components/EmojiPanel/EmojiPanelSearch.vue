@@ -51,7 +51,7 @@ export default {
     data: function() {
         return {
             filterValue: '',
-            listSkinUnicode: ['','1f3fb','1f3fc','1f3fd','1f3fe'],
+            listSkinUnicode: ['','1f3fb','1f3fc','1f3fd','1f3fe','1f3ff'],
             selectedSkin : '',
             panelSkinShow : false
         };
@@ -79,6 +79,7 @@ export default {
         updateSelectedSkin(skin) {
             this.switchPanelSkin();
             this.selectedSkin = skin;
+            this.$emit('updateSkinColor',skin)
         },
         switchPanelSkin() {
             this.panelSkinShow = !this.panelSkinShow;

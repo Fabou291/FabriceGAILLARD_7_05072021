@@ -2,7 +2,7 @@
     <div class="emoji-panel" style=" margin : 50px auto">
         <EmojiPanelNav v-on:change="aze" />
         <div v-if="actived == 'Emoji'">
-            <EmojiPanelSearch :filterValue="filterValue" placeholder="Trouve l'émoji parfait" @updateFilterValue="updateFilterValue" />
+            <EmojiPanelSearch :filterValue="filterValue" placeholder="Trouve l'émoji parfait" @updateFilterValue="updateFilterValue" @updateSkinColor="updateSkinColor" />
             <div class="emoji-panel__main">
                 <EmojiPanelCategorie :listGroupEmoji="svgPathsGroupIcon" :activeGroup="activeGroup" @scrollToGroup="scrollToGroup" />
                 <div class="emoji-panel__container">
@@ -120,7 +120,9 @@ export default {
             activeGroup: 0,
             activeEmoji: 0,
             filterValue: '',
+            skin : '',
             emojisData: emojiDatas,
+            indexesColor : require("@/assets/twemoji/datas/indexesColor.json"),
             indexedEmojis: getIndexedEmojiDatas(),
             svgPathsGroupIcon: Object.values(svgPathsGroupIcon)
         };
@@ -178,6 +180,24 @@ export default {
         updateFilterValue(value){
             console.log(value)
             this.filterValue = value;
+        },
+        updateSkinColor(skin){
+            let emojisDataUpdated = JSON.parse(JSON.stringify(this.emojisData));
+            let index = 0;
+            for (const i in emojisDataUpdated) {
+                for (const j in emojisDataUpdated[i]) {
+                    for (let k = 0; k < emojisDataUpdated[i][j].length; k++) {
+
+                        const emoji = emojisDataUpdated[i][j][k];
+                        if(indexesColor.includes(index++)){
+                            emojisDataUpdated[i][j][k].push(skin)
+                        }
+
+                    }
+                }
+            }
+            this.skin = skin;
+            this.emojisData = emojisDataUpdated;
         }
     },
     components: {
