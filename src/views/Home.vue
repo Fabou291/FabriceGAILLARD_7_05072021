@@ -1,16 +1,32 @@
 <template>
+  <div class="container">
+    <Header />
+    <main class="main">
+      <PrincipalNav />
+      <div class="channel">
 
-    <EmojiPanel/>
-
+      </div>
+    </main>
+  </div>
 </template>
 
 <script>
-import EmojiPanel from '@/components/EmojiPanel/EmojiPanel.vue'
+import Header from '@/components/Header.vue';
+import PrincipalNav from '@/components/PrincipalNav.vue';
 
 export default {
   name: 'Home',
   components: {
-    EmojiPanel
+    Header,
+    PrincipalNav
   }
 }
 </script>
+
+<style lang="scss">
+  .channel{
+    background-color :  $grey-18;
+    height : 100%;
+    flex: 1;
+  }
+</style>

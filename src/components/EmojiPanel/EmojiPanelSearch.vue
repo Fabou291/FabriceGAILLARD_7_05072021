@@ -32,11 +32,11 @@
 
             <div class="select-skin" :class="{'select-skin--active' : panelSkinShow }" >
                 <div class="select-skin__list-item">
-                    <img :src="require('@/assets/twemoji/svg/1f44f' + (selectedSkin != '' ? '-' : '') + selectedSkin + '.svg')" alt="" @click="switchPanelSkin()">
+                    <img :src="require('@/assets/twemoji/svg/' + listSkinUnicode[selectedSkin] + '.svg')" alt="" @click="switchPanelSkin()">
                 </div>
                 <ul class='select-skin__list' v-show="panelSkinShow">
-                    <li class='select-skin__list-item' v-for="skin in getListSkinUnicodeWithoutSelectedSkin" :key="skin" @click="updateSelectedSkin(skin)">
-                        <img :src="require('@/assets/twemoji/svg/1f44f' + (skin != '' ? '-' : '') + skin + '.svg')" alt=""  >
+                    <li class='select-skin__list-item' v-for="(skin,index) in listSkinUnicode" :key="skin" @click="updateSelectedSkin(index)">
+                        <img :src="require('@/assets/twemoji/svg/' + skin + '.svg')" alt=""  >
                     </li>
                 </ul>
             </div>
@@ -51,8 +51,8 @@ export default {
     data: function() {
         return {
             filterValue: '',
-            listSkinUnicode: ['','1f3fb','1f3fc','1f3fd','1f3fe','1f3ff'],
-            selectedSkin : '',
+            listSkinUnicode: ['1f44f','1f44f-1f3fb','1f44f-1f3fc','1f44f-1f3fd','1f44f-1f3fe','1f44f-1f3ff'],
+            selectedSkin : 0,
             panelSkinShow : false
         };
     },
@@ -62,11 +62,6 @@ export default {
         }
     },
     computed :{
-        getListSkinUnicodeWithoutSelectedSkin(){
-            let a = [...this.listSkinUnicode]
-            a.splice(this.listSkinUnicode.indexOf(this.selectedSkin),1);
-            return a;
-        }
     },
     props: {
         placeholder: { type: String, required: true },
