@@ -2,7 +2,7 @@ body{
     @include setCircularStdFont('Book');
     font-size: 1em;
     color : white;
-    background : grey;
+    background : $grey-21;
 }
 
 button, input{
@@ -35,8 +35,16 @@ svg {
     fill : inherit;
 }
 
+img,svg{
+    vertical-align: bottom;
+}
+
 *, *::before, *::after{
     box-sizing: border-box;
+}
+
+*:focus{
+    outline : none;
 }
 
 

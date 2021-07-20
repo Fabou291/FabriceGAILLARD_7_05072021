@@ -294,7 +294,6 @@ $listColorSkin : ('A', 'B', 'C', 'D', 'E', 'F');
     padding: 4px;
     border-radius: 4px;
     cursor: pointer;
-    vertical-align: bottom;
     &__thumb {
         background-image: url("~@/assets/twemoji/all.png");
         background-size: calc(100% * 42);

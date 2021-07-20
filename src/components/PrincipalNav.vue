@@ -3,11 +3,10 @@
         <div class="sidebar__content">
             <div class="user">
                 <div class="user__representation">
-                    <div class="user__avatar avatar">
-                        <img class="avatar__thumb" src="@/assets/imageProfil.png" alt="image de profil" />
-                        <div class="avatar__circle"></div>
-                    </div>
-                    <button class="user__statu user__statu--online"></button>
+                    <Avatar class="user__avatar" :user="{ pseudo : 'Fab', avatar : require('@/assets/imageProfil.png') }" />
+
+                    <UserStatuButton class="user__statu" />
+
                 </div>
 
                 <div class="user__identifying">
@@ -27,7 +26,8 @@
 
             <nav class="principal-nav">
                 <ul>
-                    <li class="channel-group" v-for="(group, i) in listGroup" :key="group">
+                    <channelGroup v-for="(group,i) in listGroup" :key="group" :group="group" @updateActiveChannel="updateActiveChannel(indexChannel, i)" />
+                    <!--<li class="channel-group" v-for="(group, i) in listGroup" :key="group">
                         <button class="channel-group__drop-down-btn" aria-expanded="true" @click="switchGroupVisibility(i)">
                             <dropDownIcon :visible="group.visible"/>
                             <span class="channel-group__title">{{ group.name }}</span>
@@ -45,7 +45,7 @@
                                 </router-link>
                             </li>
                         </ul>
-                    </li>
+                    </li>-->
 
                 </ul>
             </nav>
@@ -54,10 +54,16 @@
 </template>
 
 <script>
-import dropDownIcon from "@/components/dropDownIcon.vue"
+
+import channelGroup from "@/components/PrincipalNav/ChannelGroup.vue"
+import UserStatuButton from "@/components/userStatuButton.vue"
+import Avatar from '@/components/Avatar.vue';
+
 export default {
     components : {
-        dropDownIcon
+        channelGroup,
+        UserStatuButton,
+        Avatar
     },
     data(){
         return{
@@ -66,7 +72,6 @@ export default {
             listGroup : [
                 {
                     name : 'Group 1',
-                    visible : true,
                     listChannel : [ 
                         {
                             name : 'Channel 1',
@@ -84,7 +89,6 @@ export default {
                 },
                 {
                     name : 'Group 1',
-                    visible : true,
                     listChannel : [ 
                         {
                             name : 'Channel 1',
@@ -104,18 +108,18 @@ export default {
         }
     },
     methods : {
-        update(groupIndex,channelIndex){
+        updateActiveChannel(channelIndex,groupIndex){
+            console.log(channelIndex,groupIndex)
             this.activeChannel = channelIndex;
             this.activeGroup = groupIndex;
-        },
-        switchGroupVisibility(groupIndex){
-            this.listGroup[groupIndex].visible = !this.listGroup[groupIndex].visible;
         }
     }
 };
 </script>
 
 <style lang="scss">
+
+
 .user {
     display: flex;
     align-items: center;
@@ -123,29 +127,21 @@ export default {
     gap: 8px;
     font-size: 15px;
     border-radius: 4px 0 0 4px;
-
-    &:hover {
-        background-color: $grey-32;
+    
+    &__avatar{
+        border-color : $grey-21;
     }
 
     &__representation {
         position: relative;
     }
 
-    &__statu {
-        position: absolute;
+    &__statu{
+        position: absolute !important;
+        border-color : $grey-21;
         z-index: 1;
         bottom: 0;
         right: 0;
-        border-radius: 20px;
-        width: 18px;
-        height: 18px;
-        border: 4px solid $grey-21;
-        background-color: $grey-89;
-
-        &--online {
-            background-color: $green;
-        }
     }
 
     &__btn-setting {
@@ -155,9 +151,6 @@ export default {
         margin: 0 10px;
         &:hover {
             color: lighten($grey-142, 10);
-        }
-        svg {
-            vertical-align: bottom;
         }
     }
 
@@ -173,92 +166,11 @@ export default {
     }
 }
 
-.avatar {
-    position: relative;
-    display: flex;
-    align-items: center;
-    padding: 4px;
 
-    &__thumb {
-        position: relative;
-        z-index: 1;
-        width: 38px;
-        height: 38px;
-        border-radius: 60px;
-        border: 2px solid $grey-21;
-        box-sizing: content-box;
-        cursor: pointer;
-        &:hover {
-            + .avatar__circle {
-                transform: scale(1);
-            }
-        }
-    }
-    &__circle {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        border-radius: 60px;
-        background-color: $green;
-        transform: scale(0.8);
-        transition: transform 0.1s;
-    }
-}
 
 .principal-nav {
     padding: 0 15px;
 }
 
-.channel-group {
-    color: $grey-142;
-    padding-top: 15px;
 
-    &__drop-down-btn {
-        @include setCircularStdFont("Bold");
-        padding: 9px 0;
-        width: 100%;
-        text-align: left;
-        display: inline-flex;
-        align-items: center;
-        transition: color 0.1s;
-        &:hover {
-            color: $grey-193;
-        }
-    }
-
-    &__title {
-        text-transform: uppercase;
-        padding: 0 0 0 5px;
-    }
-
-    &__list-item-channel {
-        margin: 0 0 2px 0;
-    }
-}
-
-.btn-link {
-    display: flex;
-    align-items: center;
-    gap : 8px;
-    padding: 5px 10px;
-    color: inherit;
-    border-radius: 4px;
-    text-decoration: none;
-    transition: background-color 0.1s, color 0.1s;
-    &:hover {
-        color: $grey-193;
-        background-color: $grey-32;
-    }
-    &--active {
-        background-color: $grey-47;
-        color: white;
-        @include setCircularStdFont("Bold");
-        &:hover {
-            background-color: $grey-47;
-            color: white;
-        }
-    }
-}
 </style>

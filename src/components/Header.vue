@@ -29,7 +29,6 @@ export default {
         }
         &__logo{
             width : 110px;
-            vertical-align: bottom;
         }
     }
     

@@ -122,9 +122,6 @@ export default {
     }
     &__btn {
         padding: 0 10px 0 10px;
-        svg {
-            vertical-align: bottom;
-        }
     }
 
 }
