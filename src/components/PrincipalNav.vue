@@ -4,9 +4,7 @@
             <div class="user">
                 <div class="user__representation">
                     <Avatar class="user__avatar" :user="{ pseudo : 'Fab', avatar : require('@/assets/imageProfil.png') }" />
-
                     <UserStatuButton class="user__statu" />
-
                 </div>
 
                 <div class="user__identifying">
@@ -103,7 +101,25 @@ export default {
                             link : '#'
                         },
                     ]
-                }
+                },
+                {
+                    name : 'Group 1',
+                    listChannel : [ 
+                        {
+                            name : 'Channel 1',
+                            link : '#'
+                        },
+                        {
+                            name : 'Channel 2',
+                            link : '#'
+                        },
+                        {
+                            name : 'Channel 3',
+                            link : '#'
+                        },
+                    ]
+                },
+
             ]
         }
     },
