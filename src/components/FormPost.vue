@@ -1,5 +1,5 @@
 <template>
-    <form class="form-post" action="">
+    <form class="form-post" action="" >
         <button type='button' class="form-post__brownse-btn form-post-btn">
             <svg width="24" height="24" viewBox="0 0 24 24">
                 <path
@@ -10,14 +10,16 @@
         </button>
 
         <textarea
-            @keydown.enter.prevent="submit()"
-            @input="updateHeight"
-            v-model="value"
+            @keydown.enter.prevent="submit($event); updateHeight($event.target)"
+            @input="updateHeight($event.target); $emit('update:modelValue', $event.target.value)"
             class="form-post__field"
             :class="{ 'form-post__field--active' : value }"
             type="text"
             placeholder="Envoyer un message dans ce groupe"
+            :value='modelValue'
+            ref='textarea'
         ></textarea>
+
         <button type='button' class="form-post-btn">
             <svg width="24" height="24"  viewBox="0 0 24 24">
                 <path
@@ -44,13 +46,42 @@ export default {
             value : '',
         }
     },
-    methods: {
-        submit() {},
-        updateHeight(event){
-            event.target.style.height = '30px';
-            event.target.style.height = event.target.scrollHeight + 'px';
-        }
+    props : {
+        modelValue : { type : String, required : true }
     },
+    methods: {
+        submit(e) {
+            if(this.modelValue.trim() == '') return;
+            this.$emit('addPost',this.value);
+            e.target.value = '';
+        },
+        updateHeight(element){
+            element.style.height = '30px';
+            element.style.height = element.scrollHeight + 'px';
+        },
+        parseEmoji(){
+            let regex = /:\w+:/g;
+            if(regex.test(this.value)){
+                this.value.match(regex).forEach(shortCode => {
+                
+                    if(Object.keys(this.emoji.emojisShortCodeIndex).includes(shortCode)){
+
+                        this.value = this.value.replace(
+                            shortCode, 
+                            `<img width="24px" src="${require('@/assets/twemoji/svg/' + this.emoji.emojisShortCodeIndex[shortCode].u.join('-').toLowerCase() + '.svg')}">`
+                        )
+
+                        
+                    }
+                    
+                });
+            }
+        }
+
+    },
+    mounted() {
+        this.updateHeight(this.$refs['textarea']);
+    }
 };
 </script>
 

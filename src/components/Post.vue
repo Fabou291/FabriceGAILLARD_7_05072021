@@ -1,21 +1,22 @@
 <template>
     <div>
         <div class="post">
-            <InteractionPost class="post__interaction" />
+            <InteractionPost class="post__interaction" :user_id="parseInt(post.user_id)" @modifyPost="modifyPost"/>
             <div class="post__sidebar"></div>
             <div class="post__main">
               
                     <Avatar class="post__user-avatar" :user="{ pseudo : post.user_pseudo, avatar : post.user_avatar }" />
                 
-                    <div>
+                    <div class="post__infos">
                         <div class="post__aside">
                             <span class="post__user-pseudo">{{ post.user_pseudo }}</span> <span class="post__date">{{ post.date }}</span>                
                         </div>
-                    
-                        <p class="post__content" > {{ post.content }} </p>
+
+                        <FormPost v-model="value"/>
+                        <!--<p class="post__content" > {{ post.content }} </p>-->
 
                         <div class="post__reaction">
-                            <Reaction v-for="reaction in post.listReaction" :key="reaction" :reaction="reaction" />
+                            <Reaction v-for="reaction in post.listReaction" :key="reaction" :reaction="reaction"   />
                         </div>                
                     </div> 
                                        
@@ -31,81 +32,29 @@ import Avatar from '@/components/Avatar.vue';
 import Comment from '@/components/Comment.vue';
 import InteractionPost from '@/components/InteractionPost.vue';
 import Reaction from '@/components/Reaction.vue';
+import FormPost from '@/components/FormPost.vue'
 export default {
     components : {
         Avatar,
         Comment,
         InteractionPost,
-        Reaction
+        Reaction,
+        FormPost
     },
     data() {
-        return {
-            post: {
-                user_id: 0,
-                user_avatar: require("@/assets/imageProfil.png"),
-                user_pseudo: "Fab",
-                date: "2021/07/20",
-                content:
-                    "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra",
-                listComment: [
-                    {
-                        user_id: 0,
-                        user_avatar: require("@/assets/imageProfil.png"),
-                        user_pseudo: "Fab",
-                        date: "2021/07/20",
-                        content:
-                            "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra",                    
-                    },
-                    {
-                        user_id: 0,
-                        user_avatar: require("@/assets/imageProfil.png"),
-                        user_pseudo: "Fab",
-                        date: "2021/07/20",
-                        content:
-                            "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra",                    
-                    },
-                    {
-                        user_id: 0,
-                        user_avatar: require("@/assets/imageProfil.png"),
-                        user_pseudo: "Fab",
-                        date: "2021/07/20",
-                        content:
-                            "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra",                    
-                    },
-                    {
-                        user_id: 0,
-                        user_avatar: require("@/assets/imageProfil.png"),
-                        user_pseudo: "Fab",
-                        date: "2021/07/20",
-                        content:
-                            "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra",                    
-                    },
-                    {
-                        user_id: 0,
-                        user_avatar: require("@/assets/imageProfil.png"),
-                        user_pseudo: "Fab",
-                        date: "2021/07/20",
-                        content:
-                            "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra",                    
-                    },
-                ],
-                listReaction: [
-                    {
-                        unicode : '1f0cf',
-                        length : 3,
-                    },
-                    {
-                        unicode : '1f1f0',
-                        length : 10,
-                    },
-                    {
-                        unicode : '1f1ef',
-                        length : 1,
-                    },
-                ]
-            },
-        };
+        return{
+            modifyMode : false,
+            value : this.post.content
+        }
     },
+    props : {
+        post : { type : Object, required : true }
+    },
+    methods : {
+        modifyPost(){
+
+        }
+    }
 
 };
 </script>
@@ -136,6 +85,7 @@ export default {
         background-color: $grey-59;
         border-radius : 4px 0 0 4px;
     }
+
     &__main {
         padding: 20px;
         border-radius : 0 4px 4px 0;
@@ -143,6 +93,10 @@ export default {
         display : flex;
         align-items: flex-start;
         flex: 1;
+    }
+
+    &__infos {
+        flex : 1;
     }
 
 
@@ -181,6 +135,7 @@ export default {
         line-height: 1.3;
         font-size: 16px;
         color: $grey-193;
+        overflow-wrap: anywhere;
     }
 
 

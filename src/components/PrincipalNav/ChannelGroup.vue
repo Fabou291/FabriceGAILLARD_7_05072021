@@ -3,27 +3,23 @@
         <div class="channel-group__label">
             <button class="channel-group__drop-down-btn" aria-expanded="true" @click="switchVisibility()">
                 <DropDownIcon :visible="visible" />
-                <span class="channel-group__title">{{ group.name }}</span>
+                <span class="channel-group__title">{{ mutableGoup.name }}</span>
             </button>
 
-            <ButtonPopUp :label="'Ajouter un groupe'">
+            <ButtonPopUp v-if="user.role == 'admin'" :label="'Ajouter un channel'" @click="addChannel">
                 <AddIcon class="" />
             </ButtonPopUp>
-                       
         </div>
 
-        <ul class="channel-group__list-channel" v-show="visible">
+        <ul class="list-channel" v-show="visible">
             <li
-                class="channel-group__list-item-channel"
-                v-for="(channel, j) in group.listChannel"
+                class="list-channel__item"
+
+                v-for="(channel, j) in mutableGoup.listChannel"
                 :key="channel"
                 @click="activeThisChanel(j)"
             >
-                <router-link
-                    class="btn-link"
-                    :class="{ 'btn-link--active': j == activeChannel && i == activeGroup }"
-                    :to="channel.link"
-                >
+                <router-link class="link-channel" :to="channel.link">
                     <svg width="24" height="24" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -32,25 +28,43 @@
                     </svg>
                     <span>{{ channel.name }}</span>
                 </router-link>
+
+                <ButtonPopUp class="btn-rename" :label="'Settings'" v-if="user.role == 'admin'" @click="modifyChannel(j)">
+                    <svg class="actionIcon-PgcMM2" aria-hidden="false" width="16" height="16" viewBox="0 0 16 16">
+                        <path
+                            fill="currentColor"
+                            d="M14 7V9C14 9 12.5867 9 12.5733 9.00667C12.42 9.58667 12.1733 10.1267 11.84 10.6067L12.74 11.5067L11.4933 12.7533L10.5933 11.8533C10.1133 12.1867 9.57334 12.44 8.99334 12.5867V14H6.99334V12.58C6.41334 12.4333 5.87334 12.18 5.39334 11.8467L4.49333 12.7467L3.24667 11.5L4.14667 10.6C3.81333 10.1267 3.56 9.58 3.41333 9H2V7H3.41333C3.56 6.42 3.81333 5.88 4.14667 5.4L3.24667 4.5L4.5 3.24667L5.4 4.14667C5.87334 3.81333 6.42 3.56 7 3.41333V2H9V3.41333C9.58 3.56667 10.12 3.81333 10.6 4.14667L11.5067 3.25333L12.7533 4.5L11.8533 5.4C12.1867 5.87334 12.44 6.42 12.5867 7H14ZM8 10C9.10457 10 10 9.10457 10 8C10 6.89543 9.10457 6 8 6C6.89543 6 6 6.89543 6 8C6 9.10457 6.89543 10 8 10Z"
+                        ></path>
+                    </svg>
+                </ButtonPopUp>
             </li>
         </ul>
     </li>
 </template>
 
 <script>
+import { mapState } from "vuex";
 import DropDownIcon from "@/components/DropDownIcon.vue";
 import AddIcon from "@/components/AddIcon.vue";
 import ButtonPopUp from "@/components/ButtonPopUp.vue";
+
+
 export default {
     components: {
         DropDownIcon,
         AddIcon,
-        ButtonPopUp
+        ButtonPopUp,
+
     },
     data() {
         return {
             visible: true,
+            mutableGoup: this.group,
+            createChannelVisible : false
         };
+    },
+    computed: {
+        ...mapState(["user", 'panelCreateChan']),
     },
     props: {
         group: { type: Object, required: true },
@@ -62,17 +76,27 @@ export default {
         switchVisibility() {
             this.visible = !this.visible;
         },
+        addChannel() {
+            this.panelCreateChan.visible = true;
+            this.panelCreateChan.component = this;
+
+            //this.mutableGoup.listChannel.push({ name: "Channel " + (this.mutableGoup.listChannel.length + 1), link: "#" });
+        },
+        modifyChannel(index) {
+            this.mutableGoup.listChannel[index]
+        },
     },
 };
 </script>
 
 <style lang="scss">
 .channel-group {
+    font-size : 14px;
     color: $grey-142;
     padding-top: 15px;
+    @include setCircularStdFont("Bold");
 
     &__drop-down-btn {
-        @include setCircularStdFont("Bold");
         padding: 9px 0;
         width: 100%;
         text-align: left;
@@ -93,34 +117,46 @@ export default {
         text-transform: uppercase;
         padding: 0 0 0 5px;
     }
-
-    &__list-item-channel {
-        margin: 0 0 2px 0;
-    }
-    
 }
 
-.btn-link {
+.list-channel {
+    @include setCircularStdFont("Book");
+    &__item {
+        margin: 0 0 2px 0;
+        padding: 0 5px 0 0;
+        display: flex;
+        align-items: center;
+        border-radius: 4px;
+        &:hover {
+            color: $grey-193;
+            background-color: $grey-32;
+            .btn-rename {
+                display: block;
+            }
+        }
+        &--active {
+            background-color: $grey-47;
+            color: white;
+            @include setCircularStdFont("Bold");
+            &:hover {
+                background-color: $grey-47;
+                color: white;
+            }
+        }
+    }
+    .btn-rename {
+        display: none;
+    }
+}
+
+.link-channel {
+    flex: 1;
     display: flex;
     align-items: center;
     gap: 8px;
     padding: 5px 10px;
     color: inherit;
-    border-radius: 4px;
     text-decoration: none;
     transition: background-color 0.1s, color 0.1s;
-    &:hover {
-        color: $grey-193;
-        background-color: $grey-32;
-    }
-    &--active {
-        background-color: $grey-47;
-        color: white;
-        @include setCircularStdFont("Bold");
-        &:hover {
-            background-color: $grey-47;
-            color: white;
-        }
-    }
 }
 </style>

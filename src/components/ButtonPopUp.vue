@@ -19,9 +19,7 @@ export default {
     },
     methods:{
         show(e){
-            console.log(e.target)
             let boundingsElement =  e.target.getBoundingClientRect();
-            console.log(boundingsElement)
             e.target.nextSibling.setAttribute(
                 'style',
                 `left : ${boundingsElement.left + (boundingsElement.width/2)}px;
@@ -39,15 +37,13 @@ export default {
         
         button{
             &:hover + div{
-                opacity: 1;
                 visibility : visible;
-                transform : translate(-50%,-100%) ;
+                transform : translate(-50%,-100%), scale(1) ;
             }
         }
 
         div{
-            transition : opacity 0.1s, transform 0.1s;
-            opacity: 0;
+            transition : transform 0.1s, scale(0.8);
             visibility : hidden;
             position : absolute;
             transform : translate(-50%,-80%) ;

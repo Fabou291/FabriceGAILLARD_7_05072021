@@ -24,7 +24,7 @@
 
             <nav class="principal-nav">
                 <ul>
-                    <channelGroup v-for="(group,i) in listGroup" :key="group" :group="group" @updateActiveChannel="updateActiveChannel(indexChannel, i)" />
+                    <channelGroup v-for="(group,i) in listGroup" :key="group" :group="{...group, index : i}" @updateActiveChannel="updateActiveChannel(indexChannel, i)" />
                     <!--<li class="channel-group" v-for="(group, i) in listGroup" :key="group">
                         <button class="channel-group__drop-down-btn" aria-expanded="true" @click="switchGroupVisibility(i)">
                             <dropDownIcon :visible="group.visible"/>
