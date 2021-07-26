@@ -13,10 +13,12 @@ headerConfig.initialization(app);
 // Les router
 import authenticationRouter from "./routes/authenticationRouter.js";
 import userRouter from "./routes/userRouter.js";
+import roleRouter from "./routes/roleRouter.js";
 
 app.use(express.json());
 app.use('/auth', authenticationRouter);
 app.use('/user', userRouter);
+app.use('/role', roleRouter);
 
 /*app.use('/post', (req,resp,next)=>{});
 app.use('/comment', (req,resp,next)=>{});

@@ -33,12 +33,4 @@ Content-type : application/json
 }
 
 ### remove
-PUT http://localhost:3000/user/idOfUser
-Content-type : application/json
-
-{
-    "email"     : "fabou291@gmail.comA",
-    "password"  : "testTest1234.A",
-    "avatar"    : "uneUrlA",
-    "pseudo"    : "fabA",
-}
+DELETE http://localhost:3000/user/idOfUser

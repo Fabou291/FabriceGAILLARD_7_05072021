@@ -2,7 +2,7 @@ USE groupomania_social_network;
 
 CREATE TABLE role(
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100) NOT NULL
+    name VARCHAR(100) NOT NULL UNIQUE
 );
 
 CREATE TABLE user(

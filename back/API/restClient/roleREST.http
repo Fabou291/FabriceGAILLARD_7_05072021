@@ -1,0 +1,29 @@
+### findAll
+GET http://localhost:3000/role/
+
+
+### findOne
+GET http://localhost:3000/role/idOfrole
+
+
+### create
+POST http://localhost:3000/role/
+Content-type : application/json
+
+{   
+    "role" : {
+        "name"   : "admin"
+    }
+
+}
+
+### modify
+PUT http://localhost:3000/role/idOfrole
+Content-type : application/json
+
+{
+    "name"     : "adminA",
+}
+
+### remove
+DELETE http://localhost:3000/role/idOfrole
