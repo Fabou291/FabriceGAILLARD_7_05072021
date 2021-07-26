@@ -12,18 +12,15 @@ headerConfig.initialization(app);
 
 // Les router
 import authenticationRouter from "./routes/authenticationRouter.js";
+import userRouter from "./routes/userRouter.js";
 
 app.use(express.json());
 app.use('/auth', authenticationRouter);
+app.use('/user', userRouter);
 
-/*app.use('/user', (req,resp,next)=>{});
-
-app.use('/post', (req,resp,next)=>{});
-
+/*app.use('/post', (req,resp,next)=>{});
 app.use('/comment', (req,resp,next)=>{});
-
 app.use('/channel-group', (req,resp,next)=>{});
-
 app.use('/channel', (req,resp,next)=>{});*/
 
 app.use((error, req, res, next) => {

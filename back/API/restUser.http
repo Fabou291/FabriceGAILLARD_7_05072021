@@ -1,0 +1,44 @@
+### findAll
+GET http://localhost:3000/user/
+
+
+### findOne
+GET http://localhost:3000/user/idOfUser
+
+
+### create
+POST http://localhost:3000/user/
+Content-type : application/json
+
+{   
+    "user" : {
+        "email"     : "fabou291@gmail.com",
+        "password"  : "testTest1234.",
+        "avatar"    : "uneUrl",
+        "pseudo"    : "fab",
+        "role_id"   : 0
+    }
+
+}
+
+### modify
+PUT http://localhost:3000/user/idOfUser
+Content-type : application/json
+
+{
+    "email"     : "fabou291@gmail.comA",
+    "password"  : "testTest1234.A",
+    "avatar"    : "uneUrlA",
+    "pseudo"    : "fabA",
+}
+
+### remove
+PUT http://localhost:3000/user/idOfUser
+Content-type : application/json
+
+{
+    "email"     : "fabou291@gmail.comA",
+    "password"  : "testTest1234.A",
+    "avatar"    : "uneUrlA",
+    "pseudo"    : "fabA",
+}
