@@ -14,16 +14,19 @@ headerConfig.initialization(app);
 import authenticationRouter from "./routes/authenticationRouter.js";
 import userRouter from "./routes/userRouter.js";
 import roleRouter from "./routes/roleRouter.js";
+import channelRouter from "./routes/channelRouter.js";
+import channelGroupRouter from "./routes/channelGroupRouter.js";
 
 app.use(express.json());
 app.use('/auth', authenticationRouter);
 app.use('/user', userRouter);
 app.use('/role', roleRouter);
+app.use('/channel', channelRouter);
+app.use('/channel-group', channelGroupRouter);
 
 /*app.use('/post', (req,resp,next)=>{});
 app.use('/comment', (req,resp,next)=>{});
-app.use('/channel-group', (req,resp,next)=>{});
-app.use('/channel', (req,resp,next)=>{});*/
+*/
 
 app.use((error, req, res, next) => {
     console.log(error)
