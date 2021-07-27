@@ -3,7 +3,7 @@ GET http://localhost:3000/role/
 
 
 ### findOne
-GET http://localhost:3000/role/idOfrole
+GET http://localhost:3000/role/2
 
 
 ### create
@@ -18,12 +18,15 @@ Content-type : application/json
 }
 
 ### modify
-PUT http://localhost:3000/role/idOfrole
+PUT http://localhost:3000/role/2
 Content-type : application/json
 
 {
-    "name"     : "adminA",
+    "role" : {
+        "name"     : "adminA"       
+    }
+
 }
 
 ### remove
-DELETE http://localhost:3000/role/idOfrole
+DELETE http://localhost:3000/role/8

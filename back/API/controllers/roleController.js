@@ -8,7 +8,7 @@ const findAll = (req,res,next) => {
 }
 
 const findOne = (req,res,next) => {
-    mysqlDataBase.query('SELECT * FROM role WHERE id = ?', [req.userId], function(error, results, fields){
+    mysqlDataBase.query('SELECT * FROM role WHERE id = ?', [req.params.id], function(error, results, fields){
         if(error) next(error)
         else res.status(200).send({listRole : results})
     })

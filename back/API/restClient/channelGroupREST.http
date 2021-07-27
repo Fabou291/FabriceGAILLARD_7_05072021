@@ -1,0 +1,32 @@
+### findAll
+GET http://localhost:3000/channel-group/
+
+
+### findOne
+GET http://localhost:3000/channel-group/2
+
+
+### create
+POST http://localhost:3000/channel-group/
+Content-type : application/json
+
+{   
+    "channelGroup" : {
+        "name"   : "nom de mon group channelB"
+    }
+
+}
+
+### modify
+PUT http://localhost:3000/channel-group/2
+Content-type : application/json
+
+{
+    "channelGroup" : {
+        "name"     : "Prout group channel"      
+    }
+
+}
+
+### remove
+DELETE http://localhost:3000/channel-group/2

@@ -1,0 +1,33 @@
+### findAll
+GET http://localhost:3000/post/
+
+
+### findOne
+GET http://localhost:3000/post/2
+
+
+### create
+POST http://localhost:3000/post/
+Content-type : application/json
+
+{
+    "post" : {
+        "content"   : "Le contenu de mon post",
+        "channelId" : 3 
+    }
+
+}
+
+### modify
+PUT http://localhost:3000/post/2
+Content-type : application/json
+
+{
+    "post" : {
+        "content"   : "Le contenu de mon post modifié"   
+    }
+
+}
+
+### remove
+DELETE http://localhost:3000/post/3

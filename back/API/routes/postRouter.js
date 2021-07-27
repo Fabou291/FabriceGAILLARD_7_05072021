@@ -1,5 +1,5 @@
 import express from "express";
-import post from "../controllers/channelGroupController.js"
+import post from "../controllers/postController.js"
 
 const router = express.Router();
 

@@ -1,0 +1,32 @@
+### findAll
+GET http://localhost:3000/comment/
+
+
+### findOne
+GET http://localhost:3000/comment/2
+
+
+### create
+POST http://localhost:3000/comment/
+Content-type : application/json
+
+{
+    "comment" : {
+        "content"   : "Le contenu de mon comment",
+        "post_id" : 2 
+    }
+
+}
+
+### modify
+PUT http://localhost:3000/comment/3
+Content-type : application/json
+
+{
+    "comment" : {
+        "content"   : "Le contenu de mon comment modifié"   
+    }
+}
+
+### remove
+DELETE http://localhost:3000/comment/2

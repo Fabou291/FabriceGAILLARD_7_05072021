@@ -16,7 +16,7 @@ Content-type : application/json
         "password"  : "testTest1234.",
         "avatar"    : "uneUrl",
         "pseudo"    : "fab",
-        "role_id"   : 0
+        "role_id"   : 1
     }
 
 }
