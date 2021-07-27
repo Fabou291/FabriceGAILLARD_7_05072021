@@ -16,6 +16,7 @@ import userRouter from "./routes/userRouter.js";
 import roleRouter from "./routes/roleRouter.js";
 import channelRouter from "./routes/channelRouter.js";
 import channelGroupRouter from "./routes/channelGroupRouter.js";
+import postRouter from "./routes/postRouter.js";
 
 app.use(express.json());
 app.use('/auth', authenticationRouter);
@@ -23,6 +24,7 @@ app.use('/user', userRouter);
 app.use('/role', roleRouter);
 app.use('/channel', channelRouter);
 app.use('/channel-group', channelGroupRouter);
+app.use('/post', postRouter);
 
 /*app.use('/post', (req,resp,next)=>{});
 app.use('/comment', (req,resp,next)=>{});

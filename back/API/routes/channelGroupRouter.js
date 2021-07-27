@@ -9,8 +9,8 @@ router.get('/:id', channelGroupController.findOne);
 
 router.post('/', channelGroupController.create);
 
-router.put('/', channelGroupController.modify);
+router.put('/:id', channelGroupController.modify);
 
-router.delete('/', channelGroupController.remove);
+router.delete('/:id', channelGroupController.remove);
 
 export default router;
