@@ -52,7 +52,7 @@ CREATE TABLE channel_group(
 CREATE TABLE channel(
 
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50),
+    name VARCHAR(50) NOT NULL,
     description VARCHAR(150),
     channel_group_id INTEGER NOT NULL,
     CONSTRAINT FK_channel_channel_group_id FOREIGN KEY (channel_group_id) REFERENCES channel_group(id)
