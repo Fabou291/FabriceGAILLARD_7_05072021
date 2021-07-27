@@ -29,6 +29,7 @@ const modify = (req,res,next) => {
 }
 
 const remove = (req,res,next) => {
+    const  post = req.body.post;
     mysqlDataBase.query( "DELETE FROM post WHERE id = ? AND user_id = ?", [post.id, req.params.id], function(error, results, fields){
         if(error) next(error)
         else res.status(200).send({listRole : results})

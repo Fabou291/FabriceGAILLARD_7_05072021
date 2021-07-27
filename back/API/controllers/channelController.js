@@ -22,14 +22,15 @@ const create = (req,res,next) => {
 
 const modify = (req,res,next) => {
     const channel = req.body.channel;
-    mysqlDataBase.query( "UPDATE channel SET name = ?, ? ,? WHERE id = ?", [channel.name, channel.description, channel.channel_group_id, req.params.id], function(error, results, fields){
+    mysqlDataBase.query( "UPDATE channel SET name = ?, ? ,? WHERE id = ? AND user_id = ?", [channel.name, channel.description, channel.channel_group_id, channel.id, req.params.id], function(error, results, fields){
         if(error) next(error)
         else res.status(200).send({listRole : results})
     })
 }
 
 const remove = (req,res,next) => {
-    mysqlDataBase.query( "DELETE FROM channel WHERE id = ?", [req.params.id], function(error, results, fields){
+    const channel = req.body.channel;
+    mysqlDataBase.query( "DELETE FROM channel WHERE id = ? AND user_id = ?", [channel.id, req.params.id], function(error, results, fields){
         if(error) next(error)
         else res.status(200).send({listRole : results})
     })

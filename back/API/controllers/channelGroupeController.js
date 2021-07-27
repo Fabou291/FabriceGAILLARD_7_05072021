@@ -29,7 +29,8 @@ const modify = (req,res,next) => {
 }
 
 const remove = (req,res,next) => {
-    mysqlDataBase.query( "DELETE FROM channel_group WHERE id = ?", [req.params.id], function(error, results, fields){
+    const channelGroup = req.body.channelGroup;
+    mysqlDataBase.query( "DELETE FROM channel_group WHERE id = ? AND user_id = ?", [channelGroup.id, req.params.id], function(error, results, fields){
         if(error) next(error)
         else res.status(200).send({listRole : results})
     })
