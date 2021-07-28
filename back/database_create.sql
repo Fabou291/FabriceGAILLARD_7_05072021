@@ -8,16 +8,16 @@ CREATE TABLE role(
 CREATE TABLE user(
 
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    pseudo VARCHAR(100) NOT NULL,
+    username VARCHAR(100) NOT NULL,
     avatar VARCHAR(255) DEFAULT "Une url d'un avatar par default",
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(100) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    refresh_token VARCHAR(150) DEFAULT NULL,
     role_id INTEGER NOT NULL,
     CONSTRAINT FK_user_role_id FOREIGN KEY (role_id) REFERENCES role(id)
 );
-
 
 CREATE TABLE channel_group(
 
@@ -66,5 +66,23 @@ CREATE TABLE comment(
     
 );
 
+/*initialisation*/
 
+INSERT INTO role (name) VALUES("user");
 
+INSERT INTO user (username,email,password,role_id) VALUES("fabou","fabou291@gmail.com","TESTtest1234.", LAST_INSERT_ID());
+
+INSERT INTO channel_group (name) VALUES("channel_group_init");
+
+INSERT INTO channel (name, channel_group_id) VALUES("channel_init", LAST_INSERT_ID());
+
+INSERT INTO post (content, channel_id, user_id) VALUES("contenu du post init", (SELECT MAX(id) FROM channel), (SELECT MAX(id) FROM user));
+
+INSERT INTO comment (content, post_id, user_id) VALUES("contenu du commentaire init", (SELECT MAX(id) FROM post), (SELECT MAX(id) FROM user));
+
+SELECT * FROM role;
+SELECT * FROM user;
+SELECT * FROM channel_group;
+SELECT * FROM channel;
+SELECT * FROM post;
+SELECT * FROM comment;

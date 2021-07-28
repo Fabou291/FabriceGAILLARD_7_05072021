@@ -10,13 +10,17 @@
     "back": "nodemon ./back/server.js"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "core-js": "^3.6.5",
     "dotenv": "^8.6.0",
+    "email-validator": "^2.0.4",
     "express": "^4.17.1",
     "helmet": "^4.6.0",
     "http-errors": "^1.7.2",
+    "jsonwebtoken": "^8.5.1",
     "multer": "^1.4.2",
     "mysql": "^2.18.1",
+    "password-validator": "^5.1.1",
     "vue": "^3.0.0",
     "vue-router": "^4.0.0-0",
     "vuex": "^4.0.0-0"

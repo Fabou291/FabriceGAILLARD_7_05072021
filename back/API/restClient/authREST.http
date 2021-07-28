@@ -1,0 +1,12 @@
+### login
+POST http://localhost:3000/auth/login
+Content-type : application/json
+
+{   
+    "email"     : "fabou291@gmail.com",
+    "password"  : "f",
+    "pseudo"    : "fab"
+}
+
+### register
+POST http://localhost:3000/auth/register

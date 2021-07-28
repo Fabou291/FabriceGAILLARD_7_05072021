@@ -1,0 +1,1 @@
+SELECT id FROM role WHERE name = "user"

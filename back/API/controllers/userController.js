@@ -11,7 +11,7 @@ const findAll = (req,res,next) => {
 const findOne = (req,res,next) => {
     mysqlDataBase.query('SELECT * FROM user WHERE id= ?', [req.params.id] , function (error, results, fields) {
         if (error) next(error);
-        else res.status(200).send({user : results});
+        else res.status(200).send({results});
     });
 }
 
@@ -20,14 +20,15 @@ const create = (req,res,next) => {
         const user = req.body.user;
         mysqlDataBase.query(
             `
-                INSERT INTO user (pseudo,avatar,email,password, role_id)
-                VALUES ( ?, ?, ?, ?, ? )
+                INSERT INTO user (username,avatar,email,password, role_id)
+                VALUES ( ?, ?, ?, ?, (SELECT id FROM role WHERE name = "user") )
             `,
-            [ user.pseudo, user.avatar, user.email, user.password, user.role_id ],
+            [ user.username, user.avatar, user.email, user.password, "user" ],
             function (error, results, fields) {
                 if (error) next(error);
-                else res.status(202).send({response : results});
-        });        
+                else res.status(202).send({results});
+            }
+        );        
     }
     catch(e){
         next(e)
@@ -40,10 +41,10 @@ const modify = (req,res,next) => {
         mysqlDataBase.query(
             `
                 UPDATE user
-                SET pseudo = ?, avatar = ?, email = ?, password = ?
+                SET username = ?, avatar = ?, email = ?, password = ?
                 WHERE id = ?
             `,
-            [ user.pseudo, user.avatar, user.email, user.password, user.id ],
+            [ user.username, user.avatar, user.email, user.password, user.id ],
             function (error, results, fields) {
                 if (error) next(error);
                 else res.status(200).send({response : results});
