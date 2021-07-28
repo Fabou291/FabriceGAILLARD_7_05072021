@@ -66,11 +66,30 @@ CREATE TABLE comment(
     
 );
 
+CREATE TABLE log_fail(
+
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ip VARCHAR(50) NOT NULL,
+    user_id INTEGER NOT NULL,
+    CONSTRAINT FK_log_user_id FOREIGN KEY (user_id) REFERENCES user(id)
+    
+);
+
+CREATE TABLE blocked_user(
+
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    user_id INTEGER NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT FK_blocked_user_id FOREIGN KEY (user_id) REFERENCES user(id)
+
+);
+
 /*initialisation*/
 
 INSERT INTO role (name) VALUES("user");
 
-INSERT INTO user (username,email,password,role_id) VALUES("fabou","fabou291@gmail.com","TESTtest1234.", LAST_INSERT_ID());
+INSERT INTO user (username,email,password,role_id) VALUES("fabou","f6e396c3e4948dc6a9fe8aaa8f2e4e19f177","$2b$10$L7U0WoEsC97bfyyJTxaqpOZZI3ow7N9CZt4Oiz9dn3B4Yi8OIPZuy", LAST_INSERT_ID());
 
 INSERT INTO channel_group (name) VALUES("channel_group_init");
 
