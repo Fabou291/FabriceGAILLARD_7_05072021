@@ -1,5 +1,7 @@
 USE groupomania_social_network;
 
+SET NAMES 'utf8';
+
 CREATE TABLE role(
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE
@@ -71,6 +73,7 @@ CREATE TABLE log_fail(
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     ip VARCHAR(50) NOT NULL,
+    message VARCHAR(150) NOT NULL,
     user_id INTEGER NOT NULL,
     CONSTRAINT FK_log_user_id FOREIGN KEY (user_id) REFERENCES user(id)
     
@@ -98,6 +101,28 @@ INSERT INTO channel (name, channel_group_id) VALUES("channel_init", LAST_INSERT_
 INSERT INTO post (content, channel_id, user_id) VALUES("contenu du post init", (SELECT MAX(id) FROM channel), (SELECT MAX(id) FROM user));
 
 INSERT INTO comment (content, post_id, user_id) VALUES("contenu du commentaire init", (SELECT MAX(id) FROM post), (SELECT MAX(id) FROM user));
+
+DROP PROCEDURE IF EXISTS login_fail;
+DELIMITER |
+CREATE PROCEDURE login_fail(IN _user_id INT, IN ip_adress VARCHAR(150), IN delay INT, IN attempt_limit INT)
+BEGIN
+    DECLARE attempt_number INTEGER;
+    DECLARE since_delay DATETIME DEFAULT (CURRENT_TIMESTAMP - INTERVAL delay MINUTE);
+    DECLARE since_last_time DATETIME DEFAULT since_delay;
+
+    SELECT (created_at + INTERVAL delay MINUTE) INTO since_last_time FROM blocked_user WHERE user_id = _user_id 
+    AND (created_at + INTERVAL delay MINUTE) > since_delay ORDER BY created_at DESC LIMIT 1;
+
+    SELECT COUNT(*) INTO attempt_number FROM log_fail WHERE created_at >= since_last_time AND user_id = _user_id;
+
+    IF attempt_number >= attempt_limit THEN
+        INSERT INTO blocked_user (user_id) VALUES(_user_id);
+        SELECT CONCAT("Your accound has been locked for ", delay, " minutes") AS message;
+    ELSE
+        SELECT CONCAT("Remaining attempt before locking your account : ", (attempt_limit - attempt_number)) AS message;
+    END IF;
+END|
+DELIMITER ;
 
 SELECT * FROM role;
 SELECT * FROM user;

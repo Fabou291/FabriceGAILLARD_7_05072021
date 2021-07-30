@@ -5,13 +5,16 @@ const app = express();
 // Les apelles au fichiers de config
 import multerConfig from "../config/multerConfig.js";
 import headerConfig from "../config/headerConfig.js";
+import sessionConfig from "../config/sessionConfig.js";
+import limiterConfig from "../config/limiterConfig.js"
 
 
 //multerConfig.initialization(app);
 headerConfig.initialization(app);
+limiterConfig.initialization(app);
+headerConfig.initialization(app);
 
 // Les router
-
 import roleRouter from "./routes/roleRouter.js";
 import userRouter from "./routes/userRouter.js";
 import authenticationRouter from "./routes/authenticationRouter.js";

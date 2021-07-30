@@ -1,4 +1,4 @@
-import mysqlDataBase from "../../config/mysqlConfig.js";
+import {mysqlDataBase} from "../../config/mysqlConfig.js";
 const findAll = (req,res,next) => {
     mysqlDataBase.query('SELECT * FROM comment',function(error, results, fields){
         if(error) next(error)

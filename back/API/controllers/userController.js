@@ -1,4 +1,4 @@
-import mysqlDataBase from "../../config/mysqlConfig.js";
+import {mysqlDataBase} from "../../config/mysqlConfig.js";
 import createError from "http-errors";
 
 const findAll = (req,res,next) => {
@@ -16,23 +16,23 @@ const findOne = (req,res,next) => {
 }
 
 const create = (req,res,next) => {
-    try{
-        const user = req.body.user;
-        mysqlDataBase.query(
-            `
-                INSERT INTO user (username,avatar,email,password, role_id)
-                VALUES ( ?, ?, ?, ?, (SELECT id FROM role WHERE name = "user") )
-            `,
-            [ user.username, user.avatar, user.email, user.password, "user" ],
-            function (error, results, fields) {
-                if (error) next(error);
-                else res.status(202).send({results});
-            }
-        );        
-    }
-    catch(e){
-        next(e)
-    }
+
+    const user = req.body;
+    mysqlDataBase.query(
+        `
+            INSERT INTO user (username,avatar,email,password, role_id)
+            VALUES ( ?, ?, ?, ?, (SELECT id FROM role WHERE name = "user") )
+        `,
+        [ user.username, user.avatar, user.email, user.password, "user" ],
+        function (error, results, fields) {
+            if (error){
+                if(error.sqlState == "23000") next(createError.BadRequest('Email already exist'))
+                else next(error);
+            } 
+            else res.status(202).send({results});
+        }
+    );        
+
 }
 
 const modify = (req,res,next) => {

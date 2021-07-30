@@ -4,9 +4,18 @@ Content-type : application/json
 
 {   
     "email"     : "fabou291@gmail.com",
-    "password"  : "TESTtest1234.",
-    "pseudo"    : "fab"
+    "password"  : "TESTtestm1234."
 }
 
 ### register
 POST http://localhost:3000/auth/register
+Content-type : application/json
+
+{   
+
+        "email"     : "fabou291@gmail.com",
+        "password"  : "TESTtestm1234.",
+        "username"    : "fab"        
+
+
+}
