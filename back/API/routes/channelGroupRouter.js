@@ -1,16 +1,17 @@
 import express from "express";
-import channelGroupController from "../controllers/channelGroupController.js"
+import channelGroupController from "../controllers/channelGroupController.js";
+import authenticationMiddleware from "../middleware/authenticationMiddleware.js";
 
 const router = express.Router();
 
-router.get('/', channelGroupController.findAll);
+router.get('/', authenticationMiddleware, channelGroupController.findAll);
 
-router.get('/:id', channelGroupController.findOne);
+router.get('/:id', authenticationMiddleware, channelGroupController.findOne);
 
-router.post('/', channelGroupController.create);
+router.post('/', authenticationMiddleware, channelGroupController.create);
 
-router.put('/:id', channelGroupController.modify);
+router.put('/:id', authenticationMiddleware, channelGroupController.modify);
 
-router.delete('/:id', channelGroupController.remove);
+router.delete('/:id', authenticationMiddleware, channelGroupController.remove);
 
 export default router;

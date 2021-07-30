@@ -1,15 +1,17 @@
 import express from "express";
 import commentController from "../controllers/commentController.js";
+import authenticationMiddleware from "../middleware/authenticationMiddleware.js";
+
 const router = express.Router();
 
-router.get('/',commentController.findAll)
+router.get('/', authenticationMiddleware, commentController.findAll)
 
-router.get('/:id',commentController.findOne)
+router.get('/:id', authenticationMiddleware, commentController.findOne)
 
-router.post('/',commentController.create)
+router.post('/', authenticationMiddleware, commentController.create)
 
-router.put('/:id',commentController.modify)
+router.put('/:id', authenticationMiddleware, commentController.modify)
 
-router.delete('/:id',commentController.remove)
+router.delete('/:id', authenticationMiddleware, commentController.remove)
 
 export default router;

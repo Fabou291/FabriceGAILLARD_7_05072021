@@ -1,15 +1,17 @@
 import express from "express";
 import roleController from "../controllers/roleController.js";
+import authenticationMiddleware from "../middleware/authenticationMiddleware.js";
+
 const router = express.Router();
 
-router.get('/',roleController.findAll)
+router.get('/', authenticationMiddleware, roleController.findAll)
 
-router.get('/:id',roleController.findOne)
+router.get('/:id', authenticationMiddleware, roleController.findOne)
 
-router.post('/',roleController.create)
+router.post('/', authenticationMiddleware, roleController.create)
 
-router.put('/:id',roleController.modify)
+router.put('/:id', authenticationMiddleware, roleController.modify)
 
-router.delete('/:id',roleController.remove)
+router.delete('/:id', authenticationMiddleware, roleController.remove)
 
 export default router;

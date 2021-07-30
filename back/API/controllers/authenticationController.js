@@ -23,8 +23,6 @@ const login = async (req, res, next) => {
                 [delay, delay, user.id]
             ))[0];
 
-            
-
             if (user_statu && user_statu.is_blocked)
                 throw createError.BadRequest(`Account locked, remaining time : ${user_statu.remaining_time} minutes`);
 
