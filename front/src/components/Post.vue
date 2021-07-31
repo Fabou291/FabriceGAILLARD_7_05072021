@@ -12,8 +12,8 @@
                             <span class="post__user-pseudo">{{ post.user_pseudo }}</span> <span class="post__date">{{ post.date }}</span>                
                         </div>
 
-                        <FormPost v-model="value"/>
-                        <!--<p class="post__content" > {{ post.content }} </p>-->
+                        <FormPost v-model="content" v-if="modifyMode"/>
+                        <p class="post__content" v-html="content" v-if="!modifyMode"></p>
 
                         <div class="post__reaction">
                             <Reaction v-for="reaction in post.listReaction" :key="reaction" :reaction="reaction"   />
@@ -32,28 +32,39 @@ import Avatar from '@/components/Avatar.vue';
 import Comment from '@/components/Comment.vue';
 import InteractionPost from '@/components/InteractionPost.vue';
 import Reaction from '@/components/Reaction.vue';
-import FormPost from '@/components/FormPost.vue'
+import { mapState, } from 'vuex';
+import ContentParser from "../js/contentParser.js"
+//import FormPost from '@/components/FormPost.vue'
 export default {
     components : {
         Avatar,
         Comment,
         InteractionPost,
         Reaction,
-        FormPost
+
+        //FormPost
     },
     data() {
         return{
             modifyMode : false,
-            value : this.post.content
+            content : ''
         }
+    },
+    computed:{
+        ...mapState(["emoji"])
     },
     props : {
         post : { type : Object, required : true }
     },
     methods : {
-        modifyPost(){
-
+        modifyPost(){},
+        parsePost(){
+            let contentParser = new ContentParser(this.post.content, this.emoji.emojisShortCodeIndex);
+            this.content = contentParser.parseEmoji().parseUrl().content;            
         }
+    },
+    created(){
+        this.parsePost();
     }
 
 };
@@ -132,7 +143,7 @@ export default {
     &__content{
         margin: 5px 0 0 0;
         letter-spacing: -0.1px;
-        line-height: 1.3;
+        line-height: 1.5;
         font-size: 16px;
         color: $grey-193;
         overflow-wrap: anywhere;

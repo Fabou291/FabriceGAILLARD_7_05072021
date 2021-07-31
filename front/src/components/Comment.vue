@@ -10,7 +10,7 @@
                     <span class="comment__user-pseudo">{{ comment.user_pseudo }}</span> <span class="comment__date">{{ comment.date }}</span>                
                 </div>
             
-                <p class="comment__content" > {{ comment.content }} </p>                
+                <p class="comment__content" v-html="content" ></p>                
             </div>
 
         </div>
@@ -18,13 +18,34 @@
 </template>
 
 <script>
-    import Avatar from '@/components/Avatar.vue'
+    import Avatar from '@/components/Avatar.vue';
+    import ContentParser from "../js/contentParser.js";
+    import { mapState } from 'vuex';
+    
+
     export default {
+        data() {
+            return {
+                content : ""
+            }
+        },
         props : {
-            comment : { type: Object, required : true }
+            comment : { type: Object, required : true },
+        },
+        computed : {
+            ...mapState(['emoji'])
         },
         components : {
             Avatar,
+        },
+        methods : {
+            parseComment(){
+                let contentParser = new ContentParser(this.comment.content, this.emoji.emojisShortCodeIndex);
+                this.content = contentParser.parseEmoji().parseUrl().content;            
+            }
+        },
+        created(){
+            this.parseComment();
         }
     }
 </script>

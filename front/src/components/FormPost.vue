@@ -27,11 +27,9 @@
             @drag.prevent=""
             @keypress.enter.prevent=""
             @input="
-                //hasTextAround();
                 parseEmpty();
                 parseEmoji();
                 parseURL();
-                //parseNotEmpty();
                 textarea.normalize();
             "
             @paste.prevent="paste"
@@ -81,9 +79,6 @@ export default {
         return {
             value: this.modelValue,
             selection: 0,
-            sel: "",
-            valueHTMLBefore: ["&#xFEFF;"],
-            valueHTMLAfter: [],
             textarea: "",
         };
     },
@@ -99,11 +94,6 @@ export default {
             this.$emit("addPost", this.value);
             e.target.value = "";
         },
-        /*updateHeight(element){
-            element.style.height = '30px';
-            element.style.height = element.scrollHeight + 'px';
-        },*/
-
         paste(event) {
             let paste = (event.clipboardData || window.clipboardData).getData("text");
             const selection = window.getSelection();
@@ -122,49 +112,6 @@ export default {
             selection.getRangeAt(0).insertNode(document.createTextNode(drop));
             //this.parseEmoji();
         },
-        /*parseEmoji(){
-            
-             if(/:\w+:/g.test(this.textarea.textContent)){
-                this.textarea.textContent.match(/:\w+:/g).forEach(shortCode => {
-                    if(Object.keys(this.emoji.emojisShortCodeIndex).includes(shortCode)){
-                        
-                        //1. récupérer toutes les span
-                            let listChildNode = [...this.textarea.childNodes];
-                        //2. Définir dans quel span l'opération doit avoir lieu
-                            let i = 0
-                            for (i in listChildNode) if(/:\w+:/g.test(listChildNode[i].textContent)) break;
-                            
-                            let content = listChildNode[i].textContent
-                            this.textarea.removeChild(this.textarea.childNodes[i])
-                            
-                            let textNodes = content.split(shortCode).map(stringContent => {
-                                let span = document.createElement('span');
-                                span.innerHTML = stringContent != '' ? stringContent : '\u{FEFF}' ;
-                                return span;
-                            });
-                            
-
-                            let span = document.createElement('span');
-                                span.setAttribute('contenteditable','false');
-                                span.innerHTML = `<img width="20px" alt="${shortCode}" src="${require('@/assets/twemoji/svg/' + this.emoji.emojisShortCodeIndex[shortCode].u.join('-').toLowerCase() + '.svg')}">`
-
-
-                            const childRefToInsert = this.textarea.childNodes[i];
-                            [textNodes[0],span,textNodes[1]].forEach(node => this.textarea.insertBefore(node,childRefToInsert) )
-
-                        
-                        //6. Place le curseur
-
-                            let el_cursor = this.textarea.childNodes[parseInt(i)+2];
-                            this.sel.collapse(el_cursor, 0);
-
-                        
- 
-                    }
-                });
-            }
-                     
-        },*/
         parseURL() {
             
             /*Existet-il des liens déja traité :
@@ -202,7 +149,6 @@ export default {
             });
 
         },
-
         parseEmoji() {
             
             if(/:\w+:/g.test(this.textarea.textContent)){
@@ -225,15 +171,13 @@ export default {
 
 
                         let el_cursor = this.textarea.childNodes[parseInt(index)+listNodeToAppend.length-1];
-                        this.sel.collapse(el_cursor, 0); 
+                        window.getSelection().collapse(el_cursor, 0); 
                         this.textarea.normalize(); 
                     }
                 })
             }
             
         },
-
-        //------------------------------
         getDataText() {
             let el = this.$refs["textarea"];
             let str = "";
@@ -245,21 +189,8 @@ export default {
             });
             return str;
         },
-
         parseEmpty() {
             if (this.getDataText().replaceAll("\u{FEFF}", "") == "") this.textarea.innerHTML = "";
-        },
-        parseNotEmpty(){
-            const selection = window.getSelection();
-            const content = selection.focusNode.textContent
-            if(selection.focusNode.textContent != this.textarea.textContent){
-                if(content.indexOf("\u{FEFF}") != -1){
-                    if(content.replaceAll("\u{FEFF}",'') != ''){
-                        selection.focusNode.textContent = content.replaceAll("\u{FEFF}",'');
-                        selection.collapse(selection.focusNode, 1);                    
-                    }
-                }                 
-            }
         },
         createSpanImgNode(shortCode){
             const span =  document.createElement('span');
@@ -278,18 +209,9 @@ export default {
         },
         createZeroText() {
             return document.createTextNode("\u{FEFF}");
-        },
-        hasTextAround() {
-            let el = this.$refs["textarea"];
-            if (el.childNodes.length > 0) {
-                if (el.firstChild.textContent == "") el.insertBefore(this.createZeroText(), el.firstChild);
-                //if (el.lastChild.textContent == "") el.appendChild(this.createZeroText());
-            }
-        },
-        //------------------------------
+        }
     },
     mounted() {
-        this.sel = window.getSelection();
         this.textarea = this.$refs["textarea"];
     },
     udpdate() {

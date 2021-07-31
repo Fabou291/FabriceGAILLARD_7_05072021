@@ -32,6 +32,17 @@ ul {
     margin : 0;
 }
 
+a, a:visited  {
+    color : rgb(35,164,244);
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: underline;
+}
+
+
+
 svg {
     fill : inherit;
 }

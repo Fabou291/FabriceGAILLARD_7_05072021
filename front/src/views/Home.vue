@@ -52,7 +52,7 @@ export default {
                     user_pseudo: "Fab",
                     date: "2021/07/20",
                     content:
-                        "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra",
+                        "is simply dummy :a: http://www.youtube.com text of the printing and typesetting industry. Lorem Ipsum has :b: been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra",
                     listComment: [
                         {
                             user_id: 0,
@@ -60,7 +60,7 @@ export default {
                             user_pseudo: "Fab",
                             date: "2021/07/20",
                             content:
-                                "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra",
+                                "is simply :a: http://youtube.com dummy text of the printing and typesetting industry. Lorem Ipsum has been :b: the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letra",
                         },
                         {
                             user_id: 0,
