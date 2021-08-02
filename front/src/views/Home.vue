@@ -5,6 +5,7 @@
             v-model="panelCreateChan.visible"
             v-if="panelCreateChan.visible"
         />
+        
         <div class="container">
             <Header />
             <main class="main">
@@ -15,9 +16,19 @@
                         <span class="tag-content">CHANNEL</span>
                         <h1 class="channel__title">Bienvenue sur Groupe #1</h1>
                         <p class="channel__description">C'est le début du salon #Groupe 1.</p>
-                        <FormPost  @addPost="addPost" v-model="formPostValue" />
+                        <FormPost  @addPost="addPost" v-model="formPostValue" 
+                                :canBrownse="true"
+                                :canGIF="true"
+                                :canEmoji="true"
+                         />
                         <div class="channel__posts">
-                            <Post :post="post" v-for="post in listPost" :key="post" />
+                            <div  v-for="post in listPost" :key="post">
+                                <Post :post="post" />
+                                <div class="comments">
+                                    <Post :post="comment" v-for="comment in post.listComment" :key="comment"/>
+                                </div>
+                            </div>
+                            
                         </div>
                     </section>
                 </div>
@@ -34,6 +45,8 @@ import Post from "@/components/Post.vue";
 import PanelCreateChannel from "@/components/PanelCreateChannel.vue";
 import { mapState } from "vuex";
 
+//import EmojiPanel from "../components/EmojiPanel/EmojiPanel.vue";
+
 export default {
     name: "Home",
     components: {
@@ -42,6 +55,7 @@ export default {
         FormPost,
         Post,
         PanelCreateChannel,
+        //EmojiPanel,
     },
     data() {
         return {
@@ -123,7 +137,7 @@ export default {
                 user_id: this.user.id,
                 user_avatar: this.user.avatar,
                 user_pseudo: this.user.pseudo,
-                date: "2021/07/20",
+                date: "date fictive",
                 content: this.formPostValue,
                 listComment: [],
             });
@@ -151,6 +165,7 @@ export default {
         border-radius: 30px;
     }
 }
+
 .channel {
     max-width: 800px;
     padding: 30px 15px 0 30px;
@@ -173,6 +188,10 @@ export default {
     &__posts {
         margin: 25px 0 0 0;
     }
+}
+
+.comments{
+
 }
 
 .tag-content {

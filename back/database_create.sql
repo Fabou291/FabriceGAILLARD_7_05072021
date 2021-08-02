@@ -88,19 +88,152 @@ CREATE TABLE blocked_user(
 
 );
 
+CREATE TABLE interaction_comment(
+
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    emoji_id SMALLINT NOT NULL,
+    user_id INTEGER NOT NULL,
+    comment_id INTEGER NOT NULL,
+    CONSTRAINT FK_interaction_comment_user_id FOREIGN KEY (user_id) REFERENCES user(id),
+    CONSTRAINT FK_interaction_comment_comment_id FOREIGN KEY (comment_id) REFERENCES comment(id),
+    UNIQUE KEY interaction_comment_unique (emoji_id,user_id,comment_id)
+
+);
+
+CREATE TABLE interaction_post(
+
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    emoji_id SMALLINT NOT NULL,
+    user_id INTEGER NOT NULL,
+    post_id INTEGER NOT NULL,
+    CONSTRAINT FK_interaction_post_user_id FOREIGN KEY (user_id) REFERENCES user(id),
+    CONSTRAINT FK_interaction_post_comment_id FOREIGN KEY (post_id) REFERENCES post(id),
+    UNIQUE KEY interaction_post_unique (emoji_id,user_id,post_id)
+
+);
+
 /*initialisation*/
 
-INSERT INTO role (name) VALUES("user");
+INSERT INTO role (name) 
+    VALUES
+    ("admin"),
+    ("user");
 
-INSERT INTO user (username,email,password,role_id) VALUES("fabou","f6e396c3e4948dc6a9fe8aaa8f2e4e19f177","$2b$10$L7U0WoEsC97bfyyJTxaqpOZZI3ow7N9CZt4Oiz9dn3B4Yi8OIPZuy", LAST_INSERT_ID());
+INSERT INTO user (username,email,password,role_id) 
+    VALUES
+    ("Fab","f6e396c3e4948dc6a9fe8aaa8f2e4e19f177","$2b$10$L7U0WoEsC97bfyyJTxaqpOZZI3ow7N9CZt4Oiz9dn3B4Yi8OIPZuy", 1),
+    ("Vicent","a","t", 2),
+    ("Gaetan","b","$2b$10$d", 2),
+    ("Tintin","c","$2b$10$d", 2),
+    ("Liline","d","$2b$10$d", 2),
+    ("Madeline","e","$2b$10$z", 2),
+    ("Jeremy","f","$2b$10$z", 2);
 
-INSERT INTO channel_group (name) VALUES("channel_group_init");
+INSERT INTO channel_group (name) 
+    VALUES
+    ("group 1"),
+    ("group 2"),
+    ("group 3"),
+    ("group 4");
 
-INSERT INTO channel (name, channel_group_id) VALUES("channel_init", LAST_INSERT_ID());
+INSERT INTO channel (name, channel_group_id) 
+    VALUES
+    ("channel 1_1", 1),
+    ("channel 1_2", 1),
+    ("channel 1_3", 1),
 
-INSERT INTO post (content, channel_id, user_id) VALUES("contenu du post init", (SELECT MAX(id) FROM channel), (SELECT MAX(id) FROM user));
+    ("channel 2_1", 2),
+    ("channel 2_2", 2),
+    ("channel 2_3", 2),
 
-INSERT INTO comment (content, post_id, user_id) VALUES("contenu du commentaire init", (SELECT MAX(id) FROM post), (SELECT MAX(id) FROM user));
+    ("channel 3_1", 3),
+    ("channel 3_2", 3),
+    ("channel 3_3", 3),
+
+    ("channel 4_1", 4),
+    ("channel 4_2", 4),
+    ("channel 4_3", 4);
+
+INSERT INTO post (content, channel_id, user_id) 
+    VALUES
+    ("Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived ", 
+    1, 1),
+    ("ok like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their in", 
+    1, 3),
+    ("king it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydn", 
+    1, 5),
+    (" are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as n", 
+    1, 4),
+    ("Lorem Ipsum passages, ", 
+    1, 2),
+    ("Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sen", 
+    1, 1),
+    ("was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ips", 
+    1, 6),
+    ("roduced below for those interested. Sections 1.10.32 and 1.10.33 from 'de Finibus Bonorum et Malorum' by Cicero are also reproduced in their exact original for", 
+    1, 2),
+
+    ("Lorem Ipsum passages, ", 
+    1, 7),
+    ("Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sen", 
+    1, 6),
+    ("was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ips", 
+    1, 2),
+    ("roduced below for those interested. Sections 1.10.32 and 1.10.33 from 'de Finibus Bonorum et Malorum' by Cicero are also reproduced in their exact original for", 
+    1, 1),
+
+    ("king it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydn", 
+    1, 1),
+    (" are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as n", 
+    1, 3),
+    ("Lorem Ipsum passages, ", 
+    1, 7),
+    ("Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sen", 
+    1, 4),
+    ("was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ips", 
+    1, 2),
+    ("roduced below for those interested. Sections 1.10.32 and 1.10.33 from 'de Finibus Bonorum et Malorum' by Cicero are also reproduced in their exact original for", 
+    1, 1);
+
+INSERT INTO comment (content, post_id, user_id) 
+    VALUES
+    ("contenu du commentaire init", 1, 1),
+    ("ABCD", 2, 2),
+    ("sdt", 4, 4),
+    ("contenu du commentaire init", 1, 5),
+    ("contenu du cqsommentaire init", 3, 6),
+    ("contenu du commevxcvntaire init", 1, 7),
+    ("contenu du commentaire init", 7, 2),
+    ("contedsdqnu du commentaire init", 1, 1),
+    ("contsdenu du commentaire init", 3, 1);
+
+
+INSERT INTO interaction_comment (emoji_id, user_id, comment_id)
+    VALUES
+    (12, 1, 1), (5, 1, 1), (5, 2, 1),
+
+    (10, 1, 2), (10, 2, 2),
+
+    (9, 1, 3), (9, 2, 3),
+    (9, 3, 3), (9, 4, 3), (9, 5, 3),
+
+    (40, 1, 4), (40, 2, 4),
+    (40, 3, 4); 
+
+INSERT INTO interaction_post (emoji_id, user_id, post_id)
+    VALUES
+    (12, 1, 1), (5, 1, 1), (5, 2, 1),
+
+    (10, 1, 2), (10, 2, 2),
+
+    (9, 1, 3), (9, 2, 3),
+    (9, 3, 3), (9, 4, 3), (9, 5, 3),
+
+    (40, 1, 4), (40, 2, 4),
+    (40, 3, 4); 
+
+
+
 
 DROP PROCEDURE IF EXISTS login_fail;
 DELIMITER |
@@ -130,3 +263,5 @@ SELECT * FROM channel_group;
 SELECT * FROM channel;
 SELECT * FROM post;
 SELECT * FROM comment;
+SELECT * FROM interaction_post;
+SELECT * FROM interaction_comment;

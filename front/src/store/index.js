@@ -42,11 +42,22 @@ export default createStore({
           'E' : require("@/assets/twemoji/datas/E.json"),
           'F' : require("@/assets/twemoji/datas/F.json"),
       }
-    }
+    },
+    actualPostInModifyMode : null,
+  },
+  getters:{
   },
   mutations: {
+    UPDATE_ACTUAL_POST_IN_MODIFY_MODE(state){
+      state.actualPostInModifyMode = 'A';
+
+    }
   },
   actions: {
+    updateActualPostInModifyMode(context){
+      context.commit('UPDATE_ACTUAL_POST_IN_MODIFY_MODE');
+     
+    }
   },
   modules: {
   }

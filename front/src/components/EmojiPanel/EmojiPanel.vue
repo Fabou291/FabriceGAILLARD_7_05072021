@@ -1,5 +1,5 @@
 <template>
-    <div class="emoji-panel" style=" margin : 50px auto">
+    <div class="emoji-panel" >
         <EmojiPanelNav v-on:change="aze" />
         <div v-show="actived == 'Emoji'">
             <EmojiPanelSearch
@@ -192,6 +192,8 @@ export default {
 
 <style lang="scss">
 .emoji-panel {
+    position : absolute;
+    z-index : 3;
     width: 425px;
     border-radius: 7px;
     overflow: hidden;

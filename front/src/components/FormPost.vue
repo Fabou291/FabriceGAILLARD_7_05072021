@@ -1,6 +1,6 @@
 <template>
     <form class="form-post" action="">
-        <button type="button" class="form-post__brownse-btn form-post-btn">
+        <button type="button" class="form-post__brownse-btn form-post-btn" v-if="canBrownse">
             <svg width="24" height="24" viewBox="0 0 24 24">
                 <path
                     fill="currentColor"
@@ -21,39 +21,22 @@
         -->
 
         <div
-            @drop.prevent="drop"
-            @dragenter.prevent=""
-            @dragstart.prevent=""
-            @drag.prevent=""
+
+            @drop.prevent="drop" @dragenter.prevent="" @dragstart.prevent="" @drag.prevent=""
             @keypress.enter.prevent=""
-            @input="
-                parseEmpty();
-                parseEmoji();
-                parseURL();
-                textarea.normalize();
-            "
+            @input="parseEmpty(); parseEmoji(); parseURL(); textarea.normalize();"
             @paste.prevent="paste"
+
             class="form-post__field"
             contenteditable="true"
             placeholder="Envoyer un message dans ce groupe"
             ref="textarea"
-            autocorrect="off"
             spellcheck="false"
-        >
-            <span contenteditable="false">
-                <img draggable="false" style="width:24px" alt=":a:" aria-label=":a:" :src="require('@/assets/twemoji/svg/1f170.svg')"/>
-            </span>
-            [Premiere span]
-            <span contenteditable="false">
-                <img draggable="false" style="width:24px" alt=":a:" aria-label=":a:" :src="require('@/assets/twemoji/svg/1f170.svg')"/>
-            </span>
-            [Deuxieme span]
-            <span contenteditable="false">
-                <img draggable="false" style="width:24px" alt=":a:" aria-label=":a:" :src="require('@/assets/twemoji/svg/1f170.svg')"/>
-            </span>
-        </div>
+            v-html="modelValue"
 
-        <button type="button" class="form-post-btn">
+        ></div>
+
+        <button type="button" class="form-post-btn" v-if="canGIF" >
             <svg width="24" height="24" viewBox="0 0 24 24">
                 <path
                     fill="currentColor"
@@ -61,7 +44,7 @@
                 ></path>
             </svg>
         </button>
-        <button type="button" class="form-post-btn">
+        <button type="button" class="form-post-btn" v-if="canEmoji">
             <svg width="24" height="24" viewBox="0 0 24 24">
                 <path
                     fill="currentColor"
@@ -69,6 +52,7 @@
                 ></path>
             </svg>
         </button>
+        
     </form>
 </template>
 
@@ -84,6 +68,9 @@ export default {
     },
     props: {
         modelValue: { type: String, required: true },
+        canBrownse : { type: Boolean, default : false },
+        canGIF : { type: Boolean, default : false },
+        canEmoji : { type: Boolean, default : false }
     },
     computed: {
         ...mapState(["emoji"]),

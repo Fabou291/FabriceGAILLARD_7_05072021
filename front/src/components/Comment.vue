@@ -1,5 +1,6 @@
 <template>
     <div class="comment">
+        <InteractionPost class="post__interaction" v-show="!modifyMode" :user_id="parseInt(comment.user_id)" @switchModifyMode="switchModifyMode"/>
         <div class="comment__sidebar"></div>
         <div class="comment__main">
 
@@ -10,7 +11,9 @@
                     <span class="comment__user-pseudo">{{ comment.user_pseudo }}</span> <span class="comment__date">{{ comment.date }}</span>                
                 </div>
             
-                <p class="comment__content" v-html="content" ></p>                
+                <p class="comment__content" v-html="content" ></p> 
+
+              
             </div>
 
         </div>
@@ -21,12 +24,13 @@
     import Avatar from '@/components/Avatar.vue';
     import ContentParser from "../js/contentParser.js";
     import { mapState } from 'vuex';
-    
+    import InteractionPost from '@/components/InteractionPost.vue';
 
     export default {
         data() {
             return {
-                content : ""
+                content : "",
+                modifyMode : false,
             }
         },
         props : {
@@ -36,7 +40,7 @@
             ...mapState(['emoji'])
         },
         components : {
-            Avatar,
+            Avatar,InteractionPost
         },
         methods : {
             parseComment(){
@@ -62,7 +66,13 @@
         .comment__sidebar {
             background-color: lighten($grey-47,7);
         }
+
+        .post__interaction{
+            display : block;
+        }
     }
+
+    
 
     &__sidebar {
         width: 5px;

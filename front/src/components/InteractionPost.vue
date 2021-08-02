@@ -59,36 +59,38 @@ export default {
         },
     },
     methods: {
-        modify() {},
+        modify() {
+            this.$emit('switchModifyMode')
+        },
         reply() {
-            this.$emit('modifyPost')
+            
         },
     },
 };
 </script>
 
 <style lang="scss">
-.interaction-post {
-    color: $grey-142;
-    border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0px 0px 1px black;
+    .interaction-post {
+        color: $grey-142;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0px 0px 1px black;
 
-    &__list {
-        display: flex;
-    }
-    &__list-item {
-    }
+        &__list {
+            display: flex;
+        }
+        &__list-item {
+        }
 
-    &__btn {
-        background-color: darken($grey-32, 1%);
-        width: 38px;
-        height: 35px;
-        vertical-align: center;
-        &:hover {
-            background-color: lighten($grey-32, 3%);
-            color: lighten($grey-142, 4%);
+        &__btn {
+            background-color: darken($grey-32, 1%);
+            width: 38px;
+            height: 35px;
+            vertical-align: center;
+            &:hover {
+                background-color: lighten($grey-32, 3%);
+                color: lighten($grey-142, 4%);
+            }
         }
     }
-}
 </style>
