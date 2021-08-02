@@ -1,5 +1,5 @@
-import createHttpError from 'http-errors';
-import multer from 'multer';
+const createHttpError = require('http-errors');
+const multer = require('multer');
 
 const mimeTypes = {
     'image/jpg' : 'jpg',
@@ -31,4 +31,4 @@ const storage = multer.diskStorage({
 
 
    
-export default multer({ storage: storage }).single('image')
+module.exports = multer({ storage: storage }).single('image')

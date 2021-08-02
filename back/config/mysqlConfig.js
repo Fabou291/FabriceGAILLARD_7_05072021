@@ -1,4 +1,4 @@
-import mysql from "mysql";
+const mysql = require("mysql");
 
 const  mysqlDataBase = mysql.createConnection({
     host     : 'localhost',
@@ -18,4 +18,4 @@ const mysqlAsyncQuery = function(sql, params = []) {
 
 
 
-export { mysqlDataBase, mysqlAsyncQuery };
+module.exports = { mysqlDataBase, mysqlAsyncQuery };

@@ -1,6 +1,6 @@
-import express from "express";
-import roleController from "../controllers/roleController.js";
-import authenticationMiddleware from "../middleware/authenticationMiddleware.js";
+const express = require("express");
+const roleController = require("../controllers/roleController.js");
+const authenticationMiddleware = require("../middleware/authenticationMiddleware.js");
 
 const router = express.Router();
 
@@ -14,4 +14,4 @@ router.put('/:id', authenticationMiddleware, roleController.modify)
 
 router.delete('/:id', authenticationMiddleware, roleController.remove)
 
-export default router;
+module.exports = router;

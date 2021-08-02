@@ -1,6 +1,6 @@
-import express from "express";
-import commentController from "../controllers/commentController.js";
-import authenticationMiddleware from "../middleware/authenticationMiddleware.js";
+const express = require("express");
+const commentController = require("../controllers/commentController.js");
+const authenticationMiddleware = require("../middleware/authenticationMiddleware.js");
 
 const router = express.Router();
 
@@ -14,4 +14,4 @@ router.put('/:id', authenticationMiddleware, commentController.modify)
 
 router.delete('/:id', authenticationMiddleware, commentController.remove)
 
-export default router;
+module.exports = router;

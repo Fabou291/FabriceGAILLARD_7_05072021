@@ -1,4 +1,4 @@
-import {mysqlDataBase} from "../../config/mysqlConfig.js";
+const {mysqlDataBase} = require("../../config/mysqlConfig.js");
 
 const findAll = (req,res,next) => {
     mysqlDataBase.query('SELECT * FROM role',function(error, results, fields){
@@ -36,4 +36,4 @@ const remove = (req,res,next) => {
 }
 
 
-export default { findAll, findOne, create, modify, remove }
+module.exports = { findAll, findOne, create, modify, remove }

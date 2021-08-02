@@ -1,4 +1,4 @@
-import {mysqlDataBase} from "../../config/mysqlConfig.js";
+const {mysqlDataBase} = require("../../config/mysqlConfig.js");
 const findAll = (req,res,next) => {
     mysqlDataBase.query('SELECT * FROM channel',function(error, results, fields){
         if(error) next(error)
@@ -38,4 +38,4 @@ const remove = (req,res,next) => {
 }
 
 
-export default { findAll, findOne, create, modify, remove }
+module.exports = { findAll, findOne, create, modify, remove }

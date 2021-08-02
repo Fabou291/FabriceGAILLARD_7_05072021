@@ -1,7 +1,7 @@
-import passwordValidator from 'password-validator';
-import createError from "http-errors";
-import bcrypt from "bcrypt";
-import fs from 'fs';
+const passwordValidator = require('password-validator');
+const createError = require("http-errors");
+const bcrypt = require("bcrypt");
+const fs = require('fs');
 
 const getSchema = () => {
     //const rawdata = fs.readFileSync('commonPass.json');
@@ -39,7 +39,7 @@ const encrypt = (req,res,next) => {
 
 }
 
-export default { checkValidity, encrypt }
+module.exports = { checkValidity, encrypt }
 
 
 

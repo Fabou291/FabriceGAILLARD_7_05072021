@@ -1,6 +1,6 @@
-import JWT from "jsonwebtoken";
-import createHttpError from "http-errors";
-import { mysqlAsyncQuery } from "../../config/mysqlConfig.js";
+const JWT = require("jsonwebtoken");
+const createHttpError = require("http-errors");
+const { mysqlAsyncQuery } = require("../../config/mysqlConfig.js");
 
 
 
@@ -11,7 +11,7 @@ import { mysqlAsyncQuery } from "../../config/mysqlConfig.js";
  * @param {*} res
  * @param {*} next
  */
-export default (req, res, next) => {
+const verifAuthentication = (req, res, next) => {
     try {
         if (!req.headers.authorization) throw createHttpError.Unauthorized("Not Authenticated");
 
@@ -35,3 +35,5 @@ export default (req, res, next) => {
         return next(error);
     }
 };
+
+module.exports = verifAuthentication;

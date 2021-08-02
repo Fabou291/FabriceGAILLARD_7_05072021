@@ -1,8 +1,8 @@
-import express from "express";
-import authenticationController from "../controllers/authenticationController.js";
-import userController from "../controllers/userController.js";
-import emailMiddleware from "../middleware/emailMiddleware.js";
-import passwordMiddleware from "../middleware/passwordMiddleware.js";
+const express = require("express");
+const authenticationController = require("../controllers/authenticationController.js");
+const userController = require("../controllers/userController.js");
+const emailMiddleware = require("../middleware/emailMiddleware.js");
+const passwordMiddleware = require("../middleware/passwordMiddleware.js");
 const router = express.Router();
 
 router.post(
@@ -21,4 +21,4 @@ router.post(
     userController.create
 );
 
-export default router;
+module.exports = router;

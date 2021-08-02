@@ -1,6 +1,6 @@
-import validator from "email-validator";
-import crypto from "crypto";
-import createError from "http-errors";
+const validator = require("email-validator");
+const crypto = require("crypto");
+const createError = require("http-errors");
 
 
 const checkValidity = (req,res,next) => {
@@ -10,7 +10,7 @@ const checkValidity = (req,res,next) => {
 
 
 const encrypt = (req, res, next) => {
-
+    console.log(process.env.SECRET_EMAIL_KEY)
     req.body.email = crypto
         .createCipheriv(
             "aes-256-gcm",
@@ -27,4 +27,4 @@ const encrypt = (req, res, next) => {
 };
 
 
-export default {checkValidity, encrypt};
+module.exports = {checkValidity, encrypt};

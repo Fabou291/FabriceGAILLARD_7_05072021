@@ -1,4 +1,4 @@
-import rateLimit from "express-rate-limit"
+const rateLimit = require("express-rate-limit");
 //Protège des attaques ddos
 
 const initialization = (app) => {
@@ -10,5 +10,5 @@ const initialization = (app) => {
 
 
 
-export default {initialization}
+module.exports = {initialization}
   

@@ -1,6 +1,6 @@
-import express from "express";
-import post from "../controllers/postController.js"
-import authenticationMiddleware from "../middleware/authenticationMiddleware.js";
+const express = require("express");
+const post = require("../controllers/postController.js")
+const authenticationMiddleware = require("../middleware/authenticationMiddleware.js");
 
 
 const router = express.Router();
@@ -15,4 +15,4 @@ router.put('/:id', authenticationMiddleware, post.modify);
 
 router.delete('/:id', authenticationMiddleware, post.remove);
 
-export default router;
+module.exports = router;

@@ -1,4 +1,4 @@
-import helmet from 'helmet'; 
+const helmet = require('helmet'); 
 
 const initialization = (app) => {
     app.use(helmet());
@@ -11,4 +11,4 @@ const initialization = (app) => {
     })
 }
 
-export default { initialization };
+module.exports = { initialization };

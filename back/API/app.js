@@ -1,27 +1,26 @@
-import express from "express";
-import createError from "http-errors";
+const express = require("express");
+const createError = require("http-errors");
 const app = express();
 
 // Les apelles au fichiers de config
-import multerConfig from "../config/multerConfig.js";
-import headerConfig from "../config/headerConfig.js";
-import sessionConfig from "../config/sessionConfig.js";
-import limiterConfig from "../config/limiterConfig.js"
+const headerConfig = require("../config/headerConfig.js");
+const sessionConfig = require("../config/sessionConfig.js");
+const limiterConfig = require("../config/limiterConfig.js");
 
 
-//multerConfig.initialization(app);
+
 headerConfig.initialization(app);
 limiterConfig.initialization(app);
 headerConfig.initialization(app);
 
 // Les router
-import roleRouter from "./routes/roleRouter.js";
-import userRouter from "./routes/userRouter.js";
-import authenticationRouter from "./routes/authenticationRouter.js";
-import channelGroupRouter from "./routes/channelGroupRouter.js";
-import channelRouter from "./routes/channelRouter.js";
-import postRouter from "./routes/postRouter.js";
-import commentRouter from "./routes/commentRouter.js";
+const roleRouter = require("./routes/roleRouter.js");
+const userRouter = require("./routes/userRouter.js");
+const authenticationRouter = require("./routes/authenticationRouter.js");
+const channelGroupRouter = require("./routes/channelGroupRouter.js");
+const channelRouter = require("./routes/channelRouter.js");
+const postRouter = require("./routes/postRouter.js");
+const commentRouter = require("./routes/commentRouter.js");
 
 
 app.use(express.json());
@@ -42,4 +41,4 @@ app.use((error, req, res, next) => {
 });
 
 
-export default app;
+module.exports = app;

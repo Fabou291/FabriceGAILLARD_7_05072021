@@ -1,4 +1,4 @@
-import session from "express-session";
+const session = require("express-session");
 
 const ONE_HOUR = 1000 * 60 * 60;
 const NODE_ENV = "devlopment";
@@ -21,4 +21,4 @@ const initialization = (app) => {
     );
 }
 
-export default { initialization }
+module.exports = { initialization }

@@ -1,8 +1,9 @@
-import http from "http";
-import app from "./API/app.js";
-import dotenv from "dotenv";
-import { path, __dirname } from "./config/pathConfig.js";
-dotenv.config({ path: __dirname + '.env' })
+const http = require("http");
+const app = require("./API/app.js");
+const dotenv = require("dotenv");
+const path = require("path");
+
+dotenv.config({ path: __dirname + '\\.env' })
 
 
 const server = http.createServer(app);

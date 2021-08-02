@@ -1,7 +1,7 @@
-import { mysqlAsyncQuery } from "../../config/mysqlConfig.js";
-import tokenHelper from "../helpers/tokenHelper.js";
-import createError from "http-errors";
-import bcrypt from "bcrypt";
+const { mysqlAsyncQuery } = require("../../config/mysqlConfig.js");
+const tokenHelper = require("../helpers/tokenHelper.js");
+const createError = require("http-errors");
+const bcrypt = require("bcrypt");
 
 
 const login = async (req, res, next) => {
@@ -19,7 +19,7 @@ const login = async (req, res, next) => {
 
             const user_statu = (await mysqlAsyncQuery(
                 `SELECT RIGHT(SEC_TO_TIME((?*60) - TIMESTAMPDIFF(SECOND, created_at, CURRENT_TIMESTAMP )),4) as remaining_time, COUNT(*) as is_blocked
-                 FROM blocked_user WHERE created_at >= (CURRENT_TIMESTAMP - INTERVAL ? MINUTE) AND user_id = ?;`,
+                FROM blocked_user WHERE created_at >= (CURRENT_TIMESTAMP - INTERVAL ? MINUTE) AND user_id = ?;`,
                 [delay, delay, user.id]
             ))[0];
 
@@ -38,4 +38,4 @@ const login = async (req, res, next) => {
     }
 };
 
-export default { login };
+module.exports = { login };

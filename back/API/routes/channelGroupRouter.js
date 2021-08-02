@@ -1,6 +1,6 @@
-import express from "express";
-import channelGroupController from "../controllers/channelGroupController.js";
-import authenticationMiddleware from "../middleware/authenticationMiddleware.js";
+const express = require("express");
+const channelGroupController = require("../controllers/channelGroupController.js");
+const authenticationMiddleware = require("../middleware/authenticationMiddleware.js");
 
 const router = express.Router();
 
@@ -14,4 +14,4 @@ router.put('/:id', authenticationMiddleware, channelGroupController.modify);
 
 router.delete('/:id', authenticationMiddleware, channelGroupController.remove);
 
-export default router;
+module.exports = router;
