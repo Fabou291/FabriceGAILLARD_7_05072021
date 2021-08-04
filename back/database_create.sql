@@ -252,7 +252,7 @@ BEGIN
         INSERT INTO blocked_user (user_id) VALUES(_user_id);
         SELECT CONCAT("Your accound has been locked for ", delay, " minutes") AS message;
     ELSE
-        SELECT CONCAT("Remaining attempt before locking your account : ", (attempt_limit - attempt_number)) AS message;
+        SELECT CONCAT("Password incorrect, Remaining attempt before locking your account : ", (attempt_limit - attempt_number)) AS message;
     END IF;
 END|
 DELIMITER ;

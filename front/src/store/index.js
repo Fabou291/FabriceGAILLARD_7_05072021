@@ -1,5 +1,8 @@
 import { createStore } from 'vuex'
 
+import userModule from "./module/userModule.js";
+import errorModule from "./module/errorModule.js";
+
 const emojisData = require("@/assets/twemoji/datas/listEmojiByGroup.json");
 const emojisDataIndexed = function(){
   let emojisDataIndexed = [];
@@ -18,12 +21,6 @@ const emojisShortCodeIndex = function(){
 
 export default createStore({
   state: {
-    user : {
-      id : '0',
-      pseudo : 'Fab',
-      avatar : require("@/assets/imageProfil.png"),
-      role : 'admin'
-    },
     panelCreateChan : {
       component : null,
       visible : false
@@ -50,15 +47,15 @@ export default createStore({
   mutations: {
     UPDATE_ACTUAL_POST_IN_MODIFY_MODE(state){
       state.actualPostInModifyMode = 'A';
-
     }
   },
   actions: {
     updateActualPostInModifyMode(context){
       context.commit('UPDATE_ACTUAL_POST_IN_MODIFY_MODE');
-     
-    }
+    },
   },
   modules: {
+    userModule,
+    errorModule
   }
 })

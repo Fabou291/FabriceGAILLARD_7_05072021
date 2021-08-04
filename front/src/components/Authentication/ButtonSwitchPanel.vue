@@ -1,14 +1,12 @@
 <template>
-    <button type="button" class="btn-switch-panel" @click.prevent="switchPanel">{{ innerHTML }}</button>
+    <button type="button" class="btn-switch-panel" @click.prevent="switchPanel">
+        <slot></slot>
+    </button>
 </template>
 
 <script>
 export default {
-    props : {
-        innerHTML : {
-            type : String, required : true
-        }
-    },
+
     methods : {
         switchPanel(){
             this.$emit('switchPanel');

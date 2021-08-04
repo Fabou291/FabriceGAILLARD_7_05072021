@@ -32,7 +32,10 @@ const login = async (req, res, next) => {
         }
 
         await mysqlAsyncQuery("UPDATE user SET refresh_token = ? WHERE id=  ?", [tokenHelper.getRefreshToken(user.id), user.id]);
-        res.status(200).send({ accessToken : tokenHelper.getAccessToken(user.id) });
+        res.status(200).send({ 
+            user,
+            accessToken : tokenHelper.getAccessToken(user.id) 
+        });
     } catch (error) {
         next(error);
     }

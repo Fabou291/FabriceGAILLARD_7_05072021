@@ -6,10 +6,10 @@
                 <AuthenticationBrand/>
             </template>
             <template #main>
-                <FormLogin/>
+                <FormRegister/>
             </template>
             <template #footer>
-                <SuggestionLink to="/register" anchor="INSCRIVEZ-VOUS" suggestion="Pas encore de compte ?" />
+                <SuggestionLink to="/login" anchor="CONNECTEZ-VOUS" suggestion="Vous avez déja un compte ?" />
             </template>
        </DefaultModal>
 
@@ -21,7 +21,7 @@
 import DefaultModal from "@/components/authentication/DefaultModal.vue";
 import AuthenticationBrand from "@/components/authentication/authenticationBrand.vue";
 import SuggestionLink from "@/components/authentication/SuggestionLink.vue";
-import FormLogin from "@/components/authentication/FormLogin.vue";
+import FormRegister from "@/components/authentication/FormRegister.vue";
 
 
 
@@ -30,7 +30,7 @@ import FormLogin from "@/components/authentication/FormLogin.vue";
 import { mapActions } from 'vuex';
 export default {
     components: {
-        DefaultModal, AuthenticationBrand, SuggestionLink, FormLogin
+        DefaultModal, AuthenticationBrand, SuggestionLink, FormRegister
     },
     data() {
         return {

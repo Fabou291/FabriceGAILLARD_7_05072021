@@ -24,13 +24,13 @@ const commentRouter = require("./routes/commentRouter.js");
 
 
 app.use(express.json());
-app.use('/role', roleRouter);
-app.use('/user', userRouter);
-app.use('/auth', authenticationRouter);
-app.use('/channel-group', channelGroupRouter);
-app.use('/post', postRouter);
-app.use('/channel', channelRouter);
-app.use('/comment', commentRouter);
+app.use('/api/role', roleRouter);
+app.use('/api/user', userRouter);
+app.use('/api/auth', authenticationRouter);
+app.use('/api/channel-group', channelGroupRouter);
+app.use('/api/post', postRouter);
+app.use('/api/channel', channelRouter);
+app.use('/api/comment', commentRouter);
 
 
 
