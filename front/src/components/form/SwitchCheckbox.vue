@@ -6,7 +6,7 @@
                 <slot></slot>
             </span>
             <span></span>
-            <div class="switch-checkbox__switch-btn" @click="this.$emit('checkSwitch')"></div>
+            <div class="switch-checkbox__switch-btn" @click.prevent="this.$emit('checkSwitch')"></div>
         </label>
     </div>   
 </template>
