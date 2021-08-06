@@ -2,8 +2,11 @@ export default class HTTPRequest{
     static baseUrl = "http://localhost:3000/api/";
 
 
-    static async get(uri){
-        return await fetch(this.baseUrl + uri);
+    static async get(uri, headers = {}){
+        return await fetch(this.baseUrl + uri, {
+            method: "GET",
+            headers: { ...headers }
+        });
     }
 
     static async post(uri, body = {}, headers = {}){

@@ -17,7 +17,7 @@ const verifAuthentication = (req, res, next) => {
 
         const accessToken = req.headers.authorization.split(" ")[1];
 
-        JWT.verify(accessToken, process.env.SECRET_TOKEN, (err, decoded) => {
+         JWT.verify(accessToken, process.env.SECRET_ACCESS_TOKEN, (err, decoded) => {
             if (err) {
                 if (err.name == "TokenExpiredError")
                     return next("TokenExpiredError") // Retourner un code erreur spécifique pour que le front comprenne qu'il faille refresh le token

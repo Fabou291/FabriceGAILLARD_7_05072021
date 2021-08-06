@@ -4,13 +4,14 @@ const createError = require("http-errors");
 
 
 const checkValidity = (req,res,next) => {
+    console.log(req.body.email)
     if(validator.validate(req.body.email)) next();
     else next(createError.BadRequest('Invalid email'));
 }
 
 
 const encrypt = (req, res, next) => {
-    console.log(process.env.SECRET_EMAIL_KEY)
+
     req.body.email = crypto
         .createCipheriv(
             "aes-256-gcm",

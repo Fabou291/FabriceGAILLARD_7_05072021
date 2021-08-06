@@ -11,19 +11,18 @@ const findAll = (req,res,next) => {
 const findOne = (req,res,next) => {
     mysqlDataBase.query('SELECT * FROM user WHERE id= ?', [req.params.id] , function (error, results, fields) {
         if (error) next(error);
-        else res.status(200).send({results});
+        else res.status(200).send(results[0]);
     });
 }
 
 const create = (req,res,next) => {
 
-    const user = req.body;
     mysqlDataBase.query(
         `
             INSERT INTO user (username,avatar,email,password, role_id)
             VALUES ( ?, ?, ?, ?, (SELECT id FROM role WHERE name = "user") )
         `,
-        [ user.username, user.avatar, user.email, user.password, "user" ],
+        [ req.body.username, req.body.avatar, req.body.email, req.body.password, "user" ],
         function (error, results, fields) {
             if (error){
                 if(error.sqlState == "23000") next(createError.BadRequest('Email already exist'))

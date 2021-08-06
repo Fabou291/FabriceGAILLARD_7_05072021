@@ -5,7 +5,7 @@
             v-model="panelCreateChan.visible"
             v-if="panelCreateChan.visible"
         />
-        
+
         <div class="container">
             <Header />
             <main class="main">

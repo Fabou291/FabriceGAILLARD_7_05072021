@@ -38,7 +38,7 @@
                 <InputPasswordConfirmation
                     class="form-auth__input"
                     :inputCorrespondanceValue="password"
-                    placeholder="Resaisissez le même mot de passe."
+                    placeholder="Saisissez le même mot de passe."
                     v-model="passwordConfirmation"
                 />
 
@@ -87,7 +87,7 @@ export default {
         };
     },
     methods: {
-        ...mapActions("userModule", ["fetchLogin"]),
+        ...mapActions("userModule", ["register"]),
         switchRemember() {
             this.remember = !this.remember;
         },
@@ -101,8 +101,6 @@ export default {
                     ...authentication,
                     email: this.email,
                     username: this.username,
-                    password: this.password,
-                    passwordConfirmation: this.passwordConfirmation,
                     remember: this.remember,
                 })
             );
@@ -112,19 +110,23 @@ export default {
             const authentication = JSON.parse(window.sessionStorage.getItem("authentication"));
             this.email = authentication.email;
             this.username = authentication.username;
-            this.password = authentication.password;
-            this.passwordConfirmation = authentication.passwordConfirmation;
             this.remember = authentication.remember;
         },
         post() {
             this.setInSessionStorage();
             if (!document.querySelector(".form-auth form").reportValidity()) return;
-            this.fetchLogin({ email: this.email.value, password: this.password.value });
+            this.register(
+                { 
+                    email: this.email, 
+                    password: this.password,
+                    username: this.username,
+                    avatar : "Une url par default"
+                }
+            );
         },
     },
     created(){
         this.hydratefromStorage();
-        console.log(this.email)
     }
 };
 </script>

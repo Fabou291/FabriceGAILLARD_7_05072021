@@ -12,6 +12,7 @@ const initialization = (app) => {
             saveUninitialized: false,
             secret: SESSION_SECRET,
             cookie: {
+                domain : "http://localhost:8080/",
                 maxAge: ONE_HOUR,
                 httpOnly: true, //HTTP only
                 sameSite: true,

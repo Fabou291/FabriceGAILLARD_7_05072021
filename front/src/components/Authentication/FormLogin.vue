@@ -62,7 +62,6 @@ export default {
                 JSON.stringify( { 
                     ...authentication,
                     email : this.email, 
-                    password : this.password, 
                     remember : this.remember
                 } )
             )
@@ -71,7 +70,6 @@ export default {
             if(!window.sessionStorage.getItem('authentication')) return;
             const authentication = JSON.parse(window.sessionStorage.getItem('authentication'));
             this.email = authentication.email;
-            this.password = authentication.password;
             this.remember = authentication.remember;
         },
         post() {
