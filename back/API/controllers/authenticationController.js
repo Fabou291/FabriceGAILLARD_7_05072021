@@ -44,4 +44,16 @@ const login = async (req, res, next) => {
     }
 };
 
-module.exports = { login };
+const refreshToken = async (req, res, next) => {
+    try{
+        const { refreshToken, userId } = req.body;
+        let decoded = await tokenHelper.verifyRefreshToken(refreshToken);
+        if (userId && userId !== decoded.userId) throw createHttpError.Unauthorized("Invalid refresh token");
+        res.status(200).json({ accessToken : tokenHelper.getAccessToken(userId) })
+    }
+    catch(error){
+        next(error);
+    }
+}
+
+module.exports = { login, refreshToken };

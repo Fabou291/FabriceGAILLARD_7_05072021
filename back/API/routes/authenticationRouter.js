@@ -21,4 +21,9 @@ router.post(
     userController.create
 );
 
+router.post(
+    "/refresh-token",
+    authenticationController.refreshToken
+);
+
 module.exports = router;

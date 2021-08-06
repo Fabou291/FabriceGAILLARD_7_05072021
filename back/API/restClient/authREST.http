@@ -8,7 +8,7 @@ Content-type : application/json
 }
 
 ### register
-POST http://localhost:3000/auth/register
+POST http://localhost:3000/api/auth/register
 Content-type : application/json
 
 {   
@@ -16,5 +16,16 @@ Content-type : application/json
         "email"     : "fabou291@gmail.com",
         "password"  : "TESTtestm1234.",
         "username"    : "fab"        
+
+}
+
+### refreshToken
+POST http://localhost:3000/api/auth/refresh-token
+Content-type : application/json
+
+{   
+
+        "id"     : "1",
+        "refreshToken"  : "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTYyODI2NzczNywiZXhwIjoxNjI4MzU0MTM3fQ.m0yuyoHoWK9crCxm2Y-izugOy5n824tU6BsAdM4X6fM"       
 
 }

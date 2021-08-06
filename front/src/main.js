@@ -12,15 +12,18 @@ import '@/sass/layout/_sidebar.scss';
 
 
 router.beforeEach(async (to, from, next) => {
+
+
     if (to.matched.some(record => record.meta.requiresAuth)) {
         const accessToken = window.localStorage.getItem('accessToken');
         if(accessToken == null) next('/login');
         
         if(store.state.userModule.id == null){
-            const response = await store.dispatch('userModule/getById', {accessToken} ,{root : true})
-            if(!response){
-                //Refresh le token plutot que de rediriger
-                next('/login');
+            const user = await store.dispatch('userModule/getById', {accessToken} ,{root : true})
+            if(!user){
+                const accessTokenRefresh = await store.dispatch('userModule/refreshToken', {accessToken} ,{root : true})
+                if(!accessTokenRefresh) next('/login');
+                else window.localStorage.setItem('accessToken',accessTokenRefresh.accessToken)
             }
         }
         next();

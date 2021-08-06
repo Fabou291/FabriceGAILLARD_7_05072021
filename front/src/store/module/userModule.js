@@ -55,7 +55,6 @@ export default {
 
         async getById(context,body){
             try{
-                console.log(body.accessToken)
                 const decode = JWT.decode(body.accessToken, {complete: true});
                 const response = await HTTPRequest.get(`user/${decode.payload.userId}`, {
                     'Authorization' : `Bearer ${ body.accessToken }` 
@@ -65,6 +64,25 @@ export default {
                 
                 const user = await response.json();
                 context.commit('UPDATE', user);
+                return true;
+            }
+            catch(error){
+                context.dispatch('errorModule/setError', error, { root: true })
+                return false;
+            }
+        },
+
+        async refreshToken(context,body){
+            try{
+                const { userId, refreshToken } = body;
+                const response = await HTTPRequest.post(`auth/refresh-token`,{ userId, refreshToken });
+
+                if(!response.ok) throw await response.json();
+                
+                const accessToken = await response.json();
+
+                window.localStorage.setItem('accessToken', accessToken);
+
                 return true;
             }
             catch(error){

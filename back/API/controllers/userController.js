@@ -67,4 +67,5 @@ const remove = (req,res,next) => {
     });  
 }
 
+
 module.exports = { findAll, findOne, create, modify, remove }
