@@ -5,11 +5,11 @@
             <div class="post__sidebar"></div>
             <div class="post__main">
               
-                    <Avatar class="post__user-avatar" :user="{ pseudo : post.user_pseudo, avatar : post.user_avatar }" />
+                    <Avatar class="post__user-avatar" :user="{ username : post.user_username, avatar : post.user_avatar }" />
                 
                     <div class="post__infos">
                         <div class="post__aside">
-                            <span class="post__user-pseudo">{{ post.user_pseudo }}</span> <span class="post__date">{{ post.date }}</span>                
+                            <span class="post__user-username">{{ post.user_pseudo }}</span> <span class="post__date">{{ post.date }}</span>                
                         </div>
 
                         <FormPost  @keydown.esc.prevent="switchModifyMode" v-model="content" :canEmoji="true" v-if="modifyMode" />
@@ -129,7 +129,7 @@ export default {
         margin : -6px 8px 0 -6px
     }
 
-    &__user-pseudo{
+    &__user-username{
         color : $green;
         @include setCircularStdFont('Medium');
         font-size : 15px;

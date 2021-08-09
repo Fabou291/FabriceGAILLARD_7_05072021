@@ -3,13 +3,13 @@
         <div class="sidebar__content">
             <div class="user">
                 <div class="user__representation">
-                    <Avatar class="user__avatar" :user="{ pseudo : 'Fab', avatar : require('@/assets/imageProfil.png') }" />
+                    <Avatar class="user__avatar" :user="{ username : user.username, avatar : require('@/assets/imageProfil.png') }" />
                     <UserStatuButton class="user__statu" />
                 </div>
 
                 <div class="user__identifying">
-                    <div class="user__pseudo">Fab</div>
-                    <div>#6452</div>
+                    <div class="user__pseudo">{{ user.username }}</div>
+                    <div>#{{ user.id }}</div>
                 </div>
                 
                 <button class="user__btn-setting">
@@ -56,6 +56,7 @@
 import channelGroup from "@/components/PrincipalNav/ChannelGroup.vue"
 import UserStatuButton from "@/components/userStatuButton.vue"
 import Avatar from '@/components/Avatar.vue';
+import { mapGetters } from 'vuex';
 
 export default {
     components : {
@@ -122,6 +123,9 @@ export default {
 
             ]
         }
+    },
+    computed : {
+        ...mapGetters('userModule',['user'])
     },
     methods : {
         updateActiveChannel(channelIndex,groupIndex){

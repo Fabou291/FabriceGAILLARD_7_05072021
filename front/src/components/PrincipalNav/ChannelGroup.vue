@@ -6,7 +6,7 @@
                 <span class="channel-group__title">{{ mutableGoup.name }}</span>
             </button>
 
-            <ButtonPopUp v-if="user.role == 'admin'" :label="'Ajouter un channel'" @click="addChannel">
+            <ButtonPopUp v-if="user.role_id == 1" :label="'Ajouter un channel'" @click="addChannel">
                 <AddIcon class="" />
             </ButtonPopUp>
         </div>
@@ -29,7 +29,7 @@
                     <span>{{ channel.name }}</span>
                 </router-link>
 
-                <ButtonPopUp class="btn-rename" :label="'Settings'" v-if="user.role == 'admin'" @click="modifyChannel(j)">
+                <ButtonPopUp class="btn-rename" :label="'Settings'" v-if="user.role_id == 1" @click="modifyChannel(j)">
                     <svg class="actionIcon-PgcMM2" aria-hidden="false" width="16" height="16" viewBox="0 0 16 16">
                         <path
                             fill="currentColor"
@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapGetters } from "vuex";
 import DropDownIcon from "@/components/DropDownIcon.vue";
 import AddIcon from "@/components/AddIcon.vue";
 import ButtonPopUp from "@/components/ButtonPopUp.vue";
@@ -64,7 +64,8 @@ export default {
         };
     },
     computed: {
-        ...mapState(["user", 'panelCreateChan']),
+        ...mapGetters('userModule', ['user']),
+        ...mapState(['panelCreateChan'])
     },
     props: {
         group: { type: Object, required: true },
@@ -85,7 +86,7 @@ export default {
         modifyChannel(index) {
             this.mutableGoup.listChannel[index]
         },
-    },
+    }
 };
 </script>
 

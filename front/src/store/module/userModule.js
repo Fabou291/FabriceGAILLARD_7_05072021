@@ -19,6 +19,16 @@ export default {
             state.role_id = user.role_id;
         }
     },
+    getters : {
+        user: state => {
+            return {
+                id : state.id,
+                username : state.username,
+                avatar : state.avatar,
+                role_id : state.role_id,
+            }
+        }
+    },
     actions: {
 
         async fetchLogin(context, body){

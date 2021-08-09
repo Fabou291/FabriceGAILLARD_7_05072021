@@ -4,11 +4,11 @@
         <div class="comment__sidebar"></div>
         <div class="comment__main">
 
-            <Avatar class="comment__user-avatar" :user="{ pseudo : comment.user_pseudo, avatar : comment.user_avatar }" />
+            <Avatar class="comment__user-avatar" :user="{ pseudo : comment.user_username, avatar : comment.user_avatar }" />
         
             <div>
                 <div class="comment__aside">
-                    <span class="comment__user-pseudo">{{ comment.user_pseudo }}</span> <span class="comment__date">{{ comment.date }}</span>                
+                    <span class="comment__user-username">{{ comment.user_pseudo }}</span> <span class="comment__date">{{ comment.date }}</span>                
                 </div>
             
                 <p class="comment__content" v-html="content" ></p> 
@@ -96,7 +96,7 @@
         margin : -6px 8px 0 -6px
     }
 
-    &__user-pseudo{
+    &__user-username{
         color : $green;
         @include setCircularStdFont('Medium');
         font-size : 15px;

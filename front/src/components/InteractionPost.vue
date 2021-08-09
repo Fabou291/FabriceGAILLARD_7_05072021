@@ -47,13 +47,13 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 export default {
     props: {
         user_id: { type: Number, required: true },
     },
     computed: {
-        ...mapState(["user"]),
+        ...mapGetters('userModule', ['user']),
         isOwner() {
             return this.user_id == this.user.id;
         },
