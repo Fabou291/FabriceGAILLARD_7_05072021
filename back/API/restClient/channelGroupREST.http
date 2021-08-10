@@ -1,13 +1,16 @@
 ### findAll
-GET http://localhost:3000/channel-group/
+GET http://localhost:3000/api/channel-group/
+
+### findAll
+GET http://localhost:3000/api/channel-group/channels
 
 
 ### findOne
-GET http://localhost:3000/channel-group/2
+GET http://localhost:3000/api/channel-group/2
 
 
 ### create
-POST http://localhost:3000/channel-group/
+POST http://localhost:3000/api/channel-group/
 Content-type : application/json
 
 {   
@@ -18,7 +21,7 @@ Content-type : application/json
 }
 
 ### modify
-PUT http://localhost:3000/channel-group/2
+PUT http://localhost:3000/api/channel-group/2
 Content-type : application/json
 
 {
@@ -29,4 +32,4 @@ Content-type : application/json
 }
 
 ### remove
-DELETE http://localhost:3000/channel-group/2
+DELETE http://localhost:3000/api/channel-group/2

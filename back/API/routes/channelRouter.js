@@ -7,6 +7,10 @@ const router = express.Router();
 
 router.get('/', authenticationMiddleware, channelController.findAll);
 
+router.get('/byGroup', authenticationMiddleware, channelController.findAllByGroup);
+
+router.get('/:id/post', authenticationMiddleware, channelController.findAllPostOfChannel);
+
 router.get('/:id', authenticationMiddleware, channelController.findOne);
 
 router.post('/', authenticationMiddleware, channelController.create);

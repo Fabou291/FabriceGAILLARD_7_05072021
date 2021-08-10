@@ -131,9 +131,14 @@ export default {
         &:hover {
             color: $grey-193;
             background-color: $grey-32;
+            
             .btn-rename {
                 display: block;
             }
+        }
+        & a:visited, & a:hover{
+            color : inherit;
+            text-decoration : none;
         }
         &--active {
             background-color: $grey-47;
