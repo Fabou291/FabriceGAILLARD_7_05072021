@@ -1,15 +1,15 @@
 <template>
     <div>
         <div class="post">
-            <InteractionPost class="post__interaction" v-show="!modifyMode" :user_id="parseInt(post.user_id)" @switchModifyMode="switchModifyMode"/>
+            <InteractionPost class="post__interaction" v-show="!modifyMode" :user_id="parseInt(post.user.id)" @switchModifyMode="switchModifyMode"/>
             <div class="post__sidebar"></div>
             <div class="post__main">
               
-                    <Avatar class="post__user-avatar" :user="{ username : post.user_username, avatar : post.user_avatar }" />
+                    <Avatar class="post__user-avatar" :user="{ username : post.user.username, avatar : post.user.avatar }" />
                 
                     <div class="post__infos">
                         <div class="post__aside">
-                            <span class="post__user-username">{{ post.user_pseudo }}</span> <span class="post__date">{{ post.date }}</span>                
+                            <span class="post__user-username">{{ post.user.username }}</span> <span class="post__date">{{ post.created_at }}</span>                
                         </div>
 
                         <FormPost  @keydown.esc.prevent="switchModifyMode" v-model="content" :canEmoji="true" v-if="modifyMode" />

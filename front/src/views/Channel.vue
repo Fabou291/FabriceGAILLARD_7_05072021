@@ -54,7 +54,7 @@ export default {
         },
         async getListPost() {
             try {
-                const response = await HTTPRequest.get(`channel/${this.$route.params.id}/post`, {
+                const response = await HTTPRequest.get(`channel/${this.$route.params.id}/post?limit=10&offset=0`, {
                     Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
                 });
                 return await response.json();
@@ -67,7 +67,8 @@ export default {
         console.log('c')
         this.getListPost()
             .then((listPost) => {
-                this.listPost = listPost
+                this.listPost = listPost;
+                console.log(listPost)
             });
     },
     update(){
