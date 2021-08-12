@@ -5,10 +5,10 @@
         <p class="channel__description">C'est le début du salon #Groupe 1.</p>
         <FormPost @addPost="addPost" v-model="formPostValue" :canBrownse="true" :canGIF="true" :canEmoji="true" />
         <div class="channel__posts">
-            <div v-for="post in listPost" :key="post">
-                <Post :post="post" />
-                <div class="comments">
-                    <Post :post="comment" v-for="comment in post.listComment" :key="comment" />
+            <div v-for="post in listPost" :key="post.id">
+                <Post class ="post" :post="post" />
+                <div>
+                    <Post class ="post post--recursive" :post="comment" v-for="comment in post.listComment" :key="comment.id" />
                 </div>
             </div>
         </div>

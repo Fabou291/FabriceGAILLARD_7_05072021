@@ -3,13 +3,13 @@
         <div class="sidebar__content">
             <div class="user">
                 <div class="user__representation">
-                    <Avatar class="user__avatar" :user="{ username : user.username, avatar : require('@/assets/imageProfil.png') }" />
+                    <Avatar class="user__avatar" :user="{ username : user.username, avatar : require(`@/assets/${user.avatar}`) }" />
                     <UserStatuButton class="user__statu" />
                 </div>
 
                 <div class="user__identifying">
                     <div class="user__pseudo">{{ user.username }}</div>
-                    <div>#{{ user.id }}</div>
+                    <div class="user__id">#{{ user.id }}</div>
                 </div>
                 
                 <button class="user__btn-setting">
@@ -124,8 +124,10 @@ export default {
     }
 
     &__pseudo {
-        color: $green;
         @include setCircularStdFont("Bold");
+    }
+    &__id {
+        color : grey;
     }
 }
 

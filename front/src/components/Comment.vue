@@ -8,12 +8,11 @@
         
             <div>
                 <div class="comment__aside">
-                    <span class="comment__user-username">{{ comment.user_pseudo }}</span> <span class="comment__date">{{ comment.date }}</span>                
+                    <span class="comment__user-username">{{ comment.user_username }}</span> <span class="comment__date">{{ comment.createdAt }}</span>                
                 </div>
             
                 <p class="comment__content" v-html="content" ></p> 
 
-              
             </div>
 
         </div>

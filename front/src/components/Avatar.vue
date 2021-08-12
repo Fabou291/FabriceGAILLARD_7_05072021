@@ -30,6 +30,7 @@
             border-color : inherit;
             box-sizing: content-box;
             cursor: pointer;
+            background-color : black;
             &:hover {
                 + .avatar__circle {
                     transform: scale(1);
@@ -44,7 +45,7 @@
             height: 100%;
             border-radius: 60px;
             background-color: $green;
-            transform: scale(0.8);
+            transform: scale(0.7);
             transition: transform 0.1s;
         }
     }

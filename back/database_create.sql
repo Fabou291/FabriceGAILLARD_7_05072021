@@ -1,3 +1,5 @@
+DROP DATABASE groupomania_social_network;
+CREATE DATABASE groupomania_social_network;
 USE groupomania_social_network;
 
 SET NAMES 'utf8';

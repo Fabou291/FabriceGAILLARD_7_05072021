@@ -1,5 +1,5 @@
 const DateHandler = require("../helpers/DateHandler.js");
-const { mysqlDataBase } = require("../../config/mysqlConfig.js");
+const { mysqlDataBase, mysqlAsyncQuery } = require("../../config/mysqlConfig.js");
 const findAll = (req, res, next) => {
     mysqlDataBase.query("SELECT * FROM channel", function(error, results, fields) {
         if (error) next(error);
@@ -42,131 +42,56 @@ const findAllByGroup = (req, res, next) => {
     );
 };
 
-/*
-SELECT p.id as p_id, p.content as p_content, UNIX_TIMESTAMP(p.created_at) as p_timestamp,
-    p_user.id as p_user_id, p_user.username as p_user_username, p_user.avatar as p_user_avatar,
-c.id as c_id, c.content as c_content, UNIX_TIMESTAMP(c.created_at) as c_timestamp,
-    c_user.id as p_user_id, c_user.username as p_user_username, c_user.avatar as p_user_avatar
-FROM post as p
-LEFT JOIN user as p_user
-ON p_user.id = p.user_id
-LEFT JOIN comment as c
-ON p.id = c.post_id
-LEFT JOIN user as c_user
-ON c_user.id = c.user_id
-WHERE channel_id = 1
-ORDER BY p.created_at DESC;
-*/
-
-
-/*
-SELECT p.id as p_id, c.id as c_id
-FROM post as p
-LEFT JOIN user as p_user
-ON p_user.id = p.user_id
-LEFT JOIN comment as c
-ON p.id = c.post_id
-LEFT JOIN user as c_user
-ON c_user.id = c.user_id
-WHERE channel_id = 1
-ORDER BY p.created_at DESC;
-*/
-
-
-
-/*
-SELECT p.id as p_id, p.content as p_content, UNIX_TIMESTAMP(p.created_at) as p_timestamp,
-    p_user.id as p_user_id, p_user.username as p_user_username, p_user.avatar as p_user_avatar,
-c.id as c_id, c.content as c_content, UNIX_TIMESTAMP(c.created_at) as c_timestamp,
-    c_user.id as p_user_id, c_user.username as p_user_username, c_user.avatar as p_user_avatar
-FROM
-(SELECT * FROM post ORDER BY created_at DESC LIMIT 10 OFFSET 0) as p
-LEFT JOIN user as p_user
-ON p_user.id = p.user_id
-LEFT JOIN comment as c
-ON p.id = c.post_id
-LEFT JOIN user as c_user
-ON c_user.id = c.user_id
-WHERE channel_id = 1
-ORDER BY p.created_at DESC;
-*/
-
-
-/*const findAllPostOfChannel = (req,res,next) => {
-    const limit = req.query.limit || 18446744073709551615; //La plus grande limit possible
-    const offset = req.query.offset || 0;
-    mysqlDataBase.query(`SELECT post.*, UNIX_TIMESTAMP(post.created_at) as timestamp FROM post WHERE channel_id = ? ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset};`, [req.params.id], function(error, results, fields) {
-        if (error) next(error);
-        else{
-            results.forEach(post => {
-                const dateHandler = new DateHandler(post.timestamp);
-                post.date = dateHandler.getDateFromNow();
-                return post;
-            })
-            res.status(200).json(results);
-        }
-    });
-}*/
-
 const findAllPostOfChannel = (req,res,next) => {
     const limit = req.query.limit || 18446744073709551615; //La plus grande limit possible
     const offset = req.query.offset || 0;
-    mysqlDataBase.query(
-        `SELECT p.id as p_id, p.content as p_content, UNIX_TIMESTAMP(p.created_at) as p_timestamp,
-                p_user.id as p_user_id, p_user.username as p_user_username, p_user.avatar as p_user_avatar,
-                c.id as c_id, c.content as c_content, UNIX_TIMESTAMP(c.created_at) as c_timestamp,
-                c_user.id as c_user_id, c_user.username as c_user_username, c_user.avatar as c_user_avatar
-        FROM
-        (SELECT * FROM post ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}) as p
-        LEFT JOIN user as p_user
-        ON p_user.id = p.user_id
-        LEFT JOIN comment as c
-        ON p.id = c.post_id
-        LEFT JOIN user as c_user
-        ON c_user.id = c.user_id
-        WHERE channel_id = 1
-        ORDER BY p.created_at DESC;`, 
-        [req.params.id], function(error, results, fields) {
-        if (error) next(error);
-        else{
 
-            let listPost = [];
+        mysqlDataBase.query(
+            `SELECT p.*, GROUP_CONCAT(i.user_id) as list_user_id, i.emoji_id FROM (
+                SELECT p.*, u.username as user_username, u.avatar as user_avatar FROM (
+                    SELECT p.* FROM (SELECT * FROM post WHERE channel_id = ? ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}) as p
+                    UNION
+                    SELECT c.* FROM 
+                    (SELECT * FROM post WHERE channel_id = ? ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}) as p
+                    JOIN post as c
+                    ON p.id = c.post_id        
+                ) as p
+                LEFT JOIN user as u
+                ON p.user_id = u.id        
+            ) as p
+            LEFT OUTER JOIN interaction as i
+            ON i.post_id = p.id 
+            GROUP BY p.id, i.emoji_id;`,
+            [req.params.id, req.params.id],
+            (error, listRow, fields) => {
+                if (error) next(error);
+                else {
+                    const listPost = {};
 
-            results.forEach((e,i) => {
-                const dateHandler_post = new DateHandler(e.p_timestamp);
-                const post = {
-                    id : e.p_id,
-                    content : e.p_content,
-                    created_at : dateHandler_post.getDateFromNow(),
-                    user : {
-                        id : e.p_user_id,
-                        username : e.p_user_username,
-                        avatar : e.p_user_avatar,
-                    },
-                    listComment : [],
-                };
+                    //Ajoute les interactions à tous les post (post et comment)
+                    listRow.forEach(row => {
+                        const { emoji_id, list_user_id, ...rest } = row; 
+                        const post = { ...rest, created_at : DateHandler.getDateFromNow(rest.created_at), listReaction : [], listComment : [] };
 
-                const dateHandler_comment = new DateHandler(e.c_timestamp);
-                const hasSameId = post => post.id == e.p_id;
-                if(listPost.findIndex(hasSameId) == -1) listPost.push(post);
-                
-                if(e.c_id != null){
-                    listPost[listPost.findIndex(hasSameId)].listComment.push({
-                        id : e.c_id,
-                        content : e.c_content,
-                        created_at : dateHandler_comment.getDateFromNow(),
-                        user : {
-                            id : e.c_user_id,
-                            avatar : e.c_user_avatar,
-                            username : e.c_user_username
-                        }                        
-                    })
+                        if(!listPost[post.id]) listPost[post.id] = post
+                        if(list_user_id != null) listPost[post.id].listReaction.push({ emoji_id, list_user_id });
+                    });
+
+                    //Ajoute les post recursif (comment) au post, puis delete les post recursif 
+                    for (const i in listPost) {
+                        if(listPost[i].post_id != null){
+                            listPost[listPost[i].post_id].listComment.push(listPost[i]);
+                            delete listPost[i];
+                        } 
+                    }
+
+                    res.status(200).json(listPost);
                 }
+            }
+        );
 
-            })
-            res.status(200).json(listPost);
-        }
-    });
+
+
 }
 
 const findOne = (req, res, next) => {

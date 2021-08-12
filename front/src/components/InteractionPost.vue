@@ -14,7 +14,7 @@
                 </button>
             </li>
             <li class="interaction-post__list-item">
-                <button type="button" class="interaction-post__btn" @click="modify" v-if="isOwner || user.role == 'admin'">
+                <button type="button" class="interaction-post__btn" @click="modify" v-if="isOwner || user.role_id == 1">
                     <svg class="icon-3Gkjwa" aria-hidden="false" width="20" height="20" viewBox="0 0 24 24">
                         <path
 
@@ -47,26 +47,26 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-export default {
-    props: {
-        user_id: { type: Number, required: true },
-    },
-    computed: {
-        ...mapGetters('userModule', ['user']),
-        isOwner() {
-            return this.user_id == this.user.id;
+    import { mapGetters } from "vuex";
+    export default {
+        props: {
+            user_id: { type: Number, required: true },
         },
-    },
-    methods: {
-        modify() {
-            this.$emit('switchModifyMode')
+        computed: {
+            ...mapGetters('userModule', ['user']),
+            isOwner() {
+                return this.user_id == this.user.id;
+            },
         },
-        reply() {
-            
+        methods: {
+            modify() {
+                this.$emit('switchModifyMode')
+            },
+            reply() {
+                
+            },
         },
-    },
-};
+    };
 </script>
 
 <style lang="scss">

@@ -1,30 +1,26 @@
 <template>
     <div>
-        <div class="post">
-            <InteractionPost class="post__interaction" v-show="!modifyMode" :user_id="parseInt(post.user.id)" @switchModifyMode="switchModifyMode"/>
-            <div class="post__sidebar"></div>
-            <div class="post__main">
-              
-                    <Avatar class="post__user-avatar" :user="{ username : post.user.username, avatar : post.user.avatar }" />
-                
-                    <div class="post__infos">
-                        <div class="post__aside">
-                            <span class="post__user-username">{{ post.user.username }}</span> <span class="post__date">{{ post.created_at }}</span>                
-                        </div>
+        <InteractionPost class="post__interaction" v-show="!modifyMode" :user_id="parseInt(post.user_id)" @switchModifyMode="switchModifyMode"/>
+        <div class="post__sidebar"></div>
+        <div class="post__main">
+            
+                <Avatar class="post__user-avatar" :user="{ username : post.user_username, avatar : require(`@/assets/${post.user_avatar}`) }" />
 
-                        <FormPost  @keydown.esc.prevent="switchModifyMode" v-model="content" :canEmoji="true" v-if="modifyMode" />
-
-                        <p class="post__content" v-html="content" v-if="!modifyMode"></p>
-
-                        <div class="post__reaction">
-                            <Reaction v-for="reaction in post.listReaction" :key="reaction" :reaction="reaction" />
-                        </div>
+                <div class="post__infos">
+                    <div class="post__aside">
+                        <span class="post__user-username">{{ post.user_username }}</span> <span class="post__date">{{ post.created_at }}</span>                
                     </div>
 
-            </div>
-        </div>        
-    </div>
+                    <FormPost  @keydown.esc.prevent="switchModifyMode" v-model="content" :canEmoji="true" v-if="modifyMode" />
 
+                    <p class="post__content" v-html="content" v-if="!modifyMode"></p>
+
+                    <div class="post__reaction">
+                        <Reaction v-for="reaction in post.listReaction" :key="reaction" :reaction="reaction" />
+                    </div>
+                </div>
+        </div>
+    </div>        
 </template>
 
 <script>
@@ -72,15 +68,40 @@ export default {
 <style lang="scss">
 .post {
     display: flex;
-
+    
     margin : 0 0 20px 0;
     position : relative;
 
+
+
+    &.post--recursive{
+        
+        margin : 0 0 20px 40px;
+        .post__main {
+            border-radius : 0;
+            background-color : $grey-25;
+        }
+        .post__sidebar{
+            border-radius : 0;
+        }
+
+        &:hover{
+            .post__main {
+                background-color : lighten($grey-25, 1);
+            }
+            .post__sidebar {
+                background-color: lighten($grey-47,7);
+            }
+        }
+    }
+
     &:hover{
         
-        .post__main{
+        .post__main {
             background-color : lighten($grey-32, 1);
         }
+            
+        
         .post__sidebar {
             background-color: lighten($grey-59,7);
         }
@@ -98,9 +119,9 @@ export default {
     }
 
     &__main {
+        background-color: $grey-32;
         padding: 20px;
         border-radius : 0 4px 4px 0;
-        background-color: $grey-32;
         display : flex;
         align-items: flex-start;
         flex: 1;
@@ -130,7 +151,7 @@ export default {
     }
 
     &__user-username{
-        color : $green;
+
         @include setCircularStdFont('Medium');
         font-size : 15px;
     }
