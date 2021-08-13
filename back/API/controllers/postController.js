@@ -17,10 +17,10 @@ const findOne = (req,res,next) => {
 
 const create = (req,res,next) => {
     const post = req.body.post;
-    req.userId = 1
+    console.log(post)
     mysqlDataBase.query( "INSERT INTO post (content, channel_id, user_id) VALUES(?,?,?)", [post.content, post.channelId, req.userId], function(error, results, fields){
         if(error) next(error)
-        else res.status(200).send({listRole : results})
+        else res.status(200).send(results)
     })
 }
 

@@ -26,7 +26,7 @@ const verifAuthentication = (req, res, next) => {
             else{
                 if (req.userId && req.userId !== decoded.userId) return next(createHttpError.Unauthorized("Unauthorized - 1"));
                 else{
-                    req.authentication = { userId : decoded.userId }
+                    req.userId = decoded.userId;
                     return next();  
                 }               
             }

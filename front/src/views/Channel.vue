@@ -3,9 +3,9 @@
         <span class="tag-content">CHANNEL</span>
         <h1 class="channel__title">Bienvenue sur Groupe #1</h1>
         <p class="channel__description">C'est le début du salon #Groupe 1.</p>
-        <FormPost @addPost="addPost" v-model="formPostValue" :canBrownse="true" :canGIF="true" :canEmoji="true" />
+        <FormPost @submit="addPost"  :canBrownse="true" :canGIF="true" :canEmoji="true" />
         <div class="channel__posts">
-            <div v-for="post in listPost" :key="post.id">
+            <div v-for="post in listPost" :key="post">
                 <Post class ="post" :post="post" />
                 <div>
                     <Post class ="post post--recursive" :post="comment" v-for="comment in post.listComment" :key="comment.id" />
@@ -18,7 +18,7 @@
 <script>
 import FormPost from "@/components/FormPost.vue";
 import Post from "@/components/Post.vue";
-import { mapState } from "vuex";
+import { mapGetters } from "vuex";
 import HTTPRequest from "@/js/HTTPRequest/HTTPRequest.js";
 
 
@@ -34,29 +34,36 @@ export default {
     data() {
         return {
             listPost: null,
-            formPostValue: "",
+            channelId : null,
         };
     },
     computed: {
-        ...mapState(["user"]),
+        ...mapGetters('userModule',['user']),
     },
     methods: {
-        addPost() {
-            this.listPost.unshift({
-                user_id: this.user.id,
-                user_avatar: this.user.avatar,
-                user_name: this.user.pseudo,
-                date: "date fictive",
-                content: this.formPostValue,
-                listComment: [],
-            });
-            this.formPostValue = "";
+        async addPost(content) {
+            try{
+                
+                const response = await HTTPRequest.post('post/',{ post :{content, channelId : this.$route.params.id} })
+                if(!response.ok) throw response;
+
+                this.listPost.unshift({
+                    user_id: this.user.id,
+                    user_avatar: this.user.avatar,
+                    user_username: this.user.username,
+                    created_at: "Aujourd'hui",
+                    content,
+                    listComment: [],
+                    listReaction : []
+                });
+
+            }catch(e){
+                console.log(e)
+            }
         },
         async getListPost() {
             try {
-                const response = await HTTPRequest.get(`channel/${this.$route.params.id}/post?limit=10&offset=0`, {
-                    Authorization: "Bearer " + window.localStorage.getItem("accessToken"),
-                });
+                const response = await HTTPRequest.get(`channel/${this.$route.params.id}/post?limit=10&offset=0`);
                 return await response.json();
             } catch (error) {
                 console.log(error);
@@ -64,19 +71,16 @@ export default {
         },
     },
     created() {
-        console.log('c')
-        this.getListPost()
-            .then((listPost) => {
-                this.listPost = listPost;
-                console.log(listPost)
-            });
+        this.getListPost().then((listPost) => {
+            this.listPost = listPost
+            console.log(this.listPost)
+        });
+        this.channelId = this.$route.query.id;
     },
     update(){
-        console.log('up')
     },
 
     mounted(){
-        console.log('mounted')
     }
 };
 </script>

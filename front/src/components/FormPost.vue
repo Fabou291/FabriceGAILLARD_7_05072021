@@ -23,7 +23,7 @@
         <div
 
             @drop.prevent="drop" @dragenter.prevent="" @dragstart.prevent="" @drag.prevent=""
-            @keypress.enter.prevent=""
+            @keypress.enter.prevent="submit"
             @input="parseEmpty(); parseEmoji(); parseURL(); textarea.normalize();"
             @paste.prevent="paste"
 
@@ -32,7 +32,7 @@
             placeholder="Envoyer un message dans ce groupe"
             ref="textarea"
             spellcheck="false"
-            v-html="modelValue"
+            v-html="value"
 
         ></div>
 
@@ -61,13 +61,12 @@ import { mapState } from "vuex";
 export default {
     data() {
         return {
-            value: this.modelValue,
             selection: 0,
             textarea: "",
         };
     },
     props: {
-        modelValue: { type: String, required: true },
+        value: { type: String, default : '' },
         canBrownse : { type: Boolean, default : false },
         canGIF : { type: Boolean, default : false },
         canEmoji : { type: Boolean, default : false }
@@ -77,9 +76,10 @@ export default {
     },
     methods: {
         submit(e) {
-            if (this.modelValue.trim() == "") return;
-            this.$emit("addPost", this.value);
-            e.target.value = "";
+            const value = this.getDataText().trim();
+            if (value == "") return;
+            this.$emit("submit", value);
+            e.target.innerHTML = "";
         },
         paste(event) {
             let paste = (event.clipboardData || window.clipboardData).getData("text");
@@ -99,41 +99,30 @@ export default {
             selection.getRangeAt(0).insertNode(document.createTextNode(drop));
             //this.parseEmoji();
         },
-        parseURL() {
-            
-            /*Existet-il des liens déja traité :
-                Si oui, les enlever, les remplacer par un caractère vide. Pour pouvoir continuer le traitement
-            */
-
+        parseURL(){
             const reg = /https?:\/\/[www.]?[\w]+\.[\w()]+[-a-zA-Z0-9()@:%_+.~#?&/=]+/g;
 
-            this.textarea.childNodes.forEach((node,index) => {
+            const listNodes = [];
+
+            this.textarea.childNodes.forEach(node => {
                 const textContent = node.textContent;
                 if(reg.test(textContent)){
                     const listTextNode = textContent.split(reg).map(text => document.createTextNode(text));
-                    const listSpan = [... new Set(textContent.match(reg))].map(match => this.createSpanBlue(match))
-                    
+                    const listSpan = textContent.match(reg).map(match => this.createSpanBlue(match));
                     const listNodeToAppend = listTextNode.reduce((a,v,i)=> [...a,v,listSpan[i] ],[]).slice(0,-1);
-                    this.textarea.removeChild(node)
-                    
-                    const childNodeRef = this.textarea.childNodes[index]; 
-                    listNodeToAppend.forEach(node => {  this.textarea.insertBefore(node ,childNodeRef) });
-
-
-                    //Si le curseur était sur le noeud, replacer le curseur, sinon non
-                }else{
-                    if(node.nodeType == 1 && node.textContent != ''){ //si le noeud est un span blue le remplacer par un textNode
-                        this.textarea.removeChild(node);
-                        this.textarea.insertBefore(
-                            document.createTextNode(node.textContent), 
-                            this.textarea.childNodes[index]
-                        )
-                    }
+                    listNodes.push({ reference : node, after : listNodeToAppend })
                 }
+                else if(node.nodeType == 1 && node.textContent != ''){ //si le noeud est un span blue le remplacer par un textNode
+                    listNodes.push({ reference : node, after : [document.createTextNode(textContent)] })
+                }
+            })
+   
+            listNodes.forEach(node => {
+                node.after.forEach(n => {  this.textarea.insertBefore(n , node.reference) });
+                this.textarea.removeChild(node.reference)
+            })
 
-
-
-            });
+            console.log(listNodes)
 
         },
         parseEmoji() {

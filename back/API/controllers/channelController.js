@@ -42,6 +42,26 @@ const findAllByGroup = (req, res, next) => {
     );
 };
 
+/*
+SELECT p.*, GROUP_CONCAT(i.user_id) as list_user_id, i.emoji_id FROM (
+                SELECT p.*, u.username as user_username, u.avatar as user_avatar FROM (
+                    SELECT p.* FROM (SELECT * FROM post WHERE channel_id = 1 ORDER BY created_at DESC LIMIT 10 OFFSET 0) as p
+                    UNION
+                    SELECT c.* FROM 
+                    (SELECT * FROM post WHERE channel_id = 1 ORDER BY created_at DESC LIMIT 10 OFFSET 0) as p
+                    JOIN post as c
+                    ON p.id = c.post_id        
+                ) as p
+                LEFT JOIN user as u
+                ON p.user_id = u.id        
+            ) as p
+            LEFT OUTER JOIN interaction as i
+            ON i.post_id = p.id 
+            GROUP BY p.id, i.emoji_id
+            ORDER BY p.created_at DESC;
+
+*/
+
 const findAllPostOfChannel = (req,res,next) => {
     const limit = req.query.limit || 18446744073709551615; //La plus grande limit possible
     const offset = req.query.offset || 0;
@@ -61,29 +81,38 @@ const findAllPostOfChannel = (req,res,next) => {
             ) as p
             LEFT OUTER JOIN interaction as i
             ON i.post_id = p.id 
-            GROUP BY p.id, i.emoji_id;`,
+            GROUP BY p.id, i.emoji_id
+            ORDER BY p.created_at DESC;`,
             [req.params.id, req.params.id],
             (error, listRow, fields) => {
                 if (error) next(error);
                 else {
-                    const listPost = {};
+                    const listPost = [];
+                    console.log(listRow)
+                    const exist = post => listPost.findIndex(e => e.id == post.id) != -1;
+                    const get = id => listPost.find(e => e.id == id);
 
                     //Ajoute les interactions à tous les post (post et comment)
                     listRow.forEach(row => {
                         const { emoji_id, list_user_id, ...rest } = row; 
                         const post = { ...rest, created_at : DateHandler.getDateFromNow(rest.created_at), listReaction : [], listComment : [] };
 
-                        if(!listPost[post.id]) listPost[post.id] = post
-                        if(list_user_id != null) listPost[post.id].listReaction.push({ emoji_id, list_user_id });
+                        if(!exist(post)) listPost.push(post)
+                        if(list_user_id != null) get(post.id).listReaction.push({ emoji_id, list_user_id });
                     });
 
                     //Ajoute les post recursif (comment) au post, puis delete les post recursif 
-                    for (const i in listPost) {
-                        if(listPost[i].post_id != null){
-                            listPost[listPost[i].post_id].listComment.push(listPost[i]);
-                            delete listPost[i];
+                    for (let i = 0; i<listPost.length; i++) {
+                        const post = listPost[i]
+                        if(post.post_id != null){
+                            get(post.post_id).listComment.push(
+                                listPost.splice(listPost.indexOf(post),1)[0]
+                            );
+                            --i;
                         } 
                     }
+
+                    
 
                     res.status(200).json(listPost);
                 }
