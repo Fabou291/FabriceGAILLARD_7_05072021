@@ -131,10 +131,10 @@ const findOne = (req, res, next) => {
 };
 
 const create = (req, res, next) => {
-    const channel = req.body.channel;
+
     mysqlDataBase.query(
         "INSERT INTO channel (name,description,channel_group_id) VALUES(?, ? ,?) ",
-        [channel.name, channel.description, channel.channel_group_id],
+        [req.body.name, req.body.description, req.body.channelGroupId],
         function(error, results, fields) {
             if (error) next(error);
             else res.status(200).json(results);
@@ -143,10 +143,10 @@ const create = (req, res, next) => {
 };
 
 const modify = (req, res, next) => {
-    const channel = req.body.channel;
+
     mysqlDataBase.query(
         "UPDATE channel SET name = ?, description = ?, channel_group_id = ? WHERE id = ?",
-        [channel.name, channel.description, channel.channel_group_id, req.params.id],
+        [req.body.name, req.body.description, req.body.channel_group_id, req.params.id],
         function(error, results, fields) {
             if (error) next(error);
             else res.status(200).json(results);

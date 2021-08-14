@@ -2,6 +2,9 @@ import { createStore } from 'vuex'
 
 import userModule from "./module/userModule.js";
 import errorModule from "./module/errorModule.js";
+import channelModule from "./module/channelModule.js";
+import sidebarModule from "./module/sidebarModule.js";
+import postModule from "./module/postModule.js";
 
 const emojisData = require("@/assets/twemoji/datas/listEmojiByGroup.json");
 const emojisDataIndexed = function(){
@@ -21,10 +24,7 @@ const emojisShortCodeIndex = function(){
 
 export default createStore({
   state: {
-    panelCreateChan : {
-      component : null,
-      visible : false
-    },
+
     emoji : {
       skin: "A",
       emojisData : emojisData,
@@ -40,22 +40,19 @@ export default createStore({
           'F' : require("@/assets/twemoji/datas/F.json"),
       }
     },
-    actualPostInModifyMode : null,
+
   },
   getters:{
   },
   mutations: {
-    UPDATE_ACTUAL_POST_IN_MODIFY_MODE(state){
-      state.actualPostInModifyMode = 'A';
-    }
   },
   actions: {
-    updateActualPostInModifyMode(context){
-      context.commit('UPDATE_ACTUAL_POST_IN_MODIFY_MODE');
-    },
   },
   modules: {
     userModule,
-    errorModule
+    errorModule,
+    channelModule,
+    sidebarModule,
+    postModule,
   }
 })

@@ -1,6 +1,6 @@
 <template>
     <div>
-        <InteractionPost class="post__interaction" v-show="!modifyMode" :user_id="parseInt(post.user_id)" @switchModifyMode="switchModifyMode"/>
+        <InteractionPost class="post__interaction" v-show="!isInModifyMode" :user_id="parseInt(post.user_id)" @removePost="remove" @modifyPost="SET_ID_POST_IN_MODIFY_MODE(post.id)"/>
         <div class="post__sidebar"></div>
         <div class="post__main">
             
@@ -11,9 +11,9 @@
                         <span class="post__user-username">{{ post.user_username }}</span> <span class="post__date">{{ post.created_at }}</span>                
                     </div>
 
-                    <FormPost  @keydown.esc.prevent="switchModifyMode" v-model="content" :canEmoji="true" v-if="modifyMode" />
+                    <FormPost  :value="post.content" :canEmoji="true" v-if="isInModifyMode"  @submit="modify"/>
 
-                    <p class="post__content" v-html="content" v-if="!modifyMode"></p>
+                    <p class="post__content" v-html="getContent" v-if="!isInModifyMode"></p>
 
                     <div class="post__reaction">
                         <Reaction v-for="reaction in post.listReaction" :key="reaction" :reaction="reaction" />
@@ -24,45 +24,43 @@
 </template>
 
 <script>
-import Avatar from '@/components/Avatar.vue';
-import InteractionPost from '@/components/InteractionPost.vue';
-import Reaction from '@/components/Reaction.vue';
-import { mapState, mapActions } from 'vuex';
-import ContentParser from "../js/contentParser.js"
-import FormPost from '@/components/FormPost.vue'
-export default {
-    components : {
-        Avatar, InteractionPost, Reaction, FormPost
-    },
-    data() {
-        return{
-            modifyMode : false,
-            content : '',
-        }
-    },
-    computed:{
-        ...mapState(["emoji","actualPostInModifyMode"]),
-        
-    },
-    props : {
-        post : { type : Object, required : true }
-    },
-    methods : {
-        ...mapActions(['updateActualPostInModifyMode']),
-        parsePost(){
-            let contentParser = new ContentParser(this.post.content, this.emoji.emojisShortCodeIndex);
-            this.content = contentParser.parseEmoji().parseUrl().content;            
-        },
-        switchModifyMode(){
-            this.updateActualPostInModifyMode();
-            console.log(this.actualPostInModifyMode); //return null
-        }
-    },
-    created(){
-        this.parsePost();
-    }
+    import Avatar from '@/components/Avatar.vue';
+    import InteractionPost from '@/components/InteractionPost.vue';
+    import Reaction from '@/components/Reaction.vue';
+    import { mapState, mapActions, mapMutations } from 'vuex';
+    import ContentParser from "../js/contentParser.js"
+    import FormPost from '@/components/FormPost.vue';
 
-};
+    export default {
+        components : {
+            Avatar, InteractionPost, Reaction, FormPost
+        },
+        data() {
+            return{
+                modifyMode : false,
+            }
+        },
+        computed:{
+            ...mapState(["emoji","actualPostInModifyMode"]),
+            ...mapState('postModule',["idPostInModifyMode"]),
+            isInModifyMode(){ return this.idPostInModifyMode == this.post.id },
+            getContent(){ return this.parseContent() }
+        },
+        props : {
+            post : { type : Object, required : true }
+        },
+        methods : {
+            ...mapActions('postModule', ["modifyPost", "removePost"]),
+            ...mapMutations('postModule', ["SET_ID_POST_IN_MODIFY_MODE"]),
+            parseContent(){
+                let contentParser = new ContentParser(this.post.content, this.emoji.emojisShortCodeIndex);
+                return contentParser.parseEmoji().parseUrl().content;            
+            },
+            modify(content){ this.modifyPost({ id : this.post.id, content }) },
+            remove(){ this.removePost({ id : this.post.id }) }
+        }
+
+    };
 </script>
 
 <style lang="scss">

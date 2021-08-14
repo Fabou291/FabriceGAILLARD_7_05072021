@@ -3,7 +3,7 @@
         <span class="tag-content">CHANNEL</span>
         <h1 class="channel__title">Bienvenue sur Groupe #1</h1>
         <p class="channel__description">C'est le début du salon #Groupe 1.</p>
-        <FormPost @submit="addPost"  :canBrownse="true" :canGIF="true" :canEmoji="true" />
+        <FormPost @submit="add"  :canBrownse="true" :canGIF="true" :canEmoji="true" />
         <div class="channel__posts">
             <div v-for="post in listPost" :key="post">
                 <Post class ="post" :post="post" />
@@ -18,8 +18,7 @@
 <script>
 import FormPost from "@/components/FormPost.vue";
 import Post from "@/components/Post.vue";
-import { mapGetters } from "vuex";
-import HTTPRequest from "@/js/HTTPRequest/HTTPRequest.js";
+import { mapActions, mapGetters, mapState } from "vuex";
 
 
 //import EmojiPanel from "../components/EmojiPanel/EmojiPanel.vue";
@@ -33,51 +32,23 @@ export default {
     },
     data() {
         return {
-            listPost: null,
             channelId : null,
         };
     },
     computed: {
         ...mapGetters('userModule',['user']),
+        ...mapState('postModule',['listPost'])
     },
     methods: {
-        async addPost(content) {
-            try{
-                
-                const response = await HTTPRequest.post('post/',{ post :{content, channelId : this.$route.params.id} })
-                if(!response.ok) throw response;
-
-                this.listPost.unshift({
-                    user_id: this.user.id,
-                    user_avatar: this.user.avatar,
-                    user_username: this.user.username,
-                    created_at: "Aujourd'hui",
-                    content,
-                    listComment: [],
-                    listReaction : []
-                });
-
-            }catch(e){
-                console.log(e)
-            }
-        },
-        async getListPost() {
-            try {
-                const response = await HTTPRequest.get(`channel/${this.$route.params.id}/post?limit=10&offset=0`);
-                return await response.json();
-            } catch (error) {
-                console.log(error);
-            }
-        },
+        ...mapActions('postModule',['getListPost','addPost']),
+        add(content){ this.addPost({ content, channelId : this.channelId }) }
     },
     created() {
-        this.getListPost().then((listPost) => {
-            this.listPost = listPost
-            console.log(this.listPost)
-        });
-        this.channelId = this.$route.query.id;
+        this.channelId = this.$route.params.id;
+        this.getListPost(this.channelId);
     },
     update(){
+        this.channelId = this.$route.params.id;
     },
 
     mounted(){

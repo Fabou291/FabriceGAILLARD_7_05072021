@@ -23,12 +23,24 @@ export default class HTTPRequest{
         });
     }
 
-    static async delete(uri){
-        uri
+    static async delete(uri, body = {}, authentication = true, headers = {}){
+        if(authentication) headers = { ...headers, ...this.getAuthorizationHeader() }
+
+        return await fetch(this.baseUrl + uri, {
+            method: "DELETE",
+            headers: { ...headers, "Accept": "application/json", "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+        });
     }
 
-    static async update(uri){
-        uri
+    static async put(uri, body = {}, authentication = true, headers = {}){
+        if(authentication) headers = { ...headers, ...this.getAuthorizationHeader() }
+
+        return await fetch(this.baseUrl + uri, {
+            method: "PUT",
+            headers: { ...headers, "Accept": "application/json", "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+        });
     }
 
 

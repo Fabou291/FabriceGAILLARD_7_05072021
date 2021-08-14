@@ -78,7 +78,7 @@ export default {
         submit(e) {
             const value = this.getDataText().trim();
             if (value == "") return;
-            this.$emit("submit", value);
+            this.$emit("submit", value)
             e.target.innerHTML = "";
         },
         paste(event) {
@@ -116,24 +116,71 @@ export default {
                     listNodes.push({ reference : node, after : [document.createTextNode(textContent)] })
                 }
             })
-   
+
+            //Add
             listNodes.forEach(node => {
                 node.after.forEach(n => {  this.textarea.insertBefore(n , node.reference) });
                 this.textarea.removeChild(node.reference)
             })
 
-            console.log(listNodes)
 
         },
+        add(listNodes){
+            listNodes.forEach(node => {
+                node.after.forEach(n => {  this.$refs['textarea'].insertBefore(n , node.reference) });
+                this.$refs['textarea'].removeChild(node.reference)
+            })
+        },
         parseEmoji() {
+            const reg = /:\w+:/g;
+            const listNodes = [];
+
+
+            if(/:\w+:/.test(this.textarea.textContent)){
+                
+                this.textarea.childNodes.forEach(node => {
+                    const textContent = node.textContent;
+                    if(/:\w+:/.test(textContent)){
+                        const listTextNode = textContent.split(reg).map(text => document.createTextNode(text));
+                        const listShortCodeNode = textContent.match(reg).map(shortCode => {
+                            return (this.emoji.emojisShortCodeIndex[shortCode])
+                            ? this.createSpanImgNode(shortCode)
+                            : document.createTextNode(shortCode);
+                        });
+
+                        const listNodeToAppend = listTextNode.reduce((a,v,i)=> [...a,v,listShortCodeNode[i] ],[]).slice(0,-1);
+
+                        listNodes.push({ reference : node, after : listNodeToAppend });
+                    }
+                })
+                
+                this.add(listNodes);
+                      
+
+                /*listNodes.forEach(node => {
+                    if(node.reference == window.getSelection().anchorNode){
+                        const lengthBefore = node.reference.textContent.length;
+                        const lengthAfter = node.after.reduce((a,node) =>  a += node.textContent.length || 1 ,0);
+                        let index = 0;
+                        node.after.forEach(nodeAfter => {
+                            index += nodeAfter.textContent.length || 1;
+                            if(window.getSelection().focusOffset <= index)
+                        })
+                    }
+                })*/
+                
+            }
             
-            if(/:\w+:/g.test(this.textarea.textContent)){
+        },
+        /*parseEmoji() {
+            const reg = /:\w+:/g;
+            if(reg.test(this.textarea.textContent)){
                 let index, listNodeToAppend;
 
-                [...new Set(this.textarea.textContent.match(/:\w+:/g))].forEach(shortCode => {
+                this.textarea.textContent.match(reg).forEach(shortCode => {
                     if(Object.keys(this.emoji.emojisShortCodeIndex).includes(shortCode)){
                         index = 0;
-                        for (index in [...this.textarea.childNodes]) if(/:\w+:/g.test(this.textarea.childNodes[index].textContent)) break;
+                        for (index in [...this.textarea.childNodes]) if(reg.test(this.textarea.childNodes[index].textContent)) break;
                         const childNode =  this.textarea.childNodes[index];
                         const listTextNode = childNode.textContent.split(shortCode).map(text => document.createTextNode(text != '' ? text : '\u{FEFF}'));
                         
@@ -153,7 +200,7 @@ export default {
                 })
             }
             
-        },
+        },*/
         getDataText() {
             let el = this.$refs["textarea"];
             let str = "";

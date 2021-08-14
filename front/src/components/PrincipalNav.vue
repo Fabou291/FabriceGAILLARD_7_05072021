@@ -36,8 +36,7 @@
 import channelGroup from "@/components/PrincipalNav/ChannelGroup.vue"
 import UserStatuButton from "@/components/userStatuButton.vue"
 import Avatar from '@/components/Avatar.vue';
-import { mapGetters } from 'vuex';
-import HTTPRequest from '@/js/HTTPRequest/HTTPRequest.js';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
     components : {
@@ -49,33 +48,24 @@ export default {
         return{
             activeChannel : 0,
             activeGroup : 0,
-            listGroup : null,
         }
     },
     computed : {
+        ...mapState('sidebarModule', ['listGroup']),
         ...mapGetters('userModule',['user'])
     },
     methods : {
+        ...mapActions('sidebarModule',['getListGroup']),
         updateActiveChannel(channelIndex,groupIndex){
             channelIndex
             groupIndex
             /*
             this.activeChannel = channelIndex;
             this.activeGroup = groupIndex;*/
-        },
-        async fetchAll(){
-            try{
-                const results = await HTTPRequest.get('channel/byGroup', { 'Authorization' : 'Bearer ' +  window.localStorage.getItem('accessToken')});
-                const listChannelByGroup = await results.json();
-                return listChannelByGroup;
-            }
-            catch(error){
-                console.log(error)
-            }
         }
     },
     async created() {
-        this.listGroup = await this.fetchAll();
+        this.getListGroup();
     }
 };
 </script>

@@ -1,10 +1,6 @@
 <template>
     <div>
-        <PanelCreateChannel
-            :groupName="panelCreateChan.component.group.name"
-            v-model="panelCreateChan.visible"
-            v-if="panelCreateChan.visible"
-        />
+        <PanelCreateChannel/>
 
         <div class="container">
             <Header />
@@ -22,7 +18,7 @@
 import Header from "@/components/Header.vue";
 import PrincipalNav from "@/components/PrincipalNav.vue";
 import PanelCreateChannel from "@/components/PanelCreateChannel.vue";
-import { mapState } from "vuex";
+
 
 //import EmojiPanel from "../components/EmojiPanel/EmojiPanel.vue";
 
@@ -35,9 +31,7 @@ export default {
         //EmojiPanel,
     },
 
-    computed: {
-        ...mapState(["user", "panelCreateChan"]),
-    },
+
 
 
 };

@@ -3,10 +3,10 @@
         <div class="channel-group__label">
             <button class="channel-group__drop-down-btn" aria-expanded="true" @click="switchVisibility()">
                 <DropDownIcon :visible="visible" />
-                <span class="channel-group__title">{{ mutableGoup.name }}</span>
+                <span class="channel-group__title">{{ group.name }}</span>
             </button>
 
-            <ButtonPopUp v-if="user.role_id == 1" :label="'Ajouter un channel'" @click="addChannel">
+            <ButtonPopUp v-if="user.role_id == 1" :label="'Ajouter un channel'" @click="this.openPanel( { id : this.group.id, name : this.group.name } )">
                 <AddIcon class="" />
             </ButtonPopUp>
         </div>
@@ -14,11 +14,10 @@
         <ul class="list-channel" v-show="visible">
             <li
                 class="list-channel__item"
-
-                v-for="(channel, j) in mutableGoup.listChannel"
-                :key="channel"
-                @click="activeThisChanel(j)"
+                v-for="(channel, j) in group.listChannel"
+                :key="channel.id"
             >
+
                 <router-link class="link-channel" :to="channel.link">
                     <svg width="24" height="24" viewBox="0 0 24 24">
                         <path
@@ -43,48 +42,29 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import {  mapGetters, mapMutations } from "vuex";
 import DropDownIcon from "@/components/DropDownIcon.vue";
 import AddIcon from "@/components/AddIcon.vue";
 import ButtonPopUp from "@/components/ButtonPopUp.vue";
 
 
 export default {
-    components: {
-        DropDownIcon,
-        AddIcon,
-        ButtonPopUp,
-
-    },
+    components: { DropDownIcon, AddIcon, ButtonPopUp },
     data() {
         return {
             visible: true,
-            mutableGoup: this.group,
-            createChannelVisible : false
         };
     },
     computed: {
         ...mapGetters('userModule', ['user']),
-        ...mapState(['panelCreateChan'])
     },
     props: {
         group: { type: Object, required: true },
     },
     methods: {
-        activeThisChanel(channelIndex) {
-            this.$emit("updateActiveChannel", channelIndex);
-        },
+        ...mapMutations('channelModule',['openPanel']),
         switchVisibility() {
             this.visible = !this.visible;
-        },
-        addChannel() {
-            this.panelCreateChan.visible = true;
-            this.panelCreateChan.component = this;
-
-            //this.mutableGoup.listChannel.push({ name: "Channel " + (this.mutableGoup.listChannel.length + 1), link: "#" });
-        },
-        modifyChannel(index) {
-            this.mutableGoup.listChannel[index]
         },
     }
 };

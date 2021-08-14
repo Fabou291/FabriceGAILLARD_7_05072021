@@ -10,10 +10,11 @@ const routes = [
     children:[
       {
         path: 'channel/:id',
+        name: 'Channel',
         component : Channel
       }
     ],
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true, reload: true }
   },
   {
     path: '/login',
