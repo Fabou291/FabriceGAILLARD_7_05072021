@@ -2,7 +2,7 @@ import { createStore } from 'vuex'
 
 import userModule from "./module/userModule.js";
 import errorModule from "./module/errorModule.js";
-import channelModule from "./module/channelModule.js";
+import createChannelDisplay from "./module/createChannelDisplay.js";
 import sidebarModule from "./module/sidebarModule.js";
 import postModule from "./module/postModule.js";
 
@@ -51,7 +51,7 @@ export default createStore({
   modules: {
     userModule,
     errorModule,
-    channelModule,
+    createChannelDisplay,
     sidebarModule,
     postModule,
   }

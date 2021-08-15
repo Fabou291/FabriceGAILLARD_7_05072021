@@ -1,5 +1,6 @@
 const DateHandler = require("../helpers/DateHandler.js");
 const { mysqlDataBase, mysqlAsyncQuery } = require("../../config/mysqlConfig.js");
+
 const findAll = (req, res, next) => {
     mysqlDataBase.query("SELECT * FROM channel", function(error, results, fields) {
         if (error) next(error);
@@ -42,26 +43,6 @@ const findAllByGroup = (req, res, next) => {
     );
 };
 
-/*
-SELECT p.*, GROUP_CONCAT(i.user_id) as list_user_id, i.emoji_id FROM (
-                SELECT p.*, u.username as user_username, u.avatar as user_avatar FROM (
-                    SELECT p.* FROM (SELECT * FROM post WHERE channel_id = 1 ORDER BY created_at DESC LIMIT 10 OFFSET 0) as p
-                    UNION
-                    SELECT c.* FROM 
-                    (SELECT * FROM post WHERE channel_id = 1 ORDER BY created_at DESC LIMIT 10 OFFSET 0) as p
-                    JOIN post as c
-                    ON p.id = c.post_id        
-                ) as p
-                LEFT JOIN user as u
-                ON p.user_id = u.id        
-            ) as p
-            LEFT OUTER JOIN interaction as i
-            ON i.post_id = p.id 
-            GROUP BY p.id, i.emoji_id
-            ORDER BY p.created_at DESC;
-
-*/
-
 const findAllPostOfChannel = (req,res,next) => {
     const limit = req.query.limit || 18446744073709551615; //La plus grande limit possible
     const offset = req.query.offset || 0;
@@ -88,7 +69,8 @@ const findAllPostOfChannel = (req,res,next) => {
                 if (error) next(error);
                 else {
                     const listPost = [];
-                    console.log(listRow)
+ 
+
                     const exist = post => listPost.findIndex(e => e.id == post.id) != -1;
                     const get = id => listPost.find(e => e.id == id);
 
@@ -112,7 +94,7 @@ const findAllPostOfChannel = (req,res,next) => {
                         } 
                     }
 
-                    
+
 
                     res.status(200).json(listPost);
                 }
@@ -155,7 +137,6 @@ const modify = (req, res, next) => {
 };
 
 const remove = (req, res, next) => {
-    const channel = req.body.channel;
     mysqlDataBase.query("DELETE FROM channel WHERE id = ?", [req.params.id], function(error, results, fields) {
         if (error) next(error);
         else res.status(200).json(results);

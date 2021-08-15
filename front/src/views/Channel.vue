@@ -50,7 +50,6 @@ export default {
     update(){
         this.channelId = this.$route.params.id;
     },
-
     mounted(){
     }
 };

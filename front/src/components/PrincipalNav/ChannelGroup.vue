@@ -6,7 +6,7 @@
                 <span class="channel-group__title">{{ group.name }}</span>
             </button>
 
-            <ButtonPopUp v-if="user.role_id == 1" :label="'Ajouter un channel'" @click="this.openPanel( { id : this.group.id, name : this.group.name } )">
+            <ButtonPopUp v-if="user.role_id == 1" :label="'Ajouter un channel'" @click="OPEN( { id : group.id, name : group.name } )">
                 <AddIcon class="" />
             </ButtonPopUp>
         </div>
@@ -62,7 +62,7 @@ export default {
         group: { type: Object, required: true },
     },
     methods: {
-        ...mapMutations('channelModule',['openPanel']),
+        ...mapMutations('createChannelDisplay',['OPEN']),
         switchVisibility() {
             this.visible = !this.visible;
         },

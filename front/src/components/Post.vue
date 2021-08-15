@@ -1,6 +1,6 @@
 <template>
     <div>
-        <InteractionPost class="post__interaction" v-show="!isInModifyMode" :user_id="parseInt(post.user_id)" @removePost="remove" @modifyPost="SET_ID_POST_IN_MODIFY_MODE(post.id)"/>
+        <InteractionPost class="post__interaction" v-show="!isInModifyMode" :user_id="parseInt(post.user_id)" @replyPost="setIdPostToReply(post.id)" @removePost="remove" @modifyPost="SET_ID_POST_IN_MODIFY_MODE(post.id)"/>
         <div class="post__sidebar"></div>
         <div class="post__main">
             
@@ -50,14 +50,14 @@
             post : { type : Object, required : true }
         },
         methods : {
-            ...mapActions('postModule', ["modifyPost", "removePost"]),
+            ...mapActions('postModule', ["modifyPost", "removePost","setIdPostToReply"]),
             ...mapMutations('postModule', ["SET_ID_POST_IN_MODIFY_MODE"]),
             parseContent(){
                 let contentParser = new ContentParser(this.post.content, this.emoji.emojisShortCodeIndex);
                 return contentParser.parseEmoji().parseUrl().content;            
             },
-            modify(content){ this.modifyPost({ id : this.post.id, content }) },
-            remove(){ this.removePost({ id : this.post.id }) }
+            modify(content){ this.modifyPost({ ...this.post, content }) },
+            remove(){ this.removePost({ ...this.post }) }
         }
 
     };

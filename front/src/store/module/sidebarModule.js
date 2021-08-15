@@ -3,27 +3,46 @@ import HTTPRequest from "@/js/HTTPRequest/HTTPRequest.js";
 export default {
     namespaced: true,
     state: {
-        listGroup : null
+        listGroup: null,
     },
-    
-    mutations : {
-        SET_LIST_GROUP(state, listGroup){
+
+    mutations: {
+        SET_LIST_GROUP(state, listGroup) {
             state.listGroup = listGroup;
         },
-        UPDATE_LIST_GROUP(state, payload){
-            state.listGroup[payload.index].push(payload.channel);
-        }
+        ADD_CHANNEL_INTO_GROUP(state, data) {
+            state.listGroup[data.groupIndex].push(data.channel);
+        },
     },
-    actions : {
-        async getListGroup(state){
-            try{
-                const results = await HTTPRequest.get('channel/byGroup', { 'Authorization' : 'Bearer ' +  window.localStorage.getItem('accessToken')});
-                const listChannelByGroup = await results.json();
-                state.commit('SET_LIST_GROUP', listChannelByGroup);
+
+    actions: {
+        async setListGroup(state) {
+            try {
+                state.commit("SET_LIST_GROUP", await HTTPRequest.get("channel/byGroup"));
+            } catch (error) {
+                console.log(error);
             }
-            catch(error){
-                console.log(error)
+        },
+        async addChannel(state, channel){
+            try {
+                state.commit("ADD_CHANNEL_INTO_GROUP", await HTTPRequest.post("channel/", channel));
+            } catch (error) {
+                console.log(error);
             }
-        }
-    }
-}
+        },
+        async modifyChannel(state,channel){
+            try {
+                state.commit("MODIFY_CHANNEL", await HTTPRequest.put(`channel/${channel.id}`,channel));
+            } catch (error) {
+                console.log(error);
+            }
+        },
+        async removeChannel(state,channel){
+            try {
+                state.commit("REMOVE_CHANNEL", await HTTPRequest.delete(`channel/${channel.id}`));
+            } catch (error) {
+                console.log(error);
+            }
+        },
+    },
+};

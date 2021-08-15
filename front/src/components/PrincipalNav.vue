@@ -55,7 +55,7 @@ export default {
         ...mapGetters('userModule',['user'])
     },
     methods : {
-        ...mapActions('sidebarModule',['getListGroup']),
+        ...mapActions('sidebarModule',['setListGroup']),
         updateActiveChannel(channelIndex,groupIndex){
             channelIndex
             groupIndex
@@ -65,7 +65,7 @@ export default {
         }
     },
     async created() {
-        this.getListGroup();
+        this.setListGroup();
     }
 };
 </script>

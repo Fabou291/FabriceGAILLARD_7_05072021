@@ -1,8 +1,8 @@
 <template>
-    <div class="display-settings-panel" ref="display-settings-panel" v-if="panel.visible"  @mousedown="closePanel">
+    <div class="display-settings-panel" ref="display-settings-panel" v-if="visible"  @mousedown="closePanel">
         <form  action="" @mousedown.stop>
             <div class="create-panel">
-                <button class="create-panel__close-btn" type='button' @click="closePanel">
+                <button class="create-panel__close-btn" type='button' @click="close">
                     <svg  width="24" height="24" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -12,7 +12,7 @@
                 </button>
                 <header class="create-panel__header">
                     <h2 class="create-panel__title">Créer un channel</h2>
-                    <p class="create-panel__description">dans {{ panel.groupChannel.name }}</p>
+                    <p class="create-panel__description">dans {{ activeGroupChannel.name }}</p>
                 </header>
 
                 <div class="create-panel__main">
@@ -63,19 +63,19 @@ export default {
         };
     },
     computed : {
-        ...mapState('channelModule',['panel']),
+        ...mapState('createChannelDisplay',['activeGroupChannel', 'visible']),
     },
     methods:{
-        ...mapMutations('channelModule',['closePanel']),
+        ...mapMutations('createChannelDisplay',['CLOSE']),
         close(){
             this.input = '';
-            this.closePanel()
+            this.CLOSE()
         },
         create(){
             if(this.input != '' && this.input != null){
                 //this.UPDATE_LIST_GROUP()
                 //this.panelCreateChan.component.group.listChannel.push({name:this.input,link:"#"})
-                this.close()
+                this.CLOSE()
             }
         },
         update(){

@@ -72,7 +72,9 @@ export default {
         modify() {
             this.$emit("modifyPost");
         },
-        reply() {},
+        reply() {
+            this.$emit("replyPost")
+        },
         remove(){
             this.$emit("removePost");
         }
