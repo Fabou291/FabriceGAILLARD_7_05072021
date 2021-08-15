@@ -10,8 +10,9 @@ export default {
         SET_LIST_GROUP(state, listGroup) {
             state.listGroup = listGroup;
         },
-        ADD_CHANNEL_INTO_GROUP(state, data) {
-            state.listGroup[data.groupIndex].push(data.channel);
+        ADD_CHANNEL_INTO_GROUP(state, channel) {
+            console.log(channel)
+            state.listGroup.find(e => e.id == channel.channelGroupId).listChannel.push(channel);
         },
     },
 
@@ -23,21 +24,24 @@ export default {
                 console.log(error);
             }
         },
-        async addChannel(state, channel){
+        async createChannel(state, channel) {
             try {
-                state.commit("ADD_CHANNEL_INTO_GROUP", await HTTPRequest.post("channel/", channel));
+                state.commit("ADD_CHANNEL_INTO_GROUP", {
+                    ...channel,
+                    id: (await HTTPRequest.post("channel/", channel)).insertId,                        
+                });
             } catch (error) {
                 console.log(error);
             }
         },
-        async modifyChannel(state,channel){
+        async modifyChannel(state, channel) {
             try {
-                state.commit("MODIFY_CHANNEL", await HTTPRequest.put(`channel/${channel.id}`,channel));
+                state.commit("MODIFY_CHANNEL", await HTTPRequest.put(`channel/${channel.id}`, channel));
             } catch (error) {
                 console.log(error);
             }
         },
-        async removeChannel(state,channel){
+        async removeChannel(state, channel) {
             try {
                 state.commit("REMOVE_CHANNEL", await HTTPRequest.delete(`channel/${channel.id}`));
             } catch (error) {

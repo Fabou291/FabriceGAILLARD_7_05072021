@@ -18,7 +18,7 @@
                 :key="channel.id"
             >
 
-                <router-link class="link-channel" :to="channel.link">
+                <router-link class="link-channel" :to="`/channel/${channel.id}`">
                     <svg width="24" height="24" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"

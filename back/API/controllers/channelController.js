@@ -32,7 +32,6 @@ const findAllByGroup = (req, res, next) => {
 
                     channelsByGroup[channelsByGroup.findIndex(hasSameId)].listChannel.push({
                             id : e.channel_id,
-                            link : '/channel/' + e.channel_id,
                             name : e.channel_name                            
                         })
                 })

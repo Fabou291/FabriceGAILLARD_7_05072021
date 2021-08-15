@@ -1,5 +1,5 @@
 <template>
-    <div class="display-settings-panel" ref="display-settings-panel" v-if="visible"  @mousedown="closePanel">
+    <div class="display-settings-panel" ref="display-settings-panel" v-if="visible"  @mousedown="close">
         <form  action="" @mousedown.stop>
             <div class="create-panel">
                 <button class="create-panel__close-btn" type='button' @click="close">
@@ -39,7 +39,7 @@
                 </div>
 
                 <footer class="create-panel__footer">
-                    <BtnDefault type="button" @click.stop="closePanel">Annuler</BtnDefault>
+                    <BtnDefault type="button" @click.stop="close">Annuler</BtnDefault>
                     <BtnDefault type="submit" class="btn-default--green create-panel__btn" 
                         @click.prevent="create" :disabled="input == ''">
                         Créer un channel
@@ -53,7 +53,7 @@
 <script>
 import BtnDefault from "@/components/btn/btnDefault.vue";
 import InputDefaultIcon from "@/components/field/inputDefaultIcon.vue";
-import { mapMutations, mapState } from "vuex";
+import { mapActions, mapMutations, mapState } from "vuex";
 
 export default {
     components: { BtnDefault, InputDefaultIcon },
@@ -67,15 +67,15 @@ export default {
     },
     methods:{
         ...mapMutations('createChannelDisplay',['CLOSE']),
+        ...mapActions('sidebarModule',['createChannel']),
         close(){
             this.input = '';
-            this.CLOSE()
+            this.CLOSE();
         },
         create(){
             if(this.input != '' && this.input != null){
-                //this.UPDATE_LIST_GROUP()
-                //this.panelCreateChan.component.group.listChannel.push({name:this.input,link:"#"})
-                this.CLOSE()
+                this.createChannel({ name : this.input, description : null, channelGroupId : this.activeGroupChannel.id });
+                this.close();
             }
         },
         update(){
