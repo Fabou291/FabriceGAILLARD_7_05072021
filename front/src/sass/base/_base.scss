@@ -1,3 +1,6 @@
+html{
+    overflow : hidden;
+}
 
 body{
     @include setCircularStdFont('Book');
@@ -63,6 +66,6 @@ img,svg{
     content: attr(placeholder);
     pointer-events: none;
     display: block; /* For Firefox */
-  }
+}
 
 

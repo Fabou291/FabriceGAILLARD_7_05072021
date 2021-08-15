@@ -17,3 +17,18 @@
     width : $width;
     height : $height;
 }
+
+@mixin setScrollBar($color){
+    overflow: hidden;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 5px;
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $color;
+        border-radius: 30px;
+    }
+}

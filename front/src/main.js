@@ -6,9 +6,9 @@ import store from './store';
 import '@/sass/base/_reset.scss';
 import '@/sass/base/_typography.scss';
 import '@/sass/base/_base.scss';
-import '@/sass/layout/_container.scss';
+
 import '@/sass/layout/_main.scss';
-import '@/sass/layout/_sidebar.scss';
+
 
 
 router.beforeEach(async (to, from, next) => {

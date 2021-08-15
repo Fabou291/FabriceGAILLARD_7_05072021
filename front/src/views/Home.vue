@@ -1,11 +1,14 @@
 <template>
     <div>
         <PanelCreateChannel/>
+        <!--<ConfigChannel/>-->
 
         <div class="container">
             <Header />
             <main class="main">
-                <PrincipalNav />
+                <Sidebar>
+                    <PrincipalNav />
+                </Sidebar>
                 <div class="principal-content">
                     <router-view></router-view>
                 </div>
@@ -18,42 +21,33 @@
 import Header from "@/components/Header.vue";
 import PrincipalNav from "@/components/PrincipalNav.vue";
 import PanelCreateChannel from "@/components/PanelCreateChannel.vue";
+//import ConfigChannel from "@/components/ConfigChannel.vue";
+import Sidebar from "@/components/Sidebar.vue"
 
 
 //import EmojiPanel from "../components/EmojiPanel/EmojiPanel.vue";
 
 export default {
     name: "Home",
-    components: {
-        Header,
-        PrincipalNav,
-        PanelCreateChannel,
+    components: { Header, PrincipalNav, PanelCreateChannel, 
+    //ConfigChannel, 
+    Sidebar
         //EmojiPanel,
     },
-
-
-
-
 };
 </script>
 
 <style lang="scss">
+.container{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
 .principal-content {
     background-color: $grey-18;
     height: 100%;
     flex: 1;
-    overflow: hidden;
-    overflow-y: auto;
-
-    &::-webkit-scrollbar {
-        width: 5px;
-        background-color: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        background-color: $grey-47;
-        border-radius: 30px;
-    }
+    @include setScrollBar($grey-47)
 }
 
 </style>

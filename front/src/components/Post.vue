@@ -78,6 +78,7 @@
         .post__main {
             border-radius : 0;
             background-color : $grey-25;
+            padding : 10px;
         }
         .post__sidebar{
             border-radius : 0;
@@ -160,7 +161,7 @@
     }
 
     &__content{
-        margin: 5px 0 0 0;
+        margin: 0px;
         letter-spacing: -0.1px;
         line-height: 1.5;
         font-size: 16px;

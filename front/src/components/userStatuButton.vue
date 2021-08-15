@@ -38,7 +38,6 @@ export default {
 
 .statu-panel{
     border-radius: 4px;
-    //
 
     hr{
         border-color : $grey-47;
