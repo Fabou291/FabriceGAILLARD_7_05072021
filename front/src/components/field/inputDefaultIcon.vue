@@ -1,11 +1,9 @@
 <template>
-    <div class="input-default-zone" :class="{ 'input-default-zone--active' : modelValue != '' }">
-        <div class="input-default-zone__icon">
+    <div class="input-default-icon-zone" :class="{ 'input-default-icon-zone--active' : modelValue != '' }">
+        <div class="input-default-icon-zone__icon">
             <slot ></slot>            
         </div>
-        <input class="input-default input-default-zone__input" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" :type="type" :name="name" :id="id" :aria-label="label" :placeholder="placeholder"/>
-
-    
+        <input ref="input" class="input-default-icon input-default-icon-zone__input" :value="modelValue" @input="$emit('update:modelValue', $event.target.value)" :type="type" :name="name" :id="id" :aria-label="label" :placeholder="placeholder"/>
     </div>
 </template>
 
@@ -20,13 +18,22 @@
             type : { type : String, required : true },
             id : { type : String, required : true },
             name : { type : String, required : true },
-            modelValue : { type : String, required : true  }
+            modelValue : { required : true  },
+            focus : {type : Boolean, default : false}
+        },
+        methods : {
+            focusInput(){
+                this.$refs['input'].focus();
+            }
+        },
+        mounted(){
+            if(this.focus) this.focusInput();
         }
     }
 </script>
 
 <style lang="scss">
-    .input-default {
+    .input-default-icon {
         display : block;
         width : 100%;
         padding : 13px; 
@@ -40,7 +47,7 @@
             box-shadow: 0 0 1px lighten($green,15%), inset 0 0 1px darken($green,15%) ;
         }       
     }
-    .input-default-zone{
+    .input-default-icon-zone{
         position: relative;
         color : grey;
         &__input{

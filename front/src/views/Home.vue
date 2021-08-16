@@ -1,14 +1,17 @@
 <template>
     <div>
         <PanelCreateChannel/>
-        <!--<ConfigChannel/>-->
+        <ConfigChannel/>
+
 
         <div class="container">
             <Header />
             <main class="main">
-                <Sidebar>
-                    <PrincipalNav />
-                </Sidebar>
+                <div class="left-side">
+                    <div class="sidebar">
+                        <PrincipalNav />
+                    </div>  
+                </div>
                 <div class="principal-content">
                     <router-view></router-view>
                 </div>
@@ -21,17 +24,17 @@
 import Header from "@/components/Header.vue";
 import PrincipalNav from "@/components/PrincipalNav.vue";
 import PanelCreateChannel from "@/components/PanelCreateChannel.vue";
-//import ConfigChannel from "@/components/ConfigChannel.vue";
-import Sidebar from "@/components/Sidebar.vue"
+import ConfigChannel from "@/components/ConfigChannel.vue"
+
 
 
 //import EmojiPanel from "../components/EmojiPanel/EmojiPanel.vue";
 
 export default {
     name: "Home",
-    components: { Header, PrincipalNav, PanelCreateChannel, 
-    //ConfigChannel, 
-    Sidebar
+    components: { Header, PrincipalNav, PanelCreateChannel, ConfigChannel
+ 
+
         //EmojiPanel,
     },
 };

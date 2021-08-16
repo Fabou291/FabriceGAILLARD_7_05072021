@@ -33,7 +33,7 @@
             </li>
             <li class="interaction-post__list-item">
                 <button type="button" class="interaction-post__btn" @click="remove" v-if="isOwner || user.role_id == 1">
-                    <svg class="icon-LYJorE" aria-hidden="false" width="24" height="24" viewBox="0 0 24 24">
+                    <svg aria-hidden="false" width="24" height="24" viewBox="0 0 24 24">
                         <path fill="currentColor" d="M15 3.999V2H9V3.999H3V5.999H21V3.999H15Z"></path>
                         <path
                             fill="currentColor"

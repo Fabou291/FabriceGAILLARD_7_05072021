@@ -6,8 +6,12 @@ import store from './store';
 import '@/sass/base/_reset.scss';
 import '@/sass/base/_typography.scss';
 import '@/sass/base/_base.scss';
-
+import '@/sass/layout/_sidebar.scss';
+import '@/sass/layout/_left-side.scss';
+import '@/sass/layout/_right-side.scss';
+import '@/sass/layout/_sidebar.scss';
 import '@/sass/layout/_main.scss';
+import '@/sass/components/_input-default.scss';
 
 
 

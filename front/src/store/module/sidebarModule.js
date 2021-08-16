@@ -5,15 +5,24 @@ export default {
     state: {
         listGroup: null,
     },
-
     mutations: {
         SET_LIST_GROUP(state, listGroup) {
             state.listGroup = listGroup;
         },
         ADD_CHANNEL_INTO_GROUP(state, channel) {
-            console.log(channel)
             state.listGroup.find(e => e.id == channel.channelGroupId).listChannel.push(channel);
         },
+        REMOVE_CHANNEL(state,channel){
+            const listChannel  = state.listGroup.find(e => e.id == channel.channelGroupId).listChannel;
+            listChannel.splice(
+                listChannel.findIndex(e => e.id == channel.id),
+                1
+            );
+        },
+        MODIFY_CHANNEL(state,channel){
+            const listChannel  = state.listGroup.find(e => e.id == channel.channelGroupId).listChannel;
+            listChannel[listChannel.findIndex(e => e.id == channel.id)] = channel;
+        }
     },
 
     actions: {
@@ -30,20 +39,6 @@ export default {
                     ...channel,
                     id: (await HTTPRequest.post("channel/", channel)).insertId,                        
                 });
-            } catch (error) {
-                console.log(error);
-            }
-        },
-        async modifyChannel(state, channel) {
-            try {
-                state.commit("MODIFY_CHANNEL", await HTTPRequest.put(`channel/${channel.id}`, channel));
-            } catch (error) {
-                console.log(error);
-            }
-        },
-        async removeChannel(state, channel) {
-            try {
-                state.commit("REMOVE_CHANNEL", await HTTPRequest.delete(`channel/${channel.id}`));
             } catch (error) {
                 console.log(error);
             }

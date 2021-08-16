@@ -22,22 +22,22 @@
     </div>
 
     <nav class="principal-nav">
-        <ul>
-            <channelGroup v-for="(group,i) in listGroup" :key="group" :group="{...group, index : i}" @updateActiveChannel="updateActiveChannel(indexChannel, i)" />
+        <ul class="sidebar__list">
+            <ChannelGroup class="sidebar__list-item" v-for="(group,i) in listGroup" :key="group" :group="{...group, index : i}" @updateActiveChannel="updateActiveChannel(indexChannel, i)" />
         </ul>
     </nav>
 
 </template>
 
 <script>
-import channelGroup from "@/components/PrincipalNav/ChannelGroup.vue"
+import ChannelGroup from "@/components/PrincipalNav/ChannelGroup.vue"
 import UserStatuButton from "@/components/userStatuButton.vue"
 import Avatar from '@/components/Avatar.vue';
 import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
     components : {
-        channelGroup,
+        ChannelGroup,
         UserStatuButton,
         Avatar
     },
@@ -121,6 +121,7 @@ export default {
 
 
 .principal-nav {
+    width : 100%;
     padding: 0 15px;
 }
 

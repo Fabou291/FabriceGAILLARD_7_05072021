@@ -19,6 +19,7 @@ export default {
         position :relative;
         height : 21px;
         background-color : $grey-11;
+        z-index: 5;
         
         &__nav{
             position : absolute;

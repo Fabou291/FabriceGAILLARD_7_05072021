@@ -1,0 +1,21 @@
+.right-side {
+    background-color: $grey-32;
+    height: 100%;
+    flex: 1;
+    overflow: hidden;
+    overflow-y: auto;
+
+    &--grey-21 {
+        background-color : $grey-21;
+    }
+
+    &::-webkit-scrollbar {
+        width: 5px;
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $grey-47;
+        border-radius: 30px;
+    }
+}

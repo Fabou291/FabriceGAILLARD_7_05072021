@@ -10,7 +10,8 @@ const findAll = (req, res, next) => {
 
 const findAllByGroup = (req, res, next) => {
     mysqlDataBase.query(
-        `SELECT cg.name as channel_group_name, cg.id as channel_group_id, c.name as channel_name, c.id as channel_id FROM channel_group as cg JOIN channel as c ON c.channel_group_id = cg.id;`,
+        `SELECT cg.name as channel_group_name, cg.id as channel_group_id, 
+        c.name as channel_name, c.description as channel_description, c.id as channel_id FROM channel_group as cg JOIN channel as c ON c.channel_group_id = cg.id;`,
         function(error, results, fields) {
             if (error) next(error);
             else {
@@ -32,7 +33,8 @@ const findAllByGroup = (req, res, next) => {
 
                     channelsByGroup[channelsByGroup.findIndex(hasSameId)].listChannel.push({
                             id : e.channel_id,
-                            name : e.channel_name                            
+                            name : e.channel_name,
+                            description : e.channel_description                            
                         })
                 })
 
@@ -127,7 +129,7 @@ const modify = (req, res, next) => {
 
     mysqlDataBase.query(
         "UPDATE channel SET name = ?, description = ?, channel_group_id = ? WHERE id = ?",
-        [req.body.name, req.body.description, req.body.channel_group_id, req.params.id],
+        [req.body.name, req.body.description, req.body.channelGroupId, req.params.id],
         function(error, results, fields) {
             if (error) next(error);
             else res.status(200).json(results);
