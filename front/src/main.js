@@ -13,6 +13,8 @@ import '@/sass/layout/_sidebar.scss';
 import '@/sass/layout/_main.scss';
 import '@/sass/components/_input-default.scss';
 
+import "@/js/modal.js";
+
 
 
 router.beforeEach(async (to, from, next) => {

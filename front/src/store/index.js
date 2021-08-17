@@ -6,6 +6,9 @@ import createChannelDisplay from "./module/createChannelDisplay.js";
 import sidebarModule from "./module/sidebarModule.js";
 import postModule from "./module/postModule.js";
 import configChannelModule from "./module/configChannelModule.js";
+import imagePostModule from "./module/imagePostModule.js";
+
+import inputPostChannelModule from "./module/inputPostChannelModule.js";
 
 const emojisData = require("@/assets/twemoji/datas/listEmojiByGroup.json");
 const emojisDataIndexed = function(){
@@ -55,6 +58,8 @@ export default createStore({
     createChannelDisplay,
     sidebarModule,
     postModule,
-    configChannelModule
+    configChannelModule,
+    imagePostModule,
+    inputPostChannelModule
   }
 })

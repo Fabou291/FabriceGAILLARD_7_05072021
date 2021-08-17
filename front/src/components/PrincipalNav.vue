@@ -1,5 +1,4 @@
 <template>
-
     <div class="user">
         <div class="user__representation">
             <Avatar class="user__avatar" :user="{ username : user.username, avatar : require(`@/assets/${user.avatar}`) }" />

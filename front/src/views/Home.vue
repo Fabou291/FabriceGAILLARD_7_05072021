@@ -2,7 +2,8 @@
     <div>
         <PanelCreateChannel/>
         <ConfigChannel/>
-
+        <ImagePostDisplay/>
+    
 
         <div class="container">
             <Header />
@@ -24,7 +25,8 @@
 import Header from "@/components/Header.vue";
 import PrincipalNav from "@/components/PrincipalNav.vue";
 import PanelCreateChannel from "@/components/PanelCreateChannel.vue";
-import ConfigChannel from "@/components/ConfigChannel.vue"
+import ConfigChannel from "@/components/ConfigChannel.vue";
+import ImagePostDisplay from "@/components/ImagePostDisplay.vue"
 
 
 
@@ -32,7 +34,7 @@ import ConfigChannel from "@/components/ConfigChannel.vue"
 
 export default {
     name: "Home",
-    components: { Header, PrincipalNav, PanelCreateChannel, ConfigChannel
+    components: { Header, PrincipalNav, PanelCreateChannel, ConfigChannel, ImagePostDisplay
  
 
         //EmojiPanel,

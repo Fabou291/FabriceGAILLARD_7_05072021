@@ -131,6 +131,11 @@ export default {
 
     &__header {
         text-align: center;
+
+        &--left{
+            text-align: unset;
+            padding: 20px 20px 0 20px;
+        }
     }
 
     &__main {

@@ -37,7 +37,7 @@
         display : block;
         width : 100%;
         padding : 13px; 
-        border: 1px solid $grey-21;
+        border: 1px solid $grey-18;
         border-radius : $border-radius;
         background-color : $grey-25;
         transition : box-shadow 0.2s, border 0.2s;

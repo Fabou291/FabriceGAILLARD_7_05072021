@@ -63,9 +63,15 @@ img,svg{
 }
 
 [contenteditable=true]:empty:before{
-    content: attr(placeholder);
+    content: attr(title);
     pointer-events: none;
     display: block; /* For Firefox */
 }
 
+.modal {
+    display : none;
+}
 
+.show {
+    display : block;
+}

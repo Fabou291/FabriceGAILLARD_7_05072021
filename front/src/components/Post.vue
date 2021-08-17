@@ -11,7 +11,7 @@
                         <span class="post__user-username">{{ post.user_username }}</span> <span class="post__date">{{ post.created_at }}</span>                
                     </div>
 
-                    <FormPost  :value="post.content" :canEmoji="true" v-if="isInModifyMode"  @submit="modify"/>
+                    <FormPost class="post__input" :placeholder="'Supprimer le message ?'"  :value="post.content" :canEmoji="true" v-if="isInModifyMode"  @submit="modify"/>
 
                     <p class="post__content" v-html="getContent" v-if="!isInModifyMode"></p>
 
@@ -169,7 +169,17 @@
         overflow-wrap: anywhere;
     }
 
-
+    &__input{
+        background-color : $grey-47;
+        padding : 5px;
+        margin : 10px 0;
+        & .form-post__field {
+            color : $grey-215;
+        }
+        & .form-post__field:before{
+            color : $grey-142;        }
+        
+    }
 
 }
 </style>

@@ -3,7 +3,7 @@
         <span class="tag-content">CHANNEL</span>
         <h1 class="channel__title">Bienvenue sur Groupe #1</h1>
         <p class="channel__description">C'est le début du salon #Groupe 1.</p>
-        <FormPost @submit="add"  :canBrownse="true" :canGIF="true" :canEmoji="true" />
+        <FormPost @submit="add" ref="formPost"  :canBrownse="true" :canGIF="true" :canEmoji="true" />
         <div class="channel__posts">
             <div v-for="post in listPost" :key="post">
                 <Post class ="post" :post="post" />
@@ -18,7 +18,7 @@
 <script>
 import FormPost from "@/components/FormPost.vue";
 import Post from "@/components/Post.vue";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapGetters,  mapMutations,  mapState } from "vuex";
 
 
 //import EmojiPanel from "../components/EmojiPanel/EmojiPanel.vue";
@@ -37,10 +37,11 @@ export default {
     },
     computed: {
         ...mapGetters('userModule',['user']),
-        ...mapState('postModule',['listPost'])
+        ...mapState('postModule',['listPost']),
     },
     methods: {
         ...mapActions('postModule',['getListPost','addPost']),
+        ...mapMutations('inputPostChannelModule',['SET_CONTENT','SET_TEXTAREA']),
         add(content){ this.addPost({ content, channelId : this.channelId }) }
     },
     created() {
@@ -51,38 +52,40 @@ export default {
         this.channelId = this.$route.params.id;
     },
     mounted(){
+        this.SET_CONTENT(this.$refs['formPost'].getDataText);
+        this.SET_TEXTAREA(this.$refs['formPost'].textarea);
     }
 };
 </script>
 
 <style lang="scss">
-.channel {
-    max-width: 800px;
-    padding: 30px 15px 0 30px;
+    .channel {
+        max-width: 800px;
+        padding: 30px 15px 0 30px;
 
-    &__title {
-        color: white;
-        font-size: 48px;
-        @include setCircularStdFont("Black");
-        letter-spacing: -2.7px;
-        margin: 4px 0 10px 0;
+        &__title {
+            color: white;
+            font-size: 48px;
+            @include setCircularStdFont("Black");
+            letter-spacing: -2.7px;
+            margin: 4px 0 10px 0;
+        }
+
+        &__description {
+            color: $grey-193;
+            @include setCircularStdFont("Bold");
+            font-size: 13px;
+            letter-spacing: 0.3px;
+            margin: 0 0 34px 0;
+        }
+        &__posts {
+            margin: 25px 0 0 0;
+        }
     }
 
-    &__description {
-        color: $grey-193;
+    .tag-content {
+        font-size: 12px;
         @include setCircularStdFont("Bold");
-        font-size: 13px;
-        letter-spacing: 0.3px;
-        margin: 0 0 34px 0;
+        color: white;
     }
-    &__posts {
-        margin: 25px 0 0 0;
-    }
-}
-
-.tag-content {
-    font-size: 12px;
-    @include setCircularStdFont("Bold");
-    color: white;
-}
 </style>

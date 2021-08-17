@@ -1,13 +1,19 @@
 <template>
     <form class="form-post" action="">
-        <button type="button" class="form-post__brownse-btn form-post-btn" v-if="canBrownse">
-            <svg width="24" height="24" viewBox="0 0 24 24">
-                <path
-                    fill="currentColor"
-                    d="M12 2.00098C6.486 2.00098 2 6.48698 2 12.001C2 17.515 6.486 22.001 12 22.001C17.514 22.001 22 17.515 22 12.001C22 6.48698 17.514 2.00098 12 2.00098ZM17 13.001H13V17.001H11V13.001H7V11.001H11V7.00098H13V11.001H17V13.001Z"
-                ></path>
-            </svg>
-        </button>
+        
+        <div>
+            <button type="button" class="form-post__brownse-btn form-post-btn" v-if="canBrownse" @click.stop="showBrownser">
+                <svg width="24" height="24" viewBox="0 0 24 24">
+                    <path
+                        fill="currentColor"
+                        d="M12 2.00098C6.486 2.00098 2 6.48698 2 12.001C2 17.515 6.486 22.001 12 22.001C17.514 22.001 22 17.515 22 12.001C22 6.48698 17.514 2.00098 12 2.00098ZM17 13.001H13V17.001H11V13.001H7V11.001H11V7.00098H13V11.001H17V13.001Z"
+                    ></path>
+                </svg>
+            </button>
+        
+            <Brownser ref="brownser" />            
+        </div>
+
 
         <!--
             @keydown.enter.prevent="submit($event); updateHeight($event.target)"
@@ -29,7 +35,7 @@
 
             class="form-post__field"
             contenteditable="true"
-            placeholder="Envoyer un message dans ce groupe"
+            :title="placeholder"
             ref="textarea"
             spellcheck="false"
             v-html="value"
@@ -57,7 +63,8 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import Brownser from "@/components/Brownser.vue";
+import {  mapState } from "vuex";
 export default {
     data() {
         return {
@@ -65,16 +72,23 @@ export default {
             textarea: "",
         };
     },
+    components : {
+        Brownser
+    },
     props: {
         value: { type: String, default : '' },
         canBrownse : { type: Boolean, default : false },
         canGIF : { type: Boolean, default : false },
-        canEmoji : { type: Boolean, default : false }
+        canEmoji : { type: Boolean, default : false },
+        placeholder : { type : String, default : "Envoyer un message dans ce groupe" }
     },
     computed: {
         ...mapState(["emoji"]),
     },
     methods: {
+        showBrownser(){
+            this.$refs['brownser'].show();
+        },
         submit(e) {
             const value = this.getDataText().trim();
             if (value == "") return;
