@@ -11,9 +11,15 @@
                         <span class="post__user-username">{{ post.user_username }}</span> <span class="post__date">{{ post.created_at }}</span>                
                     </div>
 
-                    <FormPost class="post__input" :placeholder="'Supprimer le message ?'"  :value="post.content" :canEmoji="true" v-if="isInModifyMode"  @submit="modify"/>
+
+                    <div v-if="isInModifyMode" class="post__modify-field">
+                        <FormPost class="post__modify-input" :placeholder="'Modifier votre message'"  :value="post.content" :canEmoji="true"  @escape="SET_ID_POST_IN_MODIFY_MODE(null)"  @submit="modify"/>
+                        <span class="post__modify-infos">échap pour <a href="#" @click.prevent="SET_ID_POST_IN_MODIFY_MODE(null)">annuler</a> • entrée pour enregistrer</span>
+                    </div>
 
                     <p class="post__content" v-html="getContent" v-if="!isInModifyMode"></p>
+                    
+                    <img  :src="`http://localhost:3000/images/${post.image_url}`" v-if="post.image_url"   class="post__image" alt="">
 
                     <div class="post__reaction">
                         <Reaction v-for="reaction in post.listReaction" :key="reaction" :reaction="reaction" />
@@ -31,13 +37,14 @@
     import ContentParser from "../js/contentParser.js"
     import FormPost from '@/components/FormPost.vue';
 
+
     export default {
         components : {
             Avatar, InteractionPost, Reaction, FormPost
         },
         data() {
             return{
-                modifyMode : false,
+                
             }
         },
         computed:{
@@ -57,7 +64,7 @@
                 return contentParser.parseEmoji().parseUrl().content;            
             },
             modify(content){ this.modifyPost({ ...this.post, content }) },
-            remove(){ this.removePost({ ...this.post }) }
+            remove(){ this.removePost({ ...this.post }) },
         }
 
     };
@@ -142,6 +149,7 @@
         display: flex;
         align-items: center;
         gap : 8px;
+        padding : 0 0 8px 0;
     }
 
     &__user-avatar{
@@ -169,16 +177,34 @@
         overflow-wrap: anywhere;
     }
 
-    &__input{
+    &__image{
+        max-width : 100%;
+        max-height : 400px;
+        margin : 8px 0 0 0;
+    }
+
+    &__modify-input{
         background-color : $grey-47;
         padding : 5px;
-        margin : 10px 0;
         & .form-post__field {
             color : $grey-215;
         }
         & .form-post__field:before{
-            color : $grey-142;        }
-        
+            color : $grey-142;
+        }
+    }
+
+    &__modifiy-field{
+        margin : 10px 0;
+    }
+
+
+
+    &__modify-infos{
+        color : grey;
+        font-size : 12px;
+
+
     }
 
 }

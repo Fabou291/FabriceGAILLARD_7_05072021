@@ -28,6 +28,7 @@ export default {
                 user_id: data.user.id,
                 user_avatar: data.user.avatar,
                 user_username: data.user.username,
+                image_url : data.image_url,
                 id: data.id,
                 post_id: data.post_id,
                 created_at: "Aujourd'hui",
@@ -58,11 +59,18 @@ export default {
             }
         },
 
-        async addPost({ state, commit, dispatch, rootGetters }, body) {
+        async addPost({ state, commit, dispatch, rootGetters }, payload) {
             try {
+                const typeFormData = payload.file ? true : false;
+                let body = { ...payload, postId: state.idPostToReply };
+                if(body.file) body = HTTPRequest.convertToFormData(body) ;
+
+                const response = await HTTPRequest.post("post/", body, typeFormData);
+
                 commit("ADD_POST", {
-                    id: (await HTTPRequest.post("post/", { ...body, postId: state.idPostToReply })).insertId,
-                    content: body.content,
+                    id: response.id,
+                    image_url: response.imageUrl,
+                    content: payload.content,
                     post_id: state.idPostToReply,
                     user: rootGetters["userModule/user"],
                 });

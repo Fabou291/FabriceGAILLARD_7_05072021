@@ -1,5 +1,6 @@
 const createHttpError = require('http-errors');
 const multer = require('multer');
+const path = require('path');
 
 const mimeTypes = {
     'image/jpg' : 'jpg',
@@ -15,7 +16,7 @@ const mimeTypes = {
 const storage = multer.diskStorage({
 
     destination: function (req, file, cb) {
-        cb(null, 'images/')
+        cb(null, 'back/images/')
     },
     filename: function (req, file, cb) {
         let error = null;
@@ -29,6 +30,4 @@ const storage = multer.diskStorage({
 })
 
 
-
-   
-module.exports = multer({ storage: storage }).single('image')
+module.exports = multer({ storage }).single('file')

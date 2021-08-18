@@ -5,6 +5,11 @@ export default {
     state: {
         listGroup: null,
     },
+    getters : {
+        getChannelById: state => id => {
+            return state.listGroup.reduce( (a,e) => a = a.concat(e.listChannel), []).find(e => e.id == id);
+        }
+    },
     mutations: {
         SET_LIST_GROUP(state, listGroup) {
             state.listGroup = listGroup;

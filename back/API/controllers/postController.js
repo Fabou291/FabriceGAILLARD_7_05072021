@@ -16,9 +16,10 @@ const findOne = (req,res,next) => {
 }
 
 const create = (req,res,next) => {
-    mysqlDataBase.query( "INSERT INTO post (content, channel_id, post_id, user_id) VALUES(?,?,?,?)", [req.body.content, req.body.channelId, req.body.postId, req.userId], function(error, results, fields){
+    const imageUrl = req.file ? req.file.filename : null ;
+    mysqlDataBase.query( "INSERT INTO post (content, channel_id, post_id, image_url, user_id) VALUES(?,?,?,?,?)", [req.body.content, parseInt(req.body.channelId), JSON.parse(req.body.postId), imageUrl, req.userId], function(error, results, fields){
         if(error) next(error)
-        else res.status(200).send(results)
+        else res.status(200).send({ id : results.insertId, imageUrl })
     })
 }
 
@@ -33,7 +34,6 @@ const remove = (req,res,next) => {
     const  post = req.body.post;
     req.userId = 1
     mysqlDataBase.query( "DELETE FROM post WHERE id = ? AND user_id = ?", [req.params.id, req.userId], function(error, results, fields){
-        console.log(results)
         if(error) next(error)
         else res.status(200).send(results)
     })

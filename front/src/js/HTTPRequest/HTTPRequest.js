@@ -9,14 +9,18 @@ export default class HTTPRequest{
         return { "Accept": "application/json", "Content-Type": "application/json" };
     }
 
-    static async fetch(uri, method, body, headers ){
+    static getFormDataHeader(){
+        return { 'Content-Type': 'multipart/form-data' };
+    }
+
+    static async fetch(uri, method, headers, body ){
         return new Promise((resolve, reject) => {
-            const requesInit = { 
+            let requesInit = { 
                 method, 
-                headers : { ...headers, ...this.getJsonHeader(), ...this.getAuthorizationHeader() },
-                body : JSON.stringify(body)
+                headers : { ...headers, ...this.getAuthorizationHeader() },
+                body
             };
-                
+
             fetch(this.baseUrl + uri, requesInit)
             .then(response => {
                 if(!response.ok) throw response;
@@ -27,20 +31,30 @@ export default class HTTPRequest{
         }) 
     }
 
-    static async get(uri){
-        return await this.fetch(uri, 'GET');
+    static convertToFormData(body){
+        const formData  = new FormData();
+        for (const key in body) {
+            formData.append(key, body[key])
+        }
+        return formData;
     }
 
-    static async post(uri, body){
-        return await this.fetch(uri, 'POST', body);
+    static async get(uri){
+        return await this.fetch(uri, 'GET', this.getJsonHeader());
+    }
+
+    static async post(uri, body, formData = false){
+        const headers = formData ? {} : this.getJsonHeader(); 
+        body = formData ? body : JSON.stringify(body) ;
+        return await this.fetch(uri, 'POST', headers, body);
     }
 
     static async delete(uri){
-        return await this.fetch(uri, 'DELETE');
+        return await this.fetch(uri, 'DELETE', this.getJsonHeader());
     }
 
     static async put(uri, body){
-        return await this.fetch(uri, 'PUT', body);
+        return await this.fetch(uri, 'PUT', this.getJsonHeader(), JSON.stringify(body));
     }
 
 

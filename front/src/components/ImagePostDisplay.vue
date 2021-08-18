@@ -1,36 +1,36 @@
 <template>
     <div class="display-settings-panel" ref="display-settings-panel" v-if="listFile != null" @mousedown="close" >
-            <div class="upload-img-modal" @mousedown.stop>
-                
-                <header class="upload-img-modal__header">
-                    <img class="preview" src="" ref='IMG' alt="">
-                    <div class="title">
-                        <div class="upload-img-modal__file-name">NomDuFichier</div>
-                        <div class="upload-img-modal__channel">Uploader vers <span >NOMDUCHANNEL</span></div>
-                    </div>
-                </header>
-
-                <div class="upload-img-modal__main">
-                    <label class="upload-img-modal__label" for="postContent" >AJOUTER UN COMMENTAIRE <span>(FACULTATIF)</span></label>
-                    <FormPost id="postContent" class="input-default-icon" @submit="submit" :canEmoji="true" :value="content" />
+        <div class="upload-img-modal" @mousedown.stop>
+            
+            <header class="upload-img-modal__header">
+                <img class="preview" src="" ref='IMG' alt="">
+                <div class="title">
+                    <div class="upload-img-modal__file-name">{{listFile[0].name}}</div>
+                    <div class="upload-img-modal__channel">Uploader vers <span >{{ this.getChannelById(this.channelId).name }}</span></div>
                 </div>
+            </header>
 
-                <footer class="upload-img-modal__footer">
-                    <BtnDefault type="button" @click.stop="close">Annuler</BtnDefault>
-                    <BtnDefault type="submit" class="btn-default--green upload-img-modal__btn" 
-                        @click.prevent="submit">
-                        Créer un channel
-                    </BtnDefault>
-                </footer>                    
+            <div class="upload-img-modal__main">
+                <label class="upload-img-modal__label" for="postContent" >AJOUTER UN COMMENTAIRE <span>(FACULTATIF)</span></label>
+                <FormPost id="postContent" class="input-default-icon" @submit="submit" @updateInput="updateInput" :canEmoji="true" :value="content" />
             </div>
-        
+
+            <footer class="upload-img-modal__footer">
+                <BtnDefault type="button" @click.stop="close">Annuler</BtnDefault>
+                <BtnDefault type="submit" class="btn-default--green upload-img-modal__btn" @click.prevent="submit">
+                    Valider
+                </BtnDefault>
+            </footer>                    
+        </div>
     </div>
 </template>
 
 <script>
 import FormPost from "@/components/FormPost.vue";
 import BtnDefault from "@/components/btn/btnDefault.vue"
-import { mapActions, mapState } from 'vuex';
+import { mapActions, mapState, mapGetters } from 'vuex';
+
+
 
 export default {
     components: { FormPost, BtnDefault  },
@@ -40,8 +40,9 @@ export default {
         }
     },
     computed: {
-        ...mapState('imagePostModule',['listFile','content']),
-        ...mapState('inputPostChannelModule',['textarea'])
+        ...mapState('imagePostModule',['listFile','content','channelId']),
+        ...mapState('inputPostChannelModule',['textarea']),
+        ...mapGetters('sidebarModule',['getChannelById']),
     },
     watch : {
         listFile(){
@@ -50,7 +51,14 @@ export default {
     },
     methods: {
         ...mapActions('imagePostModule', ['close']),
+        ...mapActions('postModule', ['addPost']),
         submit() {
+            this.addPost({
+                content : this.input,
+                file : this.listFile[0],
+                channelId : this.channelId,
+                postId : null,
+            })
             this.textarea.innerHTML="";
             this.close();
         },
@@ -71,8 +79,10 @@ export default {
         },
         adjusImagePosition(){
             const img = this.$refs['IMG'];
-            console.log(img)
             img.setAttribute('style',`margin-top : ${img.width*-50/100}px`)
+        },
+        updateInput(content){
+            this.input = content;
         }
     },
 

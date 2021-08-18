@@ -42,6 +42,7 @@ export default {
     methods: {
         ...mapActions('postModule',['getListPost','addPost']),
         ...mapMutations('inputPostChannelModule',['SET_CONTENT','SET_TEXTAREA']),
+        ...mapMutations('imagePostModule',['SET_CHANNEL_ID']),
         add(content){ this.addPost({ content, channelId : this.channelId }) }
     },
     created() {
@@ -54,6 +55,7 @@ export default {
     mounted(){
         this.SET_CONTENT(this.$refs['formPost'].getDataText);
         this.SET_TEXTAREA(this.$refs['formPost'].textarea);
+        this.SET_CHANNEL_ID(this.channelId);
     }
 };
 </script>

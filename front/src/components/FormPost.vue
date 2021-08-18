@@ -30,7 +30,8 @@
 
             @drop.prevent="drop" @dragenter.prevent="" @dragstart.prevent="" @drag.prevent=""
             @keypress.enter.prevent="submit"
-            @input="parseEmpty(); parseEmoji(); parseURL(); textarea.normalize();"
+            @keydown.esc="escape"
+            @input="parseEmpty(); parseEmoji(); parseURL(); textarea.normalize(); $emit('updateInput', getDataText())"
             @paste.prevent="paste"
 
             class="form-post__field"
@@ -86,6 +87,9 @@ export default {
         ...mapState(["emoji"]),
     },
     methods: {
+        escape(){
+            this.$emit('escape')
+        },
         showBrownser(){
             this.$refs['brownser'].show();
         },
@@ -250,9 +254,6 @@ export default {
     },
     mounted() {
         this.textarea = this.$refs["textarea"];
-    },
-    udpdate() {
-        console.log("e");
     },
 };
 </script>

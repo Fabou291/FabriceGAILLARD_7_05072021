@@ -1,8 +1,9 @@
 export default {
     namespaced: true,
     state: {
+        channelId : null,
         listFile : null,
-        content : null,
+        content : '',
     },
     mutations: {
         SET_CONTENT(state, content){
@@ -10,6 +11,9 @@ export default {
         },
         SET_FILE(state, listFile){
             state.listFile = listFile;
+        },
+        SET_CHANNEL_ID(state, channelId){
+            state.channelId = channelId;
         }
     },
     actions: {
@@ -18,9 +22,8 @@ export default {
             commit('SET_CONTENT', payload.content);
         },
         close({commit}){
-            console.log("close")
             commit('SET_FILE', null);
-            commit('SET_CONTENT', null);
+            commit('SET_CONTENT', '');
         }
     },
 };
