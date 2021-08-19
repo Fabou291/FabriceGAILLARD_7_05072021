@@ -9,6 +9,9 @@ export default {
         username: null,
         avatar: null,
         role_id: null,
+        configDisplay : {
+            visible : false
+        }
     },
     mutations: {
         UPDATE(state, user) {
@@ -17,6 +20,9 @@ export default {
             state.avatar = user.avatar;
             state.role_id = user.role_id;
         },
+        SET_CONFIG_DISPLAY_VISIBLE(state, visibility){
+            state.configDisplay.visible = visibility;
+        }
     },
     getters: {
         user: (state) => {
@@ -73,5 +79,9 @@ export default {
                 return false;
             }
         },
+
+        openConfigDisplay({commit}, visibility){
+            commit('SET_CONFIG_DISPLAY_VISIBLE', visibility)
+        }
     },
 };

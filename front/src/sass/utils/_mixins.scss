@@ -18,6 +18,22 @@
     height : $height;
 }
 
+@mixin setCircle($median){
+    width : $median;
+    height : $median;
+    border-radius : $median;
+}
+
+@mixin setSizeFullContainer(){
+    width : 100%;
+    height : 100%;
+}
+
+@mixin setFlexCenter(){
+    display : flex;
+    align-items: center;
+}
+
 @mixin setScrollBar($color){
     overflow: hidden;
     overflow-y: auto;

@@ -10,7 +10,7 @@
             <div class="user__id">#{{ user.id }}</div>
         </div>
         
-        <button class="user__btn-setting">
+        <button class="user__btn-setting" @click="openConfigDisplay(true)">
             <svg aria-hidden="false" width="20" height="20" viewBox="0 0 24 24">
                 <path
                     fill="currentColor"
@@ -48,10 +48,11 @@ export default {
     },
     computed : {
         ...mapState('sidebarModule', ['listGroup']),
-        ...mapGetters('userModule',['user'])
+        ...mapGetters('userModule',['user']),
     },
     methods : {
         ...mapActions('sidebarModule',['setListGroup']),
+        ...mapActions('userModule',['openConfigDisplay']),
         updateActiveChannel(channelIndex,groupIndex){
             channelIndex
             groupIndex

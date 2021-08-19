@@ -22,6 +22,10 @@ export default {};
             }
         }
 
+        &--sm{
+            padding : 8px;
+        }
+
         &:hover{
             text-decoration: underline;
         }
