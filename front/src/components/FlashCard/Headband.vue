@@ -1,7 +1,7 @@
 <template>
     <div class="headband" v-if="error != null" >
         <div class="headband__container">
-            <p class="headband__message">Error : {{ error.error.message }}</p>
+            <p class="headband__message">Error : {{ getErrorMessage }}</p>
             <button class="headband__close-btn" type='button' @click.prevent="close">
                 <svg  width="16" height="16" viewBox="0 0 24 24">
                     <path
@@ -35,7 +35,12 @@ export default {
         
     },
     computed : {
-        ...mapState('errorModule', ['error'])
+        ...mapState('errorModule', ['error']),
+        getErrorMessage(){
+
+            if(this.error.error.message) return this.error.error.message;
+            else return this.error;
+        }
     },
     props : {
         

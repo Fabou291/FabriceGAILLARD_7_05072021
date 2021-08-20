@@ -12,6 +12,7 @@ const { mysqlAsyncQuery } = require("../../config/mysqlConfig.js");
  * @param {*} next
  */
 const verifAuthentication = (req, res, next) => {
+    
     try {
         if (!req.headers.authorization) throw createHttpError.Unauthorized("Not Authenticated");
 

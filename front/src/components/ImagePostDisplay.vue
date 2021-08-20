@@ -46,7 +46,10 @@ export default {
     },
     watch : {
         listFile(){
-            if(this.listFile) this.handleImage(this.listFile[0]);
+            if(this.listFile){
+                this.handleImage(this.listFile[0]);
+                this.updateInput(this.content)
+            }
         }
     },
     methods: {
@@ -86,9 +89,7 @@ export default {
         }
     },
 
-    created(){
-        this.input = this.content;
-    },
+
 
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
     <div class="user">
         <div class="user__representation">
-            <Avatar class="user__avatar" :user="{ username : user.username, avatar : require(`@/assets/${user.avatar}`) }" />
+            <Avatar class="user__avatar" :user="{ username : user.username, avatar : `http://localhost:3000/images/${user.avatar}` }" />
             <UserStatuButton class="user__statu" />
         </div>
 
@@ -10,7 +10,7 @@
             <div class="user__id">#{{ user.id }}</div>
         </div>
         
-        <button class="user__btn-setting" @click="openConfigDisplay(true)">
+        <button class="user__btn-setting" @click="openConfigDisplay()">
             <svg aria-hidden="false" width="20" height="20" viewBox="0 0 24 24">
                 <path
                     fill="currentColor"
@@ -63,6 +63,7 @@ export default {
     },
     async created() {
         this.setListGroup();
+        
     }
 };
 </script>
@@ -99,8 +100,11 @@ export default {
         padding: 8px;
         box-sizing: content-box;
         margin: 0 10px;
+        transition : transform 0.2s;
+        transform : rotate(0deg);
         &:hover {
             color: lighten($grey-142, 10);
+            transform : rotate(90deg)
         }
     }
 

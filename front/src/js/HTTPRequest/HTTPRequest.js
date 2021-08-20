@@ -53,8 +53,11 @@ export default class HTTPRequest{
         return await this.fetch(uri, 'DELETE', this.getJsonHeader());
     }
 
-    static async put(uri, body){
-        return await this.fetch(uri, 'PUT', this.getJsonHeader(), JSON.stringify(body));
+    static async put(uri, body, formData = false){
+        const headers = formData ? {} : this.getJsonHeader(); 
+        body = formData ? body : JSON.stringify(body) ;
+        
+        return await this.fetch(uri, 'PUT', headers, body);
     }
 
 

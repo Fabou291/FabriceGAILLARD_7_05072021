@@ -4,7 +4,7 @@
         <div class="post__sidebar"></div>
         <div class="post__main">
             
-                <Avatar class="post__user-avatar" :user="{ username : post.user_username, avatar : require(`@/assets/${post.user_avatar}`) }" />
+                <Avatar class="post__user-avatar" :user="{ username : post.user_username, avatar : `http://localhost:3000/images/${post.user_avatar}` }" />
 
                 <div class="post__infos">
                     <div class="post__aside">
@@ -149,7 +149,7 @@
         display: flex;
         align-items: center;
         gap : 8px;
-        padding : 0 0 8px 0;
+        padding : 4px 0 0px 0;
     }
 
     &__user-avatar{

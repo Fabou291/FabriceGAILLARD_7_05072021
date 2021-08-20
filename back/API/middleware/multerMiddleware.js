@@ -20,7 +20,6 @@ const storage = multer.diskStorage({
     },
     filename: function (req, file, cb) {
         let error = null;
-
         if(!(file.mimetype in mimeTypes)) 
             error = createHttpError.BadRequest(`type/mime ${file.mimetype} image not unabled`);
 

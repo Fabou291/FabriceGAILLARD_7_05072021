@@ -21,7 +21,7 @@
 @mixin setCircle($median){
     width : $median;
     height : $median;
-    border-radius : $median;
+    border-radius : 50%;
 }
 
 @mixin setSizeFullContainer(){
@@ -32,6 +32,7 @@
 @mixin setFlexCenter(){
     display : flex;
     align-items: center;
+    justify-content: center;
 }
 
 @mixin setScrollBar($color){

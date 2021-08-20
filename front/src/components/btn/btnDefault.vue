@@ -14,9 +14,9 @@ export default {};
         border-radius: $border-radius;
 
         &--green {
-            background-color: $green;
+            background-color: darken($green,5%);
             &:hover{
-                background-color: lighten($green, 3%);
+                background-color: $green;
 
                 text-decoration: none !important;
             }

@@ -7,6 +7,7 @@ export default {
     state: {
         id: null,
         username: null,
+        description: null,
         avatar: null,
         role_id: null,
         configDisplay : {
@@ -17,6 +18,7 @@ export default {
         UPDATE(state, user) {
             state.id = user.id;
             state.username = user.username;
+            state.description = user.description;
             state.avatar = user.avatar;
             state.role_id = user.role_id;
         },
@@ -29,6 +31,7 @@ export default {
             return {
                 id: state.id,
                 username: state.username,
+                description : state.description,
                 avatar: state.avatar,
                 role_id: state.role_id,
             };
@@ -48,8 +51,7 @@ export default {
 
         async register({ dispatch }, body) {
             try {
-                await HTTPRequest.post("auth/register", body);
-                dispatch("fetchLogin", body);
+                if((await HTTPRequest.post("auth/register", body)).affectdRows) dispatch("fetchLogin", body);
             } catch (error) {
                 dispatch("errorModule/setError", error, { root: true });
             }
@@ -80,8 +82,47 @@ export default {
             }
         },
 
-        openConfigDisplay({commit}, visibility){
-            commit('SET_CONFIG_DISPLAY_VISIBLE', visibility)
+        async modify({commit,state, dispatch}, body){
+            try {
+                
+                const response = await HTTPRequest.put(`user/${state.id}`, HTTPRequest.convertToFormData(body), body.file ? true : false);
+
+                commit('UPDATE', 
+                    {
+                        ...body,
+                        id : state.id,
+                        avatar : response.avatar,
+                        role_id : state.role_id
+                    }, 
+                )
+
+            } catch (error) {
+                dispatch("errorModule/setError", error, { root: true });
+            }
+        },
+
+        async remove({commit, dispatch}){
+            try {
+                await HTTPRequest.delete("user/1");
+
+                commit('UPDATE', {
+                    id : null, username : null, description : null,
+                    avatar : null, role_id : null
+                })
+
+                router.push({ name: "Login" });
+
+            } catch (error) {
+                dispatch("errorModule/setError", error, { root: true });
+            }
+        },
+
+        openConfigDisplay({commit}){
+            commit('SET_CONFIG_DISPLAY_VISIBLE', true)
+        },
+
+        shutDownConfigDisplay({commit}){
+            commit('SET_CONFIG_DISPLAY_VISIBLE', false)
         }
     },
 };

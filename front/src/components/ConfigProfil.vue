@@ -38,7 +38,7 @@
 
                         <hr>
 
-                        <div class="link-btn link-btn--danger" >
+                        <div class="link-btn link-btn--danger" @click="remove" >
                             Supprimer le compte
                         </div>
                     </div>
@@ -48,22 +48,32 @@
 
             <div class="right-side right-side--grey-32">
                 <div class="l-config__main">
+                    
+                    <button type='button' class="l-config__close-btn" @click="shutDownConfigDisplay">
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
+                        </svg>
+                    </button>
 
                     <span class="tag-content">PROFIL</span>
 
                     <section v-if="activeZone == 0">
-                        <h2 class="channel__title">Mon compte</h2>
+                        <h2 class="l-config__title">Mon compte</h2>
                         <div class="user-card">
                             <div class="user-card__top"></div>
                             <div class="user-card__main">
 
                                 <div class="user-card__avatar btn-change-avatar">
+                                    
+                                    <form action="" class="form-avatar">
+                                        <input type="file" ref="inputFile" name="avatar" id="" @change="setListFile">
+                                    </form>
 
-                                    <button type="button" class="btn-change-avatar__preview">
-                                        <span class="btn-change-avatar__showcase">Modifier l'avatar</span>
-                                        <img class="btn-change-avatar__thumb" :src="require(`@/assets/${user.avatar}`)" alt="avatar de l'utilisateur">                                        
+                                    <button type="button" class="btn-change-avatar__preview" @click="browse">
+                                        <span class="btn-change-avatar__showcase">Changer l'avatar</span>
+                                        <img class="btn-change-avatar__thumb" :src="`http://localhost:3000/images/${user.avatar}`" alt="avatar de l'utilisateur">                                        
                                     </button> 
-                                    <button class="btn-change-avatar__action"></button>
+                                    <button class="btn-change-avatar__action" @click="browse"></button>
 
                                 </div>
 
@@ -100,45 +110,18 @@
                     </section>
 
                     <section v-if="activeZone == 1">
-                        <h2 class="channel__title">Utilisateur</h2>
-                        
-                        <form class="form-channel"  action="" >
-                            <label class="create-panel__label" for="name">NOM D'UTILISATEUR</label>
-                            <input type="text" name="name" id="name" class="input-default input-default--colorA" v-model="userInputs.name" placeholder="Votre nom d'utilisateur"/>
-
-                            <label class="create-panel__label" for="description">MA DESCRIPTION</label>
-                            <textarea name="description" id="description" rows="10" class="input-default input-default--colorA" v-model="userInputs.description" placeholder="Dites à tous le monde qui vous êtes !"></textarea>
-                            <BtnDefault type="submit" class="form-channel__submit btn-default--green create-panel__btn" >Valider</BtnDefault>
-                        </form>
+                        <h2 class="l-config__title">Utilisateur</h2>
+                        <ModifyUserForm/>
                     </section>
 
                     <section v-if="activeZone == 2">
-                        <h2 class="channel__title">Adresse e-mail</h2>
-                        <form class="form-channel"  action="" >
-                            <label class="create-panel__label" for="oldMail">ANCIENNE ADRESSE E-MAIL</label>
-                            <input type="password" name="oldMail" class="input-default input-default--colorA" v-model="mailInputs.old" placeholder="Indiquez votre ancien mot de passe"/>
-
-                            <label class="create-panel__label" for="newMail">NOUVELLE ADRESSE E-MAIL</label>
-                            <input type="password" name="newMail" class="input-default input-default--colorA" v-model="mailInputs.new" placeholder="Indiquez votre nouveau mot de passe"/>
-
-                            <BtnDefault type="submit" class="form-channel__submit btn-default--green create-panel__btn" >Valider</BtnDefault>
-                        </form>
+                        <h2 class="l-config__title">Adresse e-mail</h2>
+                        <ResetMailForm/>
                     </section>
 
                     <section v-if="activeZone == 3">
-                        <h2 class="channel__title">Mot de passe</h2>
-                        <form class="form-channel"  action="" >
-                            <label class="create-panel__label" for="oldPassword">ANCIEN MOT DE PASSE</label>
-                            <input type="password" name="oldPassword" class="input-default input-default--colorA" v-model="mailInputs.old" placeholder="Indiquez votre ancien mot de passe"/>
-
-                            <label class="create-panel__label" for="newPassword">NOUVEAU MOT DE PASSE</label>
-                            <input type="password" name="newPassword" class="input-default input-default--colorA" v-model="mailInputs.new" placeholder="Indiquez votre nouveau mot de passe"/>
-
-                            <label class="create-panel__label" for="confirmPassword">CONFIRMEZ VOTRE NOUVEAU MOT DE PASSE</label>
-                            <input type="password" name="confirmPassword" class="input-default input-default--colorA" v-model="passwordInputs.confirmation" placeholder="Confirmez votre nouveau mot de passe"/>
-
-                            <BtnDefault type="submit" class="form-channel__submit btn-default--green create-panel__btn" >Valider</BtnDefault>
-                        </form>
+                        <h2 class="l-config__title">Mot de passe</h2>
+                        <ResetPasswordForm/>
                     </section>
 
                 </div>
@@ -150,27 +133,24 @@
 
 <script>
 import BtnDefault from "@/components/btn/btnDefault.vue";
-import { mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
+
+import ModifyUserForm from "@/components/form/configProfil/ModifyUserForm.vue";
+import ResetMailForm from "@/components/form/configProfil/ResetMailForm.vue";
+import ResetPasswordForm from "@/components/form/configProfil/ResetPasswordForm.vue";
+
+
 
 export default {
     data() {
         return { 
             activeZone : 0,
-            passwordInputs : {
-                old : null,
-                new : null,
-                confirmation : null
-            },
-            mailInputs : {
-                old : null,
-                new : null,
-            },
-            userInputs : {
-                avatar : null,
-                name : null,
-                description : null
-            },
-
+            listFile : null,
+        }
+    },
+    watch : {
+        listFile(){
+            if(this.listFile) this.modifyAvatar();
         }
     },
     computed : {
@@ -178,12 +158,34 @@ export default {
         ...mapState('userModule',['configDisplay']),
     },
     methods: {
-        changeZone(index){
-            this.activeZone = index;
+        ...mapActions('userModule',['shutDownConfigDisplay','remove', 'modify']),
+
+        changeZone(index) { this.activeZone = index },
+
+        browse(){ this.$refs['inputFile'].click(); },
+
+        modifyAvatar(){
+
+            const file = this.listFile[0];
+            this.resetInputFile();
+
+            this.modify({
+                file,
+                username : this.user.username,
+                description : this.user.description,
+            })
+        },
+
+        resetInputFile(){
+            this.$refs['inputFile'].value="";
+            this.$refs['inputFile'].files=null;
+        },
+
+        setListFile(){
+            this.listFile = this.$refs['inputFile'].files
         }
     },
-    components : { BtnDefault },
-
+    components : { BtnDefault, ModifyUserForm, ResetMailForm, ResetPasswordForm },
 }
 
 </script>
@@ -287,5 +289,8 @@ export default {
             }
         }
     }
-
+    
+    .form-avatar{
+        display : none;
+    }
 </style>

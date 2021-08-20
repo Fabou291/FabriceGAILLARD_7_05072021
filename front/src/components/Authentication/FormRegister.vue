@@ -115,12 +115,15 @@ export default {
         post() {
             this.setInSessionStorage();
             if (!document.querySelector(".form-auth form").reportValidity()) return;
+            const avatarDefaultSet = ['A','B','C','D','E','F','G','H'];
+            const getRandomInt = max => Math.floor(Math.random() * max);
+            
             this.register(
                 { 
                     email: this.email, 
                     password: this.password,
                     username: this.username,
-                    avatar : "Une url par default"
+                    avatar : `avatarDefaultSet/${ avatarDefaultSet[getRandomInt(avatarDefaultSet.length)] }.svg`
                 }
             );
         },

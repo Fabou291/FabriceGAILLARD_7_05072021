@@ -14,7 +14,7 @@
         </div>
 
         <ul v-show="visible">
-            <li class="sidebar-item" v-for="channel in group.listChannel" :key="channel.id">
+            <li class="sidebar-item" :class="{ 'sidebar-item--active' : $route.params.id == channel.id }" v-for="channel in group.listChannel" :key="channel.id">
                 <router-link class="sidebar-item__link" :to="`/channel/${channel.id}`">
                     <svg class="sidebar-item__link-icon" viewBox="0 0 24 24">
                         <path

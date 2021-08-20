@@ -38,10 +38,15 @@
             </div>
             <div class="right-side right-side--grey-32">
                 <div class="l-config__main">
-
+                    
+                    <button class="l-config__close-btn">
+                        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24">
+                            <path fill="currentColor" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
+                        </svg>
+                    </button>
 
                     <span class="tag-content">CHANNEL</span>
-                    <h1 class="channel__title">Configuration du Channel</h1>
+                    <h2 class="l-config__title">Configuration du Channel</h2>
                     
                     <form class="form-channel"  action="" @mousedown.stop>
 
@@ -113,9 +118,31 @@ export default {
         z-index: 5;
         width: 100%;
         &__main{
+            position: relative;
             max-width : 800px;
             padding : 100px 0 0 30px;
         }
+
+        &__close-btn{
+            position : absolute;
+            right : -56px;
+            @include setCircle(36px);
+            border : 2px solid grey;
+            @include setFlexCenter();
+
+            &:hover{
+                background-color : rgba(white,0.1);
+            }
+        }
+
+        &__title{
+            color: white;
+            font-size: 48px;
+            @include setCircularStdFont("Black");
+            letter-spacing: -2.7px;
+            margin: 4px 0 30px 0;
+        }
+
     }
     .config-sidebar{
         padding : 80px 10px 0 10px !important;

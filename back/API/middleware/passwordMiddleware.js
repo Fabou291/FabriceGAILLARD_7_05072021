@@ -26,6 +26,20 @@ const checkValidity = (req,res,next) => {
 
 }
 
+const checkToReset = (req,res,next) => {
+    try{
+        if(req.body.password == req.body.oldPassword)
+            throw createError.BadRequest('New and old password can\'t be identical.');
+        if(req.body.password != req.body.confirmationPassword)
+            throw createError.BadRequest('New password and his confirmation must be identical.');           
+        next();        
+    }
+    catch(e){
+        next(e)
+    }
+
+}
+
 const encrypt = (req,res,next) => {
 
     bcrypt
@@ -38,7 +52,7 @@ const encrypt = (req,res,next) => {
 
 }
 
-module.exports = { checkValidity, encrypt }
+module.exports = { checkValidity, checkToReset, encrypt }
 
 
 

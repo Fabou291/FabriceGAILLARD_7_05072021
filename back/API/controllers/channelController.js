@@ -128,7 +128,7 @@ const create = (req, res, next) => {
 const modify = (req, res, next) => {
 
     mysqlDataBase.query(
-        "UPDATE channel SET name = ?, description = ?, channel_group_id = ? WHERE id = ?",
+        `UPDATE channel SET name = ?, description = ?, channel_group_id = ? WHERE id = ?`,
         [req.body.name, req.body.description, req.body.channelGroupId, req.params.id],
         function(error, results, fields) {
             if (error) next(error);
