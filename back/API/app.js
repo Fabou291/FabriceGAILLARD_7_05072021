@@ -40,6 +40,7 @@ app.use('/api/comment', commentRouter);
 
 app.use((error, req, res, next) => {
     console.log(error)
+    if(Object.keys(error).length === 0) error = createError.InternalServerError('Erreur serveur')
     res.status(error.statusCode || 500).json({ error })
     res.end();
 });

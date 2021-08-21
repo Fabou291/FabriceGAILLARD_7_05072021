@@ -21,7 +21,7 @@ router.post(
     userController.create
 );
 
-router.post(
+router.get(
     "/refresh-token",
     authenticationController.refreshToken
 );

@@ -2,6 +2,7 @@ const { mysqlAsyncQuery } = require("../../config/mysqlConfig.js");
 const tokenHelper = require("../helpers/tokenHelper.js");
 const createError = require("http-errors");
 const bcrypt = require("bcrypt");
+const JWT = require("jsonwebtoken");
 
 
 const login = async (req, res, next) => {
@@ -46,12 +47,17 @@ const login = async (req, res, next) => {
 
 const refreshToken = async (req, res, next) => {
     try{
-        const { refreshToken, userId } = req.body;
-        let decoded = await tokenHelper.verifyRefreshToken(refreshToken);
-        if (userId && userId !== decoded.userId) throw createHttpError.Unauthorized("Invalid refresh token");
+        if (!req.headers.authorization) throw createHttpError.Unauthorized("Not authorized");
+
+        const { userId } = JWT.decode(req.headers.authorization.split(" ")[1]);
+
+        const user = (await mysqlAsyncQuery("SELECT * FROM user WHERE id= ?;", [userId]))[0];
+        if (!user) throw createError.BadRequest("Invalid user");
+
+        JWT.verify(user.refresh_token, process.env.SECRET_REFRESH_TOKEN);
+        
         res.status(200).json({ accessToken : tokenHelper.getAccessToken(userId) })
-    }
-    catch(error){
+    } catch(error){
         next(error);
     }
 }
