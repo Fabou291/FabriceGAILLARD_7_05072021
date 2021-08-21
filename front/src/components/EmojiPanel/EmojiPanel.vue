@@ -1,12 +1,12 @@
 <template>
-    <div class="emoji-panel" >
+    <div class="emoji-panel" ref="emojiPanel" v-if="display.visible" :style="`top : ${display.y}px; left : ${display.x}px`">
         <EmojiPanelNav v-on:change="aze" />
         <div v-show="actived == 'Emoji'">
             <EmojiPanelSearch
                 :filterValue="filterValue"
                 placeholder="Trouve l'émoji parfait"
                 @updateFilterValue="updateFilterValue"
-                @updateSkinColor="updateSkinColor"
+                @updateSkinColor="changeSkin"
             />
             <div class="emoji-panel__main">
                 <EmojiPanelCategorie
@@ -77,6 +77,7 @@
 import EmojiPanelSearch from "@/components/EmojiPanel/EmojiPanelSearch.vue";
 import EmojiPanelNav from "@/components/EmojiPanel/EmojiPanelNav.vue";
 import EmojiPanelCategorie from "@/components/EmojiPanel/EmojiPanelCategorie.vue";
+import { mapActions, mapMutations, mapState } from 'vuex';
 
 
 export default {
@@ -93,21 +94,10 @@ export default {
             activeEmoji: 0,
             groupeHide : [ false, false, false, false, false, false, false, false ],
             filterValue: "",
-            skin: "A",
-            emojisDataIndexed : [],
-            emojisData : require("@/assets/twemoji/datas/listEmojiByGroup.json"),
-            indexesColor: require("@/assets/twemoji/datas/indexesSkin.json"),
-            unicodeSkin : {
-                'A' : require("@/assets/twemoji/datas/A.json"),
-                'B' : require("@/assets/twemoji/datas/B.json"),
-                'C' : require("@/assets/twemoji/datas/C.json"),
-                'D' : require("@/assets/twemoji/datas/D.json"),
-                'E' : require("@/assets/twemoji/datas/E.json"),
-                'F' : require("@/assets/twemoji/datas/F.json"),
-            }
         };
     },
     computed: {
+        ...mapState('emojiModule', ['skin','emojisData','indexesColor','emojisDataIndexed','emojisShortCodeIndex','unicodeSkin', 'display']),
         getFilteredEmojis() {
             let emojisDataFiltered = JSON.parse(JSON.stringify(this.emojisData));
 
@@ -131,9 +121,11 @@ export default {
                 .join("-")
                 .toLowerCase()
                 .replace(/^0+/g, "");
-        }
+        },
     },
     methods: {
+        ...mapMutations('emojiModule', ['SET_SIZE']),
+        ...mapActions('emojiModule',['changeSkin']),
         aze: function(actived) {
             this.actived = actived;
         },
@@ -167,26 +159,13 @@ export default {
         },
         updateFilterValue(value) {
             this.filterValue = value;
-        },
-        updateSkinColor(skin) {
-            const colors = ['A','B','C','D','E','F'];
-            this.skin = colors[skin];
-            this.updateEmojisDataIndexedBySkin(colors[skin])
-        },
-        updateEmojisDataIndexedBySkin(skin){
-            let i = 0;
-            let emojisDataIndexed = JSON.parse(JSON.stringify(this.emojisDataIndexed));
-            for (const index of this.indexesColor) {
-                emojisDataIndexed[index].u = this.unicodeSkin[skin][i++];
-            }
-            this.emojisDataIndexed = emojisDataIndexed;
-            
         }
     },
-    created() {
-        for (const key in this.emojisData)
-            this.emojisDataIndexed = this.emojisDataIndexed.concat(this.emojisData[key].emojis);
-    },
+    mounted(){
+        /*console.log(this.$refs['emojiPanel'].getBoundingClientRect())
+        const bound = this.$refs['emojiPanel'].getBoundingClientRect();
+        this.SET_SIZE({ width: bound.width, height: bound.height})*/
+    }
 };
 </script>
 

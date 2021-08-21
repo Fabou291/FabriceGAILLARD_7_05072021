@@ -1,9 +1,13 @@
 <template>
+    <EmojiPanel/>
     <section class="channel">
         <span class="tag-content">CHANNEL</span>
         <h1 class="channel__title">Bienvenue sur Groupe #1</h1>
         <p class="channel__description">C'est le début du salon #Groupe 1.</p>
-        <FormPost @submit="add" ref="formPost"  :canBrownse="true" :canGIF="true" :canEmoji="true" />
+        <div class="channel__formPost">
+            <FormPost @submit="add" ref="formPost"  :canBrownse="true" :canGIF="true" :canEmoji="true" />            
+        </div>
+
         <div class="channel__posts">
             <div v-for="post in listPost" :key="post">
                 <Post class ="post" :post="post" />
@@ -19,16 +23,14 @@
 import FormPost from "@/components/FormPost.vue";
 import Post from "@/components/Post.vue";
 import { mapActions, mapGetters,  mapMutations,  mapState } from "vuex";
-
-
-//import EmojiPanel from "../components/EmojiPanel/EmojiPanel.vue";
+import EmojiPanel from "../components/EmojiPanel/EmojiPanel.vue";
 
 export default {
     name: "Home",
     components: {
         FormPost,
         Post,
-        //EmojiPanel,
+        EmojiPanel,
     },
     data() {
         return {
@@ -80,6 +82,15 @@ export default {
             letter-spacing: 0.3px;
             margin: 0 0 34px 0;
         }
+
+        &__formPost {
+            padding-top : 20px;
+            position: sticky;
+            top: 0;
+            z-index: 12;
+            background-color : $grey-18;
+        }
+
         &__posts {
             margin: 25px 0 0 0;
         }

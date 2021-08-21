@@ -51,7 +51,7 @@
                 ></path>
             </svg>
         </button>
-        <button type="button" class="form-post-btn" v-if="canEmoji">
+        <button type="button" class="form-post-btn" v-if="canEmoji" @click="showEmojiDisplay">
             <svg width="24" height="24" viewBox="0 0 24 24">
                 <path
                     fill="currentColor"
@@ -65,7 +65,7 @@
 
 <script>
 import Brownser from "@/components/Brownser.vue";
-import {  mapState } from "vuex";
+import {   mapMutations, mapState } from "vuex";
 export default {
     data() {
         return {
@@ -84,9 +84,18 @@ export default {
         placeholder : { type : String, default : "Envoyer un message dans ce groupe" }
     },
     computed: {
-        ...mapState(["emoji"]),
+        ...mapState('emojiModule',['emojisShortCodeIndex', 'display']),
     },
     methods: {
+        ...mapMutations('emojiModule', ['SET_POSITION', 'SET_VISIBILITY']),
+        showEmojiDisplay(e){
+            const bound = e.target.getBoundingClientRect();
+            this.SET_POSITION({
+                x : bound.right - this.display.width,
+                y : bound.top - this.display.height*-1,                
+            })
+            this.SET_VISIBILITY(true)
+        },
         escape(){
             this.$emit('escape')
         },
@@ -161,7 +170,7 @@ export default {
                     if(/:\w+:/.test(textContent)){
                         const listTextNode = textContent.split(reg).map(text => document.createTextNode(text));
                         const listShortCodeNode = textContent.match(reg).map(shortCode => {
-                            return (this.emoji.emojisShortCodeIndex[shortCode])
+                            return (this.emojisShortCodeIndex[shortCode])
                             ? this.createSpanImgNode(shortCode)
                             : document.createTextNode(shortCode);
                         });
@@ -196,7 +205,7 @@ export default {
                 let index, listNodeToAppend;
 
                 this.textarea.textContent.match(reg).forEach(shortCode => {
-                    if(Object.keys(this.emoji.emojisShortCodeIndex).includes(shortCode)){
+                    if(Object.keys(this.emojisShortCodeIndex).includes(shortCode)){
                         index = 0;
                         for (index in [...this.textarea.childNodes]) if(reg.test(this.textarea.childNodes[index].textContent)) break;
                         const childNode =  this.textarea.childNodes[index];
@@ -238,7 +247,7 @@ export default {
                     span.setAttribute('contenteditable','false');
                     span.innerHTML = 
                     `<img width="15px" alt="${shortCode}" src="${require("@/assets/twemoji/svg/" +
-                        this.emoji.emojisShortCodeIndex[shortCode].u.join("-").toLowerCase() +
+                        this.emojisShortCodeIndex[shortCode].u.join("-").toLowerCase() +
                     ".svg")}">`;
             return span
         },

@@ -50,6 +50,7 @@
         computed:{
             ...mapState(["emoji","actualPostInModifyMode"]),
             ...mapState('postModule',["idPostInModifyMode"]),
+            ...mapState('emojiModule',["emojisShortCodeIndex"]),
             isInModifyMode(){ return this.idPostInModifyMode == this.post.id },
             getContent(){ return this.parseContent() }
         },
@@ -60,7 +61,7 @@
             ...mapActions('postModule', ["modifyPost", "removePost","setIdPostToReply"]),
             ...mapMutations('postModule', ["SET_ID_POST_IN_MODIFY_MODE"]),
             parseContent(){
-                let contentParser = new ContentParser(this.post.content, this.emoji.emojisShortCodeIndex);
+                let contentParser = new ContentParser(this.post.content, this.emojisShortCodeIndex);
                 return contentParser.parseEmoji().parseUrl().content;            
             },
             modify(content){ this.modifyPost({ ...this.post, content }) },
@@ -171,7 +172,6 @@
     &__content{
         margin: 0px;
         letter-spacing: -0.1px;
-        line-height: 1.5;
         font-size: 16px;
         color: $grey-193;
         overflow-wrap: anywhere;
