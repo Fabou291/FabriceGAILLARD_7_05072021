@@ -37,9 +37,7 @@ export default {
     computed : {
         ...mapState('errorModule', ['error']),
         getErrorMessage(){
-
-            if(this.error.error.message) return this.error.error.message;
-            else return this.error;
+            return this.error.message;
         }
     },
     props : {

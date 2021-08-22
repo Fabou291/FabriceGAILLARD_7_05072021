@@ -1,4 +1,4 @@
-
+import router from "../../router/index.js";
 export default {
     namespaced: true,
     state: {
@@ -10,17 +10,22 @@ export default {
         },
     },
     actions: {
-        setError( state, error) {
-            state.commit("SET_ERROR", error);
+        setError( context, error) {
+            context.commit("SET_ERROR", error);
         },
-        parseError(state, error) {
-            if(error.message == "access token expired"){
-                //Faire un module AUTH pour cette fonction et d'autre
-
-                
-
+        handleError(context, error) {
+            if(error.message == "Failed to fetch"){
+                router.push({ name: "Login" })
+                error = { message : 'Server not responding' }
             }
-            else state.dispatch.setError( state, error) 
+
+            console.log(error)
+
+            if(error.message == "jwt expired"){
+                router.push({ name: "Login" })
+            }
+
+            context.dispatch('setError', error) 
         },
     },
 };

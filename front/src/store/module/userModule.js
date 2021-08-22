@@ -1,6 +1,5 @@
 import HTTPRequest from "../../js/HTTPRequest/HTTPRequest.js";
 import router from "../../router/index.js";
-import JWT from "jsonwebtoken";
 
 export default {
     namespaced: true,
@@ -57,30 +56,17 @@ export default {
             }
         },
 
-        async getById(context, body) {
+        async getById(context, userId) {
             try {
-                const decode = JWT.decode(body.accessToken, { complete: true });
-                context.commit("UPDATE", await HTTPRequest.get(`user/${decode.payload.userId}`));
-                return true;
+                console.log(userId)
+                context.commit("UPDATE", await HTTPRequest.get(`user/${userId}`));
             } catch (error) {
-                context.dispatch("errorModule/setError", error, { root: true });
-                return false;
+
+                context.dispatch("errorModule/handleError", error, { root: true });
             }
         },
 
-        async refreshToken(context, body) {
-            try {
-                const { userId, refreshToken } = body;
-                window.localStorage.setItem(
-                    "accessToken",
-                    await HTTPRequest.post(`auth/refresh-token`, { userId, refreshToken })
-                );
-                return true;
-            } catch (error) {
-                context.dispatch("errorModule/setError", error, { root: true });
-                return false;
-            }
-        },
+
 
         async modify({commit,state, dispatch}, body){
             try {

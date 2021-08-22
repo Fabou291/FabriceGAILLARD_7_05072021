@@ -14,22 +14,37 @@ export default class HTTPRequest{
     }
 
     static async fetch(uri, method, headers, body ){
-        return new Promise((resolve, reject) => {
-            let requesInit = { 
-                method, 
-                headers : { ...headers, ...this.getAuthorizationHeader() },
-                body
-            };
+        let requesInit = { 
+            method, 
+            headers : { ...headers, ...this.getAuthorizationHeader() },
+            body
+        };
+        const response = await fetch(this.baseUrl + uri, requesInit);
 
-            fetch(this.baseUrl + uri, requesInit)
-            .then(response => {
-                if(!response.ok) throw response;
-                return response.json();
-            })
-            .then(data => resolve(data))
-            .catch(e =>  reject(e))
-        }) 
+        if(!response.ok){
+            const error = await response.json();
+            if(error.message == 'jwt expired'){
+                try{ 
+                    const response = await this.refreshToken();
+                    if(!response.ok) throw { message : 'Jwt refresh expire' }
+                    const { accessToken } = await response.json();
+                    window.localStorage.setItem('accessToken', accessToken)
+                    return await this.fetch(uri, method, headers, body );
+                } catch(e){ return e; }
+            }
+        } 
+
+        return await response.json();            
     }
+
+    static async refreshToken(){
+        return await fetch(this.baseUrl + 'auth/refresh-token', {
+            method : 'GET',
+            headers : { ...this.getAuthorizationHeader(), ...this.getJsonHeader() }
+        });
+    }
+
+
 
     static convertToFormData(body){
         const formData  = new FormData();

@@ -58,6 +58,7 @@ const refreshToken = async (req, res, next) => {
         
         res.status(200).json({ accessToken : tokenHelper.getAccessToken(userId) })
     } catch(error){
+        if(error.message == 'jwt expired') error = createError.Unauthorized("Refresh token invalid");
         next(error);
     }
 }

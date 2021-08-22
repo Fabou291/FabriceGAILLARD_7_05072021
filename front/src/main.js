@@ -2,6 +2,7 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import JWT from "jsonwebtoken";
 
 import '@/sass/base/_reset.scss';
 import '@/sass/base/_typography.scss';
@@ -23,19 +24,15 @@ router.beforeEach(async (to, from, next) => {
     if (to.matched.some(record => record.meta.requiresAuth)) {
         const accessToken = window.localStorage.getItem('accessToken');
         if(accessToken == null) return next('/login');
+
+        const { userId } = JWT.decode(accessToken);
+     
         
-        if(store.state.userModule.id == null){
-            const user = await store.dispatch('userModule/getById', {accessToken} ,{root : true})
-            if(!user){
-                const accessTokenRefresh = await store.dispatch('userModule/refreshToken', {accessToken} ,{root : true})
-                if(!accessTokenRefresh) return next('/login');
-                
-                window.localStorage.setItem('accessToken',accessTokenRefresh.accessToken)
-            }
-        }
-        return next();
+        if(store.state.userModule.id == null) await store.dispatch('userModule/getById', userId ,{root : true})
+        else return next();
     }
     return next();
+    
 })
 
 
