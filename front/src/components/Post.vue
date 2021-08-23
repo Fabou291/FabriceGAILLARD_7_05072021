@@ -185,10 +185,15 @@
 
     &__modify-input{
         background-color : $grey-47;
-        padding : 5px;
+
+        .form-post__container{
+            padding : 5px;            
+        }
+
         & .form-post__field {
             color : $grey-215;
         }
+        
         & .form-post__field:before{
             color : $grey-142;
         }

@@ -5,7 +5,7 @@
         <h1 class="channel__title">Bienvenue sur Groupe #1</h1>
         <p class="channel__description">C'est le début du salon #Groupe 1.</p>
         <div class="channel__formPost">
-            <FormPost @submit="add" ref="formPost"  :canBrownse="true" :canGIF="true" :canEmoji="true" />            
+            <FormPost @submit="add" ref="formPost"  :canBrownse="true" :canGIF="true" :canEmoji="true" :canRespond="true" />            
         </div>
 
         <div class="channel__posts">
@@ -64,7 +64,7 @@ export default {
 
 <style lang="scss">
     .channel {
-        max-width: 800px;
+        width: 100%;
         padding: 30px 15px 0 30px;
 
         &__title {

@@ -16,8 +16,9 @@ export default {
 
 <style lang="scss">
     .header {
-        position :relative;
-        height : 21px;
+        position :fixed;
+        width: 100%;
+        height : $header-height;
         background-color : $grey-11;
         z-index: 5;
         

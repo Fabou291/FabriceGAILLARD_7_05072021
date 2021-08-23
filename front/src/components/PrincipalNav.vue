@@ -127,6 +127,8 @@ export default {
 .principal-nav {
     width : 100%;
     padding: 0 15px;
+
+    
 }
 
 

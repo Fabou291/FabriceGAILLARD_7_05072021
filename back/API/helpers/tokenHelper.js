@@ -9,7 +9,4 @@ const getRefreshToken = (userId) => {
     return JWT.sign({ userId }, process.env.SECRET_REFRESH_TOKEN, { expiresIn: "1d" });
 };
 
-
-
-
 module.exports = { getAccessToken, getRefreshToken };

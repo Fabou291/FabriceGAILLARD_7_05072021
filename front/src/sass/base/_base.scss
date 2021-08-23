@@ -1,12 +1,16 @@
 html{
-    overflow : hidden;
+    background: $grey-18
 }
 
 body{
     @include setCircularStdFont('Book');
     font-size: 1em;
     color : white;
-    background : $grey-32;
+
+    background: $grey-18;
+    background: linear-gradient(90deg, $grey-21 0%, $grey-21 50%, $grey-18 51%, $grey-18 100%);
+    overflow: hidden;
+
 }
 
 button, input{

@@ -1,0 +1,16 @@
+.scroll-y{
+    height : 100vh;
+
+    @include setScrollBar(transparent);
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+        width: 5px;
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background-color: $grey-47;
+        border-radius: 30px;
+    }
+}

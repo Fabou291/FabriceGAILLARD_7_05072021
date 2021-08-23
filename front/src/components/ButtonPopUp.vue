@@ -1,57 +1,55 @@
 <template>
-    <div class="btn-pop-up">
-        <button @mouseenter.stop="show">
+    <div class="btn-pop-up"  >
+        <button @mouseenter="fixPositionSidebar">
             <slot></slot>
         </button>
-        <div>{{ label }}</div>        
+        <div :style="style">{{ label }}</div>        
     </div>
 </template>
 
 <script>
 export default {
-    data(){
+    data() {
         return {
-            visible : false
+            style : { marginTop : "0px" }
         }
     },
     props : {
-        label : { type : String, required : true }
+        label : { type : String, required : true },
     },
-    methods:{
-        show(e){
-            let boundingsElement =  e.target.getBoundingClientRect();
-            e.target.nextSibling.setAttribute(
-                'style',
-                `left : ${boundingsElement.left + (boundingsElement.width/2)}px;
-                 top : ${boundingsElement.top - 15}px;`
-            )
+    methods : {
+        fixPositionSidebar(){
+            console.log(document.getElementById('sidebarContent').scrollTop)
+            this.style.marginTop = document.getElementById('sidebarContent').scrollTop*-1 + "px";
         }
-    },
-
+    }
 }
 </script>
 
 <style lang="scss" scoped>
     $bgColor : $grey-11;
+    $btn-size : 18px;
     .btn-pop-up{
-        
+
         button{
             &:hover + div{
                 visibility : visible;
-                transform : translate(-50%,-100%), scale(1) ;
+                transform : translate( calc(-50% + 18px / 2), calc(-100% - 18px - 10px )  ) scale(1) ;
             }
         }
 
         div{
-            transition : transform 0.1s, scale(0.8);
+            transition : transform 0.05s;
             visibility : hidden;
             position : absolute;
-            transform : translate(-50%,-80%) ;
+            transform : translate( calc(-50% + 18px / 2), calc(-90% - 18px - 10px )  ) scale(0.95) ;
             z-index : 100;
             background-color : $bgColor;
             border-radius : 4px;
             padding : 8px;
             color : white;
+            white-space: nowrap;
+            z-index: 2;
             &::before{
                 content:'';
                 position: absolute;

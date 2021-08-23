@@ -57,7 +57,7 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
+import { mapGetters, mapMutations } from "vuex";
 export default {
     props: {
         user_id: { type: Number, required: true },
@@ -69,8 +69,10 @@ export default {
         },
     },
     methods: {
+        ...mapMutations('postModule', ['SET_ID_POST_TO_REPLY']),
         modify() {
             this.$emit("modifyPost");
+            this.SET_ID_POST_TO_REPLY(null);
         },
         reply() {
             this.$emit("replyPost")

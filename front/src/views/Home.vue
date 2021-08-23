@@ -5,19 +5,23 @@
         <ConfigProfil/>
         <ImagePostDisplay/>
 
-        <div class="container">
-            <Header />
-            <main class="main">
-                <div class="left-side">
-                    <div class="sidebar">
-                        <PrincipalNav />
-                    </div>  
+        <Header />
+        <div class="container-full">
+            <div class="scroll-y">
+                <div class="container">
+                    
+                    <aside class="sidebar">
+                        <div id="sidebarContent" class="sidebar__content">
+                            <PrincipalNav />                                 
+                        </div>
+                    </aside>  
+                    <main class="main">
+                        <router-view></router-view>
+                    </main>
                 </div>
-                <div class="principal-content">
-                    <router-view></router-view>
-                </div>
-            </main>
+            </div>
         </div>
+
 
     </div>
 </template>
@@ -45,16 +49,6 @@ export default {
 </script>
 
 <style lang="scss">
-.container{
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
-.principal-content {
-    background-color: $grey-18;
-    height: 100%;
-    flex: 1;
-    @include setScrollBar($grey-47)
-}
+
 
 </style>
