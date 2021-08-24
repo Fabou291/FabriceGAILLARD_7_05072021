@@ -4,6 +4,7 @@ export default {
     namespaced: true,
     state: {
         listGroup: null,
+        visible : false
     },
     getters : {
         getChannelById: state => id => {
@@ -27,6 +28,9 @@ export default {
         MODIFY_CHANNEL(state,channel){
             const listChannel  = state.listGroup.find(e => e.id == channel.channelGroupId).listChannel;
             listChannel[listChannel.findIndex(e => e.id == channel.id)] = channel;
+        },
+        SET_VISIBILITY(state, visibility){
+            state.visible = visibility;
         }
     },
 
@@ -48,5 +52,8 @@ export default {
                 console.log(error);
             }
         },
+        switchVisibility({commit, state}){
+            commit('SET_VISIBILITY', !state.visible)
+        }
     },
 };

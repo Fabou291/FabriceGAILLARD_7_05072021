@@ -1,11 +1,9 @@
 <template>
-    <div class="container l-config" v-if="configDisplay.visible">
-        <main class="main">
-            <div class="left-side left-side--grey-25">
-
+    <div class="container-full l-config" v-if="configDisplay.visible">
+        <div class="scroll-y">
+            <div class="container">
                 <div class="sidebar config-sidebar">
-                    <div class="config-sidebar__content" >
-
+                    <div class="sidebar__content config-sidebar__content">
                         <div class="config-sidebar__group">
                             <span class="config-sidebar__group-title">
                                 <svg height="12px" viewBox="0 0 24 24">
@@ -18,40 +16,63 @@
                             </span>
                             <span class="config-sidebar__group-categorie">
                                 Profil
-                            </span>                            
+                            </span>
                         </div>
 
                         <ul class="config-sidebar__list">
                             <li class="config-sidebar__list-item">
-                                <a href="#" class="link-btn" :class="{ 'link-btn--active' : activeZone == 0 }" @click.prevent="changeZone(0)">Mon compte</a>
+                                <a
+                                    href="#"
+                                    class="link-btn"
+                                    :class="{ 'link-btn--active': activeZone == 0 }"
+                                    @click.prevent="changeZone(0)"
+                                    >Mon compte</a
+                                >
                             </li>
                             <li class="config-sidebar__list-item">
-                                <a href="#" class="link-btn" :class="{ 'link-btn--active' : activeZone == 1 }" @click.prevent="changeZone(1)">Utilisateur</a>
+                                <a
+                                    href="#"
+                                    class="link-btn"
+                                    :class="{ 'link-btn--active': activeZone == 1 }"
+                                    @click.prevent="changeZone(1)"
+                                    >Utilisateur</a
+                                >
                             </li>
                             <li class="config-sidebar__list-item">
-                                <a href="#" class="link-btn" :class="{ 'link-btn--active' : activeZone == 2 }" @click.prevent="changeZone(2)">Adresse e-mail</a>
+                                <a
+                                    href="#"
+                                    class="link-btn"
+                                    :class="{ 'link-btn--active': activeZone == 2 }"
+                                    @click.prevent="changeZone(2)"
+                                    >Adresse e-mail</a
+                                >
                             </li>
                             <li class="config-sidebar__list-item">
-                                <a href="#" class="link-btn" :class="{ 'link-btn--active' : activeZone == 3 }" @click.prevent="changeZone(3)">Mot de passe</a>
+                                <a
+                                    href="#"
+                                    class="link-btn"
+                                    :class="{ 'link-btn--active': activeZone == 3 }"
+                                    @click.prevent="changeZone(3)"
+                                    >Mot de passe</a
+                                >
                             </li>
                         </ul>
 
-                        <hr>
+                        <hr />
 
-                        <div class="link-btn link-btn--danger" @click="remove" >
+                        <div class="link-btn link-btn--danger" @click="remove">
                             Supprimer le compte
                         </div>
                     </div>
                 </div>
 
-            </div>
-
-            <div class="right-side right-side--grey-32">
-                <div class="l-config__main">
-                    
-                    <button type='button' class="l-config__close-btn" @click="shutDownConfigDisplay">
+                <div class="main l-config__main">
+                    <button type="button" class="l-config__close-btn" @click="shutDownConfigDisplay">
                         <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24">
-                            <path fill="currentColor" d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"></path>
+                            <path
+                                fill="currentColor"
+                                d="M18.4 4L12 10.4L5.6 4L4 5.6L10.4 12L4 18.4L5.6 20L12 13.6L18.4 20L20 18.4L13.6 12L20 5.6L18.4 4Z"
+                            ></path>
                         </svg>
                     </button>
 
@@ -62,19 +83,20 @@
                         <div class="user-card">
                             <div class="user-card__top"></div>
                             <div class="user-card__main">
-
                                 <div class="user-card__avatar btn-change-avatar">
-                                    
                                     <form action="" class="form-avatar">
-                                        <input type="file" ref="inputFile" name="avatar" id="" @change="setListFile">
+                                        <input type="file" ref="inputFile" name="avatar" id="" @change="setListFile" />
                                     </form>
 
                                     <button type="button" class="btn-change-avatar__preview" @click="browse">
                                         <span class="btn-change-avatar__showcase">Changer l'avatar</span>
-                                        <img class="btn-change-avatar__thumb" :src="`http://localhost:3000/images/${user.avatar}`" alt="avatar de l'utilisateur">                                        
-                                    </button> 
+                                        <img
+                                            class="btn-change-avatar__thumb"
+                                            :src="`http://localhost:3000/images/${user.avatar}`"
+                                            alt="avatar de l'utilisateur"
+                                        />
+                                    </button>
                                     <button class="btn-change-avatar__action" @click="browse"></button>
-
                                 </div>
 
                                 <div class="user-card__section-container">
@@ -83,214 +105,265 @@
                                             <div class="card-section__entitled">NOM DE L'UTILISATEUR</div>
                                             {{ user.username }}
                                         </div>
-                                        <BtnDefault type="button" class="card-section__btn btn-default--green btn-default--sm create-panel__btn" @click="changeZone(1)" >Modifier</BtnDefault>                                    
-                                    </div>                                    
+                                        <button type="button"
+                                            class="btn-default card-section__btn btn-default--green btn-default--sm create-panel__btn"
+                                            @click="changeZone(1)"
+                                        >
+                                            <span class="card-section__btn-text-content"> Modifier </span>
+                                            <span class="card-section__btn-icon-content">
+                                                <svg aria-hidden="false" width="20" height="20" viewBox="0 0 24 24" >
+                                                    <path
+                                                        d="M19.2929 9.8299L19.9409 9.18278C21.353 7.77064 21.353 5.47197 19.9409 4.05892C18.5287 2.64678 16.2292 2.64678 14.817 4.05892L14.1699 4.70694L19.2929 9.8299ZM12.8962 5.97688L5.18469 13.6906L10.3085 18.813L18.0201 11.0992L12.8962 5.97688ZM4.11851 20.9704L8.75906 19.8112L4.18692 15.239L3.02678 19.8796C2.95028 20.1856 3.04028 20.5105 3.26349 20.7337C3.48669 20.9569 3.8116 21.046 4.11851 20.9704Z"
+                                                        fill="currentColor"
+                                                    ></path>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </div>
 
                                     <div class="card-section">
                                         <div>
                                             <div class="card-section__entitled">ADRESSE E-MAIL</div>
                                             *********@*********
                                         </div>
-                                        <BtnDefault type="button" class="card-section__btn btn-default--green btn-default--sm create-panel__btn" @click="changeZone(2)" >Modifier</BtnDefault>                                    
-                                    </div>                                    
+                                        <button type="button"
+                                            class="btn-default card-section__btn btn-default--green btn-default--sm create-panel__btn"
+                                            @click="changeZone(2)"
+                                        >
+                                            <span class="card-section__btn-text-content"> Modifier </span>
+                                            <span class="card-section__btn-icon-content">
+                                                <svg aria-hidden="false" width="20" height="20" viewBox="0 0 24 24" >
+                                                    <path
+                                                        d="M19.2929 9.8299L19.9409 9.18278C21.353 7.77064 21.353 5.47197 19.9409 4.05892C18.5287 2.64678 16.2292 2.64678 14.817 4.05892L14.1699 4.70694L19.2929 9.8299ZM12.8962 5.97688L5.18469 13.6906L10.3085 18.813L18.0201 11.0992L12.8962 5.97688ZM4.11851 20.9704L8.75906 19.8112L4.18692 15.239L3.02678 19.8796C2.95028 20.1856 3.04028 20.5105 3.26349 20.7337C3.48669 20.9569 3.8116 21.046 4.11851 20.9704Z"
+                                                        fill="currentColor"
+                                                    ></path>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </div>
 
                                     <div class="card-section">
                                         <div>
                                             <div class="card-section__entitled">MOT DE PASSE</div>
                                             ********************
                                         </div>
-                                        <BtnDefault type="button" class="card-section__btn btn-default--green btn-default--sm create-panel__btn" @click="changeZone(3)" >Modifier</BtnDefault>                                    
-                                    </div>                                    
+                                        <button type="button"
+                                            class="btn-default card-section__btn btn-default--green btn-default--sm create-panel__btn"
+                                            @click="changeZone(3)"
+                                        >
+                                            <span class="card-section__btn-text-content"> Modifier </span>
+                                            <span class="card-section__btn-icon-content">
+                                                <svg aria-hidden="false" width="20" height="20" viewBox="0 0 24 24" >
+                                                    <path
+                                                        d="M19.2929 9.8299L19.9409 9.18278C21.353 7.77064 21.353 5.47197 19.9409 4.05892C18.5287 2.64678 16.2292 2.64678 14.817 4.05892L14.1699 4.70694L19.2929 9.8299ZM12.8962 5.97688L5.18469 13.6906L10.3085 18.813L18.0201 11.0992L12.8962 5.97688ZM4.11851 20.9704L8.75906 19.8112L4.18692 15.239L3.02678 19.8796C2.95028 20.1856 3.04028 20.5105 3.26349 20.7337C3.48669 20.9569 3.8116 21.046 4.11851 20.9704Z"
+                                                        fill="currentColor"
+                                                    ></path>
+                                                </svg>
+                                            </span>
+                                        </button>
+                                    </div>
                                 </div>
-
-
-
                             </div>
                         </div>
                     </section>
 
                     <section v-if="activeZone == 1">
                         <h2 class="l-config__title">Utilisateur</h2>
-                        <ModifyUserForm/>
+                        <ModifyUserForm />
                     </section>
 
                     <section v-if="activeZone == 2">
                         <h2 class="l-config__title">Adresse e-mail</h2>
-                        <ResetMailForm/>
+                        <ResetMailForm />
                     </section>
 
                     <section v-if="activeZone == 3">
                         <h2 class="l-config__title">Mot de passe</h2>
-                        <ResetPasswordForm/>
+                        <ResetPasswordForm />
                     </section>
-
                 </div>
-                
             </div>
-        </main>
+        </div>
     </div>
 </template>
 
 <script>
-import BtnDefault from "@/components/btn/btnDefault.vue";
-import { mapActions, mapGetters, mapState } from 'vuex';
+
+import { mapActions, mapGetters, mapState } from "vuex";
 
 import ModifyUserForm from "@/components/form/configProfil/ModifyUserForm.vue";
 import ResetMailForm from "@/components/form/configProfil/ResetMailForm.vue";
 import ResetPasswordForm from "@/components/form/configProfil/ResetPasswordForm.vue";
 
-
-
 export default {
     data() {
-        return { 
-            activeZone : 0,
-            listFile : null,
-        }
+        return {
+            activeZone: 0,
+            listFile: null,
+        };
     },
-    watch : {
-        listFile(){
-            if(this.listFile) this.modifyAvatar();
-        }
+    watch: {
+        listFile() {
+            if (this.listFile) this.modifyAvatar();
+        },
     },
-    computed : {
-        ...mapGetters('userModule',['user']),
-        ...mapState('userModule',['configDisplay']),
+    computed: {
+        ...mapGetters("userModule", ["user"]),
+        ...mapState("userModule", ["configDisplay"]),
     },
     methods: {
-        ...mapActions('userModule',['shutDownConfigDisplay','remove', 'modify']),
+        ...mapActions("userModule", ["shutDownConfigDisplay", "remove", "modify"]),
 
-        changeZone(index) { this.activeZone = index },
+        changeZone(index) {
+            this.activeZone = index;
+        },
 
-        browse(){ this.$refs['inputFile'].click(); },
+        browse() {
+            this.$refs["inputFile"].click();
+        },
 
-        modifyAvatar(){
-
+        modifyAvatar() {
             const file = this.listFile[0];
             this.resetInputFile();
 
             this.modify({
                 file,
-                username : this.user.username,
-                description : this.user.description,
-            })
+                username: this.user.username,
+                description: this.user.description,
+            });
         },
 
-        resetInputFile(){
-            this.$refs['inputFile'].value="";
-            this.$refs['inputFile'].files=null;
+        resetInputFile() {
+            this.$refs["inputFile"].value = "";
+            this.$refs["inputFile"].files = null;
         },
 
-        setListFile(){
-            this.listFile = this.$refs['inputFile'].files
-        }
+        setListFile() {
+            this.listFile = this.$refs["inputFile"].files;
+        },
     },
-    components : { BtnDefault, ModifyUserForm, ResetMailForm, ResetPasswordForm },
-}
-
+    components: {  ModifyUserForm, ResetMailForm, ResetPasswordForm },
+};
 </script>
 
 <style lang="scss">
-    .user-card{
-        border-radius: 8px;
-        position : relative;
-        overflow: hidden;
+.user-card {
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    display: block;
 
-        &__top{
-            background-color: $grey-47;
-            height : 60px;
-            width: 100%;
-        }
-
-        &__main{
-            padding : 64px 20px 20px 20px; 
-            background-color: $grey-25;
-        }
-
-        &__avatar{
-            position : absolute;
-            left : 12px;
-            top : 9px;
-        }
-
-        &__section-container{
-            border-radius : 4px;
-            background-color : $grey-47;
-            padding : 20px;
-        }
-
+    &__top {
+        background-color: $grey-47;
+        height: 60px;
+        width: 100%;
     }
 
-    .card-section{
-        display : flex;
-        font-size : 13px;
-
-        &:not(:last-child){
-            margin : 0 0 20px 0;
-        }
-
-        &__entitled {
-            @include setCircularStdFont('Bold');
-            color : $grey-193;
-            margin : 0 0 3px 0;
-        }
-
-        &__btn{
-            margin-left: auto;
-            width : 100px;
-        }
-
-
+    &__main {
+        padding: 64px 20px 20px 20px;
+        background-color: $grey-25;
     }
 
-    .btn-change-avatar{
-        padding : 7px;
-        background-color : $grey-25;
-        @include setCircle(89px);
+    &__avatar {
+        position: absolute;
+        left: 12px;
+        top: 9px;
+    }
 
-        &__preview{
-            position : relative;
-            border-radius : 100px;
-            overflow : hidden;
-            @include setSizeFullContainer();
-  
-            &:hover .btn-change-avatar__showcase{
-                @include setFlexCenter();
-            }            
+    &__section-container {
+        border-radius: 4px;
+        background-color: $grey-47;
+        padding: 20px;
+    }
+}
+
+.card-section {
+    display: flex;
+    font-size: 13px;
+
+    &:not(:last-child) {
+        margin: 0 0 20px 0;
+    }
+
+    &__entitled {
+        @include setCircularStdFont("Bold");
+        @include textEllipsis();
+        color: $grey-193;
+        margin: 0 0 3px 0;
+    }
+
+    &__btn {
+        margin-left: auto;
+        width: 100px;
+
+        &-text-content{
+            display : block;
         }
 
-        &__thumb{
-            left: 0;
-            top : 0;
-            position : absolute;
-            @include setSizeFullContainer();
-        }
-
-        &__showcase{
-            position : absolute;
+        &-icon-content{
             display : none;
-            left: 0;
-            top : 0;
-            @include setSizeFullContainer();
-            z-index : 1;
-            background-color : rgba(0,0,0,0.7);
         }
 
-        &__action{
-            @include setCircle(28px);
-            @include setFlexCenter();
-            background-color : $grey-215;
-            position : absolute;
-            right : 5px;
-            top : 5px;
-            z-index: 2;
-            &:hover{
-                background-color : darken($grey-215,10%);
+        @include setMediaScreen(mobile) {
+            width: auto;
+            &-text-content{
+                display : none;
+            }
+            &-icon-content{
+                display : block;
             }
         }
     }
-    
-    .form-avatar{
-        display : none;
+}
+
+.btn-change-avatar {
+    padding: 7px;
+    background-color: $grey-25;
+    @include setCircle(89px);
+
+    &__preview {
+        position: relative;
+        border-radius: 100px;
+        overflow: hidden;
+        @include setSizeFullContainer();
+
+        &:hover .btn-change-avatar__showcase {
+            @include setFlexCenter();
+        }
     }
+
+    &__thumb {
+        left: 0;
+        top: 0;
+        position: absolute;
+        @include setSizeFullContainer();
+    }
+
+    &__showcase {
+        position: absolute;
+        display: none;
+        left: 0;
+        top: 0;
+        @include setSizeFullContainer();
+        z-index: 1;
+        background-color: rgba(0, 0, 0, 0.7);
+    }
+
+    &__action {
+        @include setCircle(28px);
+        @include setFlexCenter();
+        background-color: $grey-215;
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        z-index: 2;
+        &:hover {
+            background-color: darken($grey-215, 10%);
+        }
+    }
+}
+
+.form-avatar {
+    display: none;
+}
 </style>

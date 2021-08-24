@@ -25,6 +25,11 @@
         text-align: left;
         display: inline-flex;
         align-items: center;
+        overflow: hidden;
+
+        &__content{
+            @include textEllipsis();
+        }
 
         &__icon{
             padding : 0 5px 0 0;

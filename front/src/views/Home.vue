@@ -10,11 +10,8 @@
             <div class="scroll-y">
                 <div class="container">
                     
-                    <aside class="sidebar">
-                        <div id="sidebarContent" class="sidebar__content">
-                            <PrincipalNav />                                 
-                        </div>
-                    </aside>  
+                    
+                    <PrincipalNav />                                  
                     <main class="main">
                         <router-view></router-view>
                     </main>

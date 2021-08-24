@@ -1,5 +1,5 @@
 <template>
-    <div class="emoji-panel" ref="emojiPanel" v-if="display.visible" :style="`top : ${display.y}px; left : ${display.x}px`">
+    <div class="emoji-panel" data-modal ref="emojiPanel" v-if="display.visible" :style="`top : ${display.y}px; left : ${display.x}px`">
         <EmojiPanelNav v-on:change="aze" />
         <div v-show="actived == 'Emoji'">
             <EmojiPanelSearch

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :id="`post-id-${post.id}`">
         <InteractionPost class="post__interaction" v-show="!isInModifyMode" :user_id="parseInt(post.user_id)" @replyPost="setIdPostToReply(post.id)" @removePost="remove" @modifyPost="SET_ID_POST_IN_MODIFY_MODE(post.id)"/>
         <div class="post__sidebar"></div>
         <div class="post__main">
@@ -79,10 +79,14 @@
     position : relative;
 
 
-
     &.post--recursive{
         
         margin : 0 0 20px 40px;
+
+        @include setMediaScreen(mobile){
+            margin : 0 0 20px 20px;
+        }
+
         .post__main {
             border-radius : 0;
             background-color : $grey-25;
@@ -120,7 +124,7 @@
 
 
     &__sidebar {
-        width: 5px;
+        width: 0px;
         background-color: $grey-59;
         border-radius : 4px 0 0 4px;
     }
@@ -128,7 +132,12 @@
     &__main {
         background-color: $grey-32;
         padding: 20px;
-        border-radius : 0 4px 4px 0;
+
+        @include setMediaScreen(mobile){
+            padding : 10px;
+        }
+
+        border-radius : 4px;
         display : flex;
         align-items: flex-start;
         flex: 1;
@@ -181,6 +190,8 @@
         max-width : 100%;
         max-height : 400px;
         margin : 8px 0 0 0;
+        border-radius : 4px;
+        background-color : $grey-18;
     }
 
     &__modify-input{

@@ -43,13 +43,12 @@ export default {
             visibility : hidden;
             position : absolute;
             transform : translate( calc(-50% + 18px / 2), calc(-90% - 18px - 10px )  ) scale(0.95) ;
-            z-index : 100;
             background-color : $bgColor;
             border-radius : 4px;
             padding : 8px;
             color : white;
             white-space: nowrap;
-            z-index: 2;
+            z-index: 500;
             &::before{
                 content:'';
                 position: absolute;

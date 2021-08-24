@@ -132,6 +132,14 @@ export default {
         background-color: $grey-32;
         width: 600px;
 
+        @include setMediaScreen(tablette){
+            width: 80%;
+        }
+
+        @include setMediaScreen(mobile){
+            width: 90%;
+        }
+
         &__close-btn{
             padding : 15px;
             color : grey;
@@ -163,12 +171,14 @@ export default {
             @include setCircularStdFont("Black");
             margin: 0 0 6px 0;
             font-size: 19px;
+            word-break: break-all;
         }
 
         &__channel {
             font-size: 12px;
             color: white;
             margin: 0;
+            word-break: break-all;
 
             span {
                 color : $grey-193;

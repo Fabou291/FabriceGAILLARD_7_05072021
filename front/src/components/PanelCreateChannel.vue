@@ -95,7 +95,7 @@ export default {
     width: 100%;
     height: 100%;
     position: fixed;
-    z-index: 3;
+    z-index: 10;
     background-color: rgba(0, 0, 0, 0.7);
     overflow: auto;
 }

@@ -43,7 +43,7 @@
 
             ></div>
 
-            <button type="button" class="form-post-btn" v-if="canGIF" >
+            <button type="button" class="form-post-btn form-post-btn__gif-btn" v-if="canGIF" >
                 <svg width="24" height="24" viewBox="0 0 24 24">
                     <path
                         fill="currentColor"
@@ -106,6 +106,10 @@ export default {
     computed: {
         ...mapState('emojiModule',['emojisShortCodeIndex', 'display']),
         ...mapState('postModule',['idPostToReply', 'listPost']),
+        isEmpty(){
+            console.log(this.textarea.innerHTML == '')
+            return this.textarea.innerHTML == '';
+        },
         getNameToReply(){
             //Vu que ca sera restreint à répondre auniquement au post (et non au post recursif)
             //je peux aller piocher dans l'array listPost sans me soucier
@@ -265,6 +269,7 @@ export default {
                     str += node.querySelector("img") ? node.querySelector("img").alt : node.textContent;
                 } else str += node.textContent || "";
             });
+            //console.log(str == '')
             return str;
         },
         parseEmpty() {
@@ -298,7 +303,7 @@ export default {
 <style lang="scss">
 .form-post {
     border-radius: 4px;
-    background-color: $grey-32;
+    background-color: $grey-47;
     &__container{
         
         color: $grey-142;
@@ -308,7 +313,11 @@ export default {
         padding: 10px;
         position: sticky;
         top: 0;
-        z-index: 2;        
+        z-index: 2;
+        
+        @include setMediaScreen(mobile){
+            flex-wrap: wrap;
+        }
     }
 
 
@@ -316,16 +325,19 @@ export default {
         flex: 1;
         color: inherit;
         background-color: transparent;
-        resize: none;
         border: none;
         overflow: hidden;
         padding: 7px;
-        //height : 30px;
         word-break: break-all;
         @include setCircularStdFont("Book");
 
-        &--active {
-            color: lighten($grey-142, 40%);
+        @include setMediaScreen(mobile){
+            order : 1;
+            min-width : 100%;
+        }
+
+        &:not(:empty) {
+            color: lighten($grey-142, 30%);
         }
     }
 
@@ -339,6 +351,10 @@ export default {
     margin: 0 4px;
     &:hover {
         color: lighten($grey-142, 10%);
+    }
+
+    &__gif-btn{
+        margin-left : auto;
     }
 }
 

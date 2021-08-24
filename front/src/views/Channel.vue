@@ -1,9 +1,12 @@
 <template>
     <EmojiPanel/>
     <section class="channel">
-        <span class="tag-content">CHANNEL</span>
-        <h1 class="channel__title">Bienvenue sur Groupe #1</h1>
-        <p class="channel__description">C'est le début du salon #Groupe 1.</p>
+        <div class="channel__caption">
+            <span class="tag-content">CHANNEL</span>
+            <h1 class="channel__title">Bienvenue sur Groupe #1</h1>
+            <p class="channel__description">C'est le début du salon #Groupe 1.</p>            
+        </div>
+
         <div class="channel__formPost">
             <FormPost @submit="add" ref="formPost"  :canBrownse="true" :canGIF="true" :canEmoji="true" :canRespond="true" />            
         </div>
@@ -65,7 +68,17 @@ export default {
 <style lang="scss">
     .channel {
         width: 100%;
-        padding: 30px 15px 0 30px;
+        padding: 30px;
+
+        @include setMediaScreen(tablette){
+            padding: 30px 5px 0 5px;
+        }
+
+        &__caption {
+            @include setMediaScreen(tablette){
+                padding: 0 0 0 20px;
+            }
+        }
 
         &__title {
             color: white;
@@ -87,7 +100,7 @@ export default {
             padding-top : 20px;
             position: sticky;
             top: 0;
-            z-index: 12;
+            z-index: 4;
             background-color : $grey-18;
         }
 

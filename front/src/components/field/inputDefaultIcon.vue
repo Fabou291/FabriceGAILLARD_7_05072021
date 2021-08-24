@@ -36,7 +36,6 @@
     .input-default-icon {
         display : block;
         width : 100%;
-        padding : 13px; 
         border: 1px solid $grey-18;
         border-radius : $border-radius;
         background-color : $grey-25;
@@ -51,8 +50,7 @@
         position: relative;
         color : grey;
         &__input{
-            padding-left : 40px;
-            
+            padding : 13px 0 13px 40px
         }
 
         &__icon{

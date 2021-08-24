@@ -2,5 +2,10 @@
     background-color: $grey-18;
     flex : 1;
     display: flex;
-    margin-left : $sidebar-width
+    margin-left : $sidebar-width;
+    min-height: 100vh;
+
+    @include setMediaScreen(tablette){
+        margin-left : 0
+    }
 }

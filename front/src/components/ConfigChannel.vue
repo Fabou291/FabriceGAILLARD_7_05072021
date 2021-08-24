@@ -1,10 +1,10 @@
 <template>
-    <div class="container l-config" v-if="visible">
-        <main class="main">
-            <div class="left-side left-side--grey-25">
+    <div class="container-full l-config" v-if="visible">
+        <div class="scroll-y">
+            <div class="container">
 
                 <div class="sidebar config-sidebar">
-                    <div class="config-sidebar__content" >
+                    <div class="sidebar__content config-sidebar__content" >
 
                         <div class="config-sidebar__group">
                             <span class="config-sidebar__group-title">
@@ -35,9 +35,7 @@
                     </div>
                 </div>
 
-            </div>
-            <div class="right-side right-side--grey-32">
-                <div class="l-config__main">
+                <div class="main l-config__main">
                     
                     <button class="l-config__close-btn" @click="CLOSE_CONFIG">
                         <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24">
@@ -75,9 +73,10 @@
 
                     </form> 
                 </div>
-                
+
             </div>
-        </main>
+
+        </div>
     </div>
 </template>
 
@@ -115,17 +114,30 @@ export default {
 <style lang="scss">
     .l-config{
         position: absolute;
-        z-index: 5;
+        z-index: 7;
         width: 100%;
+        background: $grey-25;
+        background: linear-gradient(90deg, $grey-25 0%, $grey-25 50%, $grey-32 51%, $grey-32 100%);
+        padding : 0 !important;
+
+
+
+
         &__main{
             position: relative;
-            max-width : 800px;
-            padding : 100px 0 0 30px;
+            padding : 100px 30px 30px 30px;
+            display : block !important;
+            min-height: 100vh;
+            background-color : $grey-32 !important;
+
+            @include setMediaScreen(tablette){
+                padding : 100px 5px 5px 5px;
+            }
         }
 
         &__close-btn{
             position : absolute;
-            right : -56px;
+            right : 0px;
             @include setCircle(36px);
             border : 2px solid grey;
             @include setFlexCenter();
@@ -146,6 +158,12 @@ export default {
     }
     .config-sidebar{
         padding : 80px 10px 0 10px !important;
+        background-color : $grey-25 !important;
+        top : 0 !important;
+
+        @include setMediaScreen(tablette){
+            padding : 0px !important;
+        }
 
         &__content{
             padding : 31px 0;
