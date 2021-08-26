@@ -15,18 +15,20 @@
             </div>
             <div
 
-                @drop.prevent="drop" @dragenter.prevent="" @dragstart.prevent="" @drag.prevent=""
+                @drop.prevent="" @dragenter.prevent="" @dragstart.prevent="" @drag.prevent="" 
+                
+
                 @keypress.enter.prevent="submit"
                 @keydown.esc="escape"
-                @input="parseEmpty(); parseEmoji(); parseURL(); textarea.normalize(); $emit('updateInput', getDataText())"
-                @paste.prevent="paste"
+                @input="parseEmoji(); parseUrl(); textarea.normalize();"
+                
 
                 class="form-post__field"
                 contenteditable="true"
                 :title="placeholder"
                 ref="textarea"
                 spellcheck="false"
-                v-html="value"
+                
 
             ></div>
 
@@ -70,12 +72,16 @@
 <script>
 import Brownser from "@/components/Brownser.vue";
 import {   mapMutations, mapState } from "vuex";
+import EmojiParser from '@/js/editableDivParser/emojiParser.js';
+import UrlParser from '@/js/editableDivParser/urlParser.js';
+import HandlerDivEditable from '@/js/handlerDivEditable.js';
 export default {
     data() {
         return {
             selection: 0,
             textarea: "",
-            selectionBeforeFocusOut: null
+            EmojiParser : null,
+            HandlerDivEditable : null
         };
     },
     components : {
@@ -111,6 +117,7 @@ export default {
     methods: {
         ...mapMutations('emojiModule', ['SET_POSITION', 'SET_VISIBILITY', 'SET_FORM_POST_COMPONENT_TARGET']),
         ...mapMutations('postModule', ['SET_ID_POST_TO_REPLY']),
+
         getInfoSticky(bound){
             const paddingForm = 10;
             return{
@@ -188,19 +195,22 @@ export default {
             
             
         },
+
         escape(){
             this.$emit('escape')
         },
         showBrownser(){
             this.$refs['brownser'].show();
         },
-        submit(e) {
-            const value = this.getDataText().trim();
+
+        submit() {
+            const value = this.handlerDivEditable.getTextContent().trim();
             if (value == "") return;
+
             this.$emit("submit", value)
-            e.target.innerHTML = "";
-            
+            this.textarea.innerHTML = "";
         },
+        
         paste(event) {
             let paste = (event.clipboardData || window.clipboardData).getData("text");
             const selection = window.getSelection();
@@ -219,157 +229,31 @@ export default {
             selection.getRangeAt(0).insertNode(document.createTextNode(drop));
             //this.parseEmoji();
         },
-        parseURL(){
-            const reg = /https?:\/\/[www.]?[\w]+\.[\w()]+[-a-zA-Z0-9()@:%_+.~#?&/=]+/g;
 
-            const listNodes = [];
+        ///NEW
 
-            this.textarea.childNodes.forEach(node => {
-                const textContent = node.textContent;
-                if(reg.test(textContent)){
-                    const listTextNode = textContent.split(reg).map(text => document.createTextNode(text));
-                    const listSpan = textContent.match(reg).map(match => this.createSpanBlue(match));
-                    const listNodeToAppend = listTextNode.reduce((a,v,i)=> [...a,v,listSpan[i] ],[]).slice(0,-1);
-                    listNodes.push({ reference : node, after : listNodeToAppend })
-                }
-                else if(node.nodeType == 1 && node.textContent != ''){ //si le noeud est un span blue le remplacer par un textNode
-                    listNodes.push({ reference : node, after : [document.createTextNode(textContent)] })
-                }
-            })
-
-            //Add
-            listNodes.forEach(node => {
-                node.after.forEach(n => {  this.textarea.insertBefore(n , node.reference) });
-                this.textarea.removeChild(node.reference)
-            })
-
-
-        },
-        add(listNodes){
-            listNodes.forEach(node => {
-                node.after.forEach(n => {  this.$refs['textarea'].insertBefore(n , node.reference) });
-                this.$refs['textarea'].removeChild(node.reference)
-            })
-        },
-        parseEmoji() {
-            const reg = /:\w+:/g;
-            const listNodes = [];
-
-
-            if(/:\w+:/.test(this.textarea.textContent)){
-                
-                this.textarea.childNodes.forEach(node => {
-                    const textContent = node.textContent;
-                    if(/:\w+:/.test(textContent)){
-                        const listTextNode = textContent.split(reg).map(text => document.createTextNode(text));
-                        const listShortCodeNode = textContent.match(reg).map(shortCode => {
-                            return (this.emojisShortCodeIndex[shortCode])
-                            ? this.createSpanImgNode(shortCode)
-                            : document.createTextNode(shortCode);
-                        });
-
-                        const listNodeToAppend = listTextNode.reduce((a,v,i)=> [...a,v,listShortCodeNode[i] ],[]).slice(0,-1);
-
-                        listNodes.push({ reference : node, after : listNodeToAppend });
-                    }
-                })
-                
-                this.add(listNodes);
-                      
-
-                /*listNodes.forEach(node => {
-                    if(node.reference == window.getSelection().anchorNode){
-                        const lengthBefore = node.reference.textContent.length;
-                        const lengthAfter = node.after.reduce((a,node) =>  a += node.textContent.length || 1 ,0);
-                        let index = 0;
-                        node.after.forEach(nodeAfter => {
-                            index += nodeAfter.textContent.length || 1;
-                            if(window.getSelection().focusOffset <= index)
-                        })
-                    }
-                })*/
-                
-            }
-            
-        },
-        /*parseEmoji() {
-            const reg = /:\w+:/g;
-            if(reg.test(this.textarea.textContent)){
-                let index, listNodeToAppend;
-
-                this.textarea.textContent.match(reg).forEach(shortCode => {
-                    if(Object.keys(this.emojisShortCodeIndex).includes(shortCode)){
-                        index = 0;
-                        for (index in [...this.textarea.childNodes]) if(reg.test(this.textarea.childNodes[index].textContent)) break;
-                        const childNode =  this.textarea.childNodes[index];
-                        const listTextNode = childNode.textContent.split(shortCode).map(text => document.createTextNode(text != '' ? text : '\u{FEFF}'));
-                        
-                        this.textarea.removeChild(childNode); //Delete
-                        
-                        const childNodeRef = this.textarea.childNodes[index];
-                        listNodeToAppend = listTextNode.reduce((a,v)=>[...a,v,this.createSpanImgNode(shortCode)],[]).slice(0,-1)
-                        listNodeToAppend.forEach(node => { //Append
-                            this.textarea.insertBefore(node ,childNodeRef)
-                        })
-
-
-                        let el_cursor = this.textarea.childNodes[parseInt(index)+listNodeToAppend.length-1];
-                        window.getSelection().collapse(el_cursor, 0); 
-                        this.textarea.normalize(); 
-                    }
-                })
-            }
-            
-        },*/
-        getDataText() {
-            let el = this.$refs["textarea"];
-            let str = "";
-            el.childNodes.forEach((node) => {
-                if (node.nodeType == 1) {
-                    // 1 => Span
-                    str += node.querySelector("img") ? node.querySelector("img").alt : node.textContent;
-                } else str += node.textContent || "";
-            });
-            //console.log(str == '')
-            return str;
-        },
-        parseEmpty() {
-            if (this.getDataText().replaceAll("\u{FEFF}", "") == "") this.textarea.innerHTML = "";
-        },
-        createSpanImgNode(shortCode){
-            const span =  document.createElement('span');
-                    span.setAttribute('contenteditable','false');
-                    span.innerHTML = 
-                    `<img width="15px" alt="${shortCode}" src="${require("@/assets/twemoji/svg/" +
-                        this.emojisShortCodeIndex[shortCode].u.join("-").toLowerCase() +
-                    ".svg")}">`;
-            return span
-        },
-        createSpanBlue(text){
-            const span =  document.createElement('span');
-                    span.setAttribute('style','color : blue');
-                    span.innerHTML = text;
-            return span
-        },
-        createZeroText() {
-            return document.createTextNode("\u{FEFF}");
+        parseEmoji(){
+            this.HandlerDivEditable.append(
+                this.EmojiParser.parse()
+            )
         },
 
-        setSelectionBeforeFocusOut(){
-            const { anchorOffset, focusOffset, anchorNode, focusNode } =  window.getSelection();
-            this.selectionBeforeFocusOut = {anchorOffset, focusOffset, anchorNode, focusNode}
-            console.log(this.selectionBeforeFocusOut);
-            //savoir le début, la fin
+        parseUrl(){
+            this.HandlerDivEditable.append(
+                this.UrlParser.parse()
+            )
         }
-
 
     },
     mounted() {
         this.textarea = this.$refs["textarea"];
-        this.textarea.addEventListener('focusout',this.setSelectionBeforeFocusOut,true)
+        this.EmojiParser = new EmojiParser(this.textarea, this.emojisShortCodeIndex);
+        this.HandlerDivEditable = new HandlerDivEditable(this.textarea);
+        this.UrlParser = new UrlParser(this.textarea);
+        //this.textarea.addEventListener('focusout',this.HandlerDivEditable.getSelection,true)
     },
     beforeUnmount() {
-        this.textarea.addEventListener('focusout',this.setSelectionBeforeFocusOut,true)
+        //this.textarea.addEventListener('focusout',this.HandlerDivEditable.getSelection,true)
     }
 };
 </script>
