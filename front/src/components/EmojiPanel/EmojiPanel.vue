@@ -1,76 +1,85 @@
 <template>
-    <div class="emoji-panel" data-modal ref="emojiPanel" v-if="display.visible" :style="`top : ${display.y}px; left : ${display.x}px`">
-        <EmojiPanelNav v-on:change="aze" />
-        <div v-show="actived == 'Emoji'">
-            <EmojiPanelSearch
-                :filterValue="filterValue"
-                placeholder="Trouve l'émoji parfait"
-                @updateFilterValue="updateFilterValue"
-                @updateSkinColor="changeSkin"
-            />
-            <div class="emoji-panel__main">
-                <EmojiPanelCategorie
-                    :listGroupEmoji="getSvgPathsGroupIcon"
-                    :activeGroup="activeGroup"
-                    @scrollToGroup="scrollToGroup"
-                />
-                <div class="emoji-panel__container">
-                    <div class="emoji-panel__emojis" @scroll="checkGroupActive">
-                        <div class="emoji-group" v-for="(group, indexGroup) in getFilteredEmojis" :key="group">
-                            <!-- Header Group-->
-                            <div class="emoji-group__header" @click="hide(indexGroup)">
-                                <svg aria-hidden="false" width="16" height="16" viewBox="0 0 24 24">
-                                    <path fill="currentColor" v-for="path in group.svgPathIcon" :key="path" :d="path"></path>
-                                </svg>
+    <div class="display-emoji">
+        <div class="display-emoji__sticky-top" id="displayEmojiStickyTop" >
 
-                                {{ group.name }}
-
-                                <svg
-                                    class="emoji-group__dropdown-icon"
-                                    :class="{ 'emoji-group__dropdown-icon--active': !groupeHide[indexGroup] }"
-                                    width="16"
-                                    height="16"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        fill="currentColor"
-                                        d="M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.59004Z"
-                                    ></path>
-                                </svg>
-                            </div>
-
-                            <!-- Emojis Group-->
-                            <ul class="emoji-group__list" v-if="!groupeHide[indexGroup]">
-                                <li
-                                    class="emoji-group__list-item emoji-btn"
-                                    :class="{ 'emoji-group__list-item--active': activeEmoji == emoji.i }"
-                                    v-for="emoji in group.emojis"
-                                    :key="emoji"
-                                    @mouseenter="updateActiveEmoji(emoji.i)"
-                                >
-                                    <div
-                                        class="emoji-btn__thumb"
-                                        :class="(emoji.is != undefined) ? 'emoji-btn__thumb--' + skin : ''"
-                                        :alt="emoji.i"
-                                        :style="'background-position: ' + getPositionBackgroundEmoji(emoji)"
-                                    ></div>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="emoji-panel__caption">
-                        <img
-                            draggable="false"
-                            class="emoji-panel__caption-emoji"
-                            :src="require('@/assets/twemoji/svg/' + getSvgEmojiNameFile + '.svg')"
-                            :alt="emojisDataIndexed[activeEmoji].i"
+            <div class="emoji-panel" data-modal="" ref="emojiPanel" v-show="display.visible" >
+                <EmojiPanelNav v-on:change="aze" />
+                <div v-show="actived == 'Emoji'">
+                    <EmojiPanelSearch
+                        :filterValue="filterValue"
+                        placeholder="Trouve l'émoji parfait"
+                        @updateFilterValue="updateFilterValue"
+                        @updateSkinColor="changeSkin"
+                    />
+                    <div class="emoji-panel__main">
+                        <EmojiPanelCategorie
+                            :listGroupEmoji="getSvgPathsGroupIcon"
+                            :activeGroup="activeGroup"
+                            @scrollToGroup="scrollToGroup"
                         />
-                        <span>{{ emojisDataIndexed[activeEmoji].sc }}</span>
+                        <div class="emoji-panel__container">
+                            <div class="emoji-panel__emojis" @scroll="checkGroupActive">
+                                <div class="emoji-group" v-for="(group, indexGroup) in getFilteredEmojis" :key="group">
+                                    <!-- Header Group-->
+                                    <div class="emoji-group__header" @click="hide(indexGroup)">
+                                        <svg aria-hidden="false" width="16" height="16" viewBox="0 0 24 24">
+                                            <path fill="currentColor" v-for="path in group.svgPathIcon" :key="path" :d="path"></path>
+                                        </svg>
+
+                                        {{ group.name }}
+
+                                        <svg
+                                            class="emoji-group__dropdown-icon"
+                                            :class="{ 'emoji-group__dropdown-icon--active': !groupeHide[indexGroup] }"
+                                            width="16"
+                                            height="16"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                fill="currentColor"
+                                                d="M16.59 8.59004L12 13.17L7.41 8.59004L6 10L12 16L18 10L16.59 8.59004Z"
+                                            ></path>
+                                        </svg>
+                                    </div>
+
+                                    <!-- Emojis Group-->
+                                    <ul class="emoji-group__list" v-if="!groupeHide[indexGroup]">
+                                        <li
+                                            class="emoji-group__list-item emoji-btn"
+                                            :class="{ 'emoji-group__list-item--active': activeEmoji == emoji.i }"
+                                            v-for="emoji in group.emojis"
+                                            :key="emoji"
+                                            @mouseenter="updateActiveEmoji(emoji.i)"
+                                            @click="applyEmoji(emoji)"
+                                        >
+                                            <div
+                                                class="emoji-btn__thumb"
+                                                :class="(emoji.is != undefined) ? 'emoji-btn__thumb--' + skin : ''"
+                                                :alt="emoji.i"
+                                                :style="'background-position: ' + getPositionBackgroundEmoji(emoji)"
+                                            ></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="emoji-panel__caption">
+                                <img
+                                    draggable="false"
+                                    class="emoji-panel__caption-emoji"
+                                    :src="require('@/assets/twemoji/svg/' + getSvgEmojiNameFile + '.svg')"
+                                    :alt="emojisDataIndexed[activeEmoji].i"
+                                />
+                                <span>{{ emojisDataIndexed[activeEmoji].sc }}</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
         </div>
+      
     </div>
+
 </template>
 
 <script>
@@ -159,6 +168,9 @@ export default {
         },
         updateFilterValue(value) {
             this.filterValue = value;
+        },
+        applyEmoji(emoji) {
+            this.display.formPost.textarea.innerHTML = emoji.sc;
         }
     },
     mounted(){
@@ -170,19 +182,43 @@ export default {
 </script>
 
 <style lang="scss">
+.display-emoji{
+    position: absolute;
+    top: 0;
+    left: 50%;
+    padding : 30px 35px 30px 30px;
+    pointer-events : none;
+    width: 100%;
+    height : 100%;
+    max-width: 1100px;
+    transform: translateX(-50%);
+    z-index: 10;
+
+    &__sticky-top{
+        display: flex;
+        justify-content: flex-end;
+        margin-top : 300px;
+        position : sticky;
+        top : 90px;
+        z-index: 10;
+        pointer-events : none;
+    }
+
+
+}
+
 .emoji-panel {
-    position : absolute;
-    z-index : 3;
+    position : sticky;
+    z-index : 10;
     width: 425px;
     border-radius: 7px;
     overflow: hidden;
-    background-color: $grey-32;
+    background-color: $grey-47;
     color: $grey-193;
 
-    &__top {
-        padding: 17px 19px;
-        position: relative;
-    }
+    box-shadow: 0 0 8px rgba(black, 0.5);
+
+    pointer-events : auto;
 
     &__main {
         display: flex;
@@ -194,7 +230,7 @@ export default {
     }
 
     &__emojis {
-        background-color: #202020;
+
         height: 299px;
         padding: 0 0 0 8px;
         position: relative;
@@ -208,14 +244,14 @@ export default {
         }
 
         &::-webkit-scrollbar-thumb {
-            background-color: $grey-21;
+            background-color: $grey-32;
             border-radius: 30px;
         }
     }
 
     &__caption {
         height: 47px;
-        background-color: $grey-25;
+        background-color: $grey-38;
         display: flex;
         align-items: center;
         gap: 8px;
@@ -240,7 +276,7 @@ export default {
         align-items: center;
         gap: 8px;
         cursor: pointer;
-        background-color: $grey-32;
+        background-color: $grey-47;
         position: sticky;
         top: 0;
 

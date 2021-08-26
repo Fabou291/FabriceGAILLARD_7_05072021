@@ -15,8 +15,10 @@ import { mapMutations } from 'vuex';
     components : { Headband },
     methods: {
       ...mapMutations('emojiModule',['SET_VISIBILITY']),
+      ...mapMutations('postModule',['SET_ACTION_LIST_VISIBLE']),
       shutDownModals() {
           this.SET_VISIBILITY(false);
+          this.SET_ACTION_LIST_VISIBLE(false);
       },
       shutDownModalsByKeyCode(e){
         if(e.code == 'Escape') this.shutDownModals(); 

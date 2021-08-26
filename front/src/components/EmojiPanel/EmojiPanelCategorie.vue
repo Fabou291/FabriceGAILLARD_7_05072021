@@ -48,7 +48,7 @@ export default {
 
 <style lang="scss">
     .emoji-panel-categorie {
-        background-color: $background-color-tertiary;
+        background-color: $grey-32;
         width: 48px;
         height: 100%;
         overflow: auto;

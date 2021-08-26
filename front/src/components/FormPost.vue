@@ -1,8 +1,8 @@
 <template>
-    <form class="form-post" action="">
-        <div class="form-post__container">
-            <div>
-                <button type="button" class="form-post__brownse-btn form-post-btn" v-if="canBrownse" @click.stop="showBrownser">
+    <form class="form-post"  action="">
+        <div class="form-post__container" >
+            <div v-if="canBrownse">
+                <button type="button" class="form-post__brownse-btn form-post-btn"  @click.stop="showBrownser">
                     <svg width="24" height="24" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -11,21 +11,8 @@
                     </svg>
                 </button>
             
-                <Brownser ref="brownser" />            
+                <Brownser ref="brownser" v-show="ActionListVisible" />            
             </div>
-
-
-            <!--
-                @keydown.enter.prevent="submit($event); updateHeight($event.target)"
-                @input="updateHeight($event.target); $emit('update:modelValue', $event.target.value)" 
-                :class="{ 'form-post__field--active' : value }"
-
-                <span>[Premiere span]</span><span contenteditable="false"><img style="width:24px" :src="require('@/assets/twemoji/svg/1f170.svg')"></span><span>[Deuxieme span]</span>           
-            
-                        @keypress="parse"
-                @input="parse($event); parseEmoji($event)"
-            -->
-
             <div
 
                 @drop.prevent="drop" @dragenter.prevent="" @dragstart.prevent="" @drag.prevent=""
@@ -51,14 +38,17 @@
                     ></path>
                 </svg>
             </button>
-            <button type="button" class="form-post-btn" v-if="canEmoji" @click="showEmojiDisplay">
-                <svg width="24" height="24" viewBox="0 0 24 24">
-                    <path
-                        fill="currentColor"
-                        d="M12 2.00098C6.486 2.00098 2 6.48698 2 12.001C2 17.515 6.486 22.001 12 22.001C17.514 22.001 22 17.515 22 12.001C22 6.48698 17.514 2.00098 12 2.00098ZM17 13.001H13V17.001H11V13.001H7V11.001H11V7.00098H13V11.001H17V13.001Z"
-                    ></path>
-                </svg>
-            </button>            
+            <div class="form-post-btn__emoji-btn">
+                <button type="button" class="form-post-btn"  ref="emojiFormBtn" v-if="canEmoji" @click="showEmojiDisplay()">
+                    <svg width="24" height="24" viewBox="0 0 24 24">
+                        <path
+                            fill="currentColor"
+                            d="M12 2.00098C6.486 2.00098 2 6.48698 2 12.001C2 17.515 6.486 22.001 12 22.001C17.514 22.001 22 17.515 22 12.001C22 6.48698 17.514 2.00098 12 2.00098ZM17 13.001H13V17.001H11V13.001H7V11.001H11V7.00098H13V11.001H17V13.001Z"
+                        ></path>
+                    </svg>
+                </button>
+            </div>
+          
         </div>
 
         
@@ -85,6 +75,7 @@ export default {
         return {
             selection: 0,
             textarea: "",
+            selectionBeforeFocusOut: null
         };
     },
     components : {
@@ -96,7 +87,8 @@ export default {
         canGIF : { type: Boolean, default : false },
         canEmoji : { type: Boolean, default : false },
         placeholder : { type : String, default : "Envoyer un message dans ce groupe" },
-        canRespond : {type : Boolean, default : false }
+        canRespond : {type : Boolean, default : false },
+        sticky : { type : Boolean, default : false }
     },
     watch : {
         idPostToReply(){
@@ -105,7 +97,7 @@ export default {
     },
     computed: {
         ...mapState('emojiModule',['emojisShortCodeIndex', 'display']),
-        ...mapState('postModule',['idPostToReply', 'listPost']),
+        ...mapState('postModule',['idPostToReply', 'listPost', 'ActionListVisible']),
         isEmpty(){
             console.log(this.textarea.innerHTML == '')
             return this.textarea.innerHTML == '';
@@ -117,15 +109,84 @@ export default {
         }
     },
     methods: {
-        ...mapMutations('emojiModule', ['SET_POSITION', 'SET_VISIBILITY']),
+        ...mapMutations('emojiModule', ['SET_POSITION', 'SET_VISIBILITY', 'SET_FORM_POST_COMPONENT_TARGET']),
         ...mapMutations('postModule', ['SET_ID_POST_TO_REPLY']),
-        showEmojiDisplay(e){
-            const bound = e.target.getBoundingClientRect();
-            this.SET_POSITION({
-                x : bound.right - this.display.width,
-                y : bound.top - this.display.height*-1,                
-            })
-            this.SET_VISIBILITY(true)
+        getInfoSticky(bound){
+            const paddingForm = 10;
+            return{
+                marginTop : document.getElementById('channel__caption').getBoundingClientRect().bottom + document.getElementById('scrollY').scrollTop + bound.height + paddingForm,
+                position : 'sticky',
+                top : 85,
+                channelPosition : 'relative'
+            }
+        },
+        getInfoAbsolute(bound){
+            return{
+                marginTop : bound.bottom,
+                position : 'unset',
+                top : 0,
+                channelPosition : 'unset'
+            }
+        },
+        getPxOutOfRange(y){
+            let diff = 0;
+            const heightTotalOfPanelEmoji = 454;
+
+            if( (y+heightTotalOfPanelEmoji) > window.innerHeight)
+                diff = (y+heightTotalOfPanelEmoji) - window.innerHeight;
+            
+            if( y < 0 ) diff =  y;
+
+            return diff;
+        },
+        showEmojiDisplay(){
+            this.SET_VISIBILITY(true);
+            this.SET_FORM_POST_COMPONENT_TARGET({
+                textarea : this.textarea,
+                selectionBeforeFocusOut : this.selectionBeforeFocusOut,
+            });
+
+            const bound = this.$refs['emojiFormBtn'].getBoundingClientRect();
+
+
+            const {marginTop, top, position, channelPosition} = this.sticky ? this.getInfoSticky(bound) : this.getInfoAbsolute(bound);
+            
+
+            
+
+            const displayEmojiStickyTop = document.getElementById('displayEmojiStickyTop');
+            displayEmojiStickyTop.style.position = position;
+
+            const espace = 20;
+            const paddingContainer = 30;
+
+            document.getElementById('channel').style.position = channelPosition ;
+
+            const height =  (bound.top/window.innerHeight > 0.5) ? 454 + bound.height + espace*2 : 0 ;
+
+
+            
+
+
+            const outOfRange = this.sticky ? 0 : this.getPxOutOfRange(marginTop  + espace - paddingContainer - height);
+
+
+            displayEmojiStickyTop.style.marginTop = marginTop  + espace - paddingContainer - height - outOfRange + 'px';
+            displayEmojiStickyTop.style.top = top + 'px';
+
+
+
+
+            
+           
+
+
+            
+            /*this.SET_POSITION({
+                y : top - 20 ,                
+            })*/
+            
+            
         },
         escape(){
             this.$emit('escape')
@@ -292,11 +353,24 @@ export default {
         },
         createZeroText() {
             return document.createTextNode("\u{FEFF}");
+        },
+
+        setSelectionBeforeFocusOut(){
+            const { anchorOffset, focusOffset, anchorNode, focusNode } =  window.getSelection();
+            this.selectionBeforeFocusOut = {anchorOffset, focusOffset, anchorNode, focusNode}
+            console.log(this.selectionBeforeFocusOut);
+            //savoir le début, la fin
         }
+
+
     },
     mounted() {
         this.textarea = this.$refs["textarea"];
+        this.textarea.addEventListener('focusout',this.setSelectionBeforeFocusOut,true)
     },
+    beforeUnmount() {
+        this.textarea.addEventListener('focusout',this.setSelectionBeforeFocusOut,true)
+    }
 };
 </script>
 
@@ -355,6 +429,10 @@ export default {
 
     &__gif-btn{
         margin-left : auto;
+    }
+
+    &__emoji-btn{
+        position : relative;
     }
 }
 

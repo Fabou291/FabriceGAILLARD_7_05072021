@@ -36,7 +36,8 @@ export default {
             y : 0,
             width : 0,
             height : 0,
-            visible : false
+            visible : false,
+            formPost : null
         }
     },
     mutations : {
@@ -64,7 +65,10 @@ export default {
         },
         SET_VISIBILITY(state, visibility){
             state.display.visible = visibility;
-        }
+        },
+        SET_FORM_POST_COMPONENT_TARGET(state, formPostComponentTarget){
+            state.display.formPost = formPostComponentTarget;
+        },
     },
     actions : {
         changeSkin({commit, dispatch}, index){

@@ -99,7 +99,7 @@ export default {
     &__field {
         display: flex;
         align-items: center;
-        background-color: $grey-21;
+        background-color: $grey-32;
         border-radius: 4px;
         color: $grey-127;
         width: calc(100% - 40px);
@@ -113,6 +113,7 @@ export default {
         padding: 10px 13px;
         flex: 1;
         border-radius: 4px;
+        min-width: 0;
         &::placeholder {
             color: $grey-127;
         }

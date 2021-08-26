@@ -7,7 +7,7 @@
 
         <Header />
         <div class="container-full">
-            <div class="scroll-y">
+            <div class="scroll-y" id="scrollY">
                 <div class="container">
                     
                     

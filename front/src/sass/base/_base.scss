@@ -68,6 +68,12 @@ img,svg{
     outline : none;
 }
 
+button:focus-visible, a:focus-visible{
+    box-shadow: 0 0 2px white;
+    border: 2px solid white;
+    border-radius : 4px;
+}
+
 [contenteditable=true]:empty:before{
     content: attr(title);
     pointer-events: none;

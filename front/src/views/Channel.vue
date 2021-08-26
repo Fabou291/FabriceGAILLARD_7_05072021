@@ -1,23 +1,23 @@
 <template>
-    <EmojiPanel/>
-    <section class="channel">
-        <div class="channel__caption">
+    
+    <section class="channel" id="channel">
+            <EmojiPanel/>        
+        <div class="channel__caption" id="channel__caption">
             <span class="tag-content">CHANNEL</span>
             <h1 class="channel__title">Bienvenue sur Groupe #1</h1>
             <p class="channel__description">C'est le début du salon #Groupe 1.</p>            
         </div>
 
         <div class="channel__formPost">
-            <FormPost @submit="add" ref="formPost"  :canBrownse="true" :canGIF="true" :canEmoji="true" :canRespond="true" />            
+            <FormPost @submit="add" ref="formPost"  :canBrownse="true" :canGIF="true" :canEmoji="true" :canRespond="true" :sticky="true" />            
         </div>
 
         <div class="channel__posts">
-            <div v-for="post in listPost" :key="post">
+            <template v-for="post in listPost" :key="post">
                 <Post class ="post" :post="post" />
-                <div>
-                    <Post class ="post post--recursive" :post="comment" v-for="comment in post.listComment" :key="comment.id" />
-                </div>
-            </div>
+                    <Post class ="post post--recursive" :post="comment" v-for="comment in post.listComment" :key="comment.id" />              
+            </template>
+
         </div>
     </section>
 </template>
@@ -66,9 +66,12 @@ export default {
 </script>
 
 <style lang="scss">
+$FormPostPaddingTop : 20px; 
+
     .channel {
         width: 100%;
         padding: 30px;
+        position: relative;
 
         @include setMediaScreen(tablette){
             padding: 30px 5px 0 5px;
@@ -93,11 +96,12 @@ export default {
             @include setCircularStdFont("Bold");
             font-size: 13px;
             letter-spacing: 0.3px;
-            margin: 0 0 34px 0;
+            margin: 0;
+            padding: 0 0 34px 0;
         }
 
         &__formPost {
-            padding-top : 20px;
+            padding-top : $FormPostPaddingTop;
             position: sticky;
             top: 0;
             z-index: 4;
@@ -105,6 +109,7 @@ export default {
         }
 
         &__posts {
+            position: relative;
             margin: 25px 0 0 0;
         }
     }

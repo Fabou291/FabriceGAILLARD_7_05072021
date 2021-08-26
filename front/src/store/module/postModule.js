@@ -4,9 +4,13 @@ export default {
     state: {
         idPostInModifyMode: null,
         idPostToReply: null,
+        ActionListVisible : false,
         listPost: null,
     },
     mutations: {
+        SET_ACTION_LIST_VISIBLE(state, visibility) {
+            state.ActionListVisible = visibility;
+        },
         SET_ID_POST_IN_MODIFY_MODE(state, id) {
             state.idPostInModifyMode = id;
         },

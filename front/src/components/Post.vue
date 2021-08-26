@@ -88,7 +88,7 @@
         }
 
         .post__main {
-            border-radius : 0;
+            border-radius : 4px;
             background-color : $grey-25;
             padding : 10px;
         }

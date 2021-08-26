@@ -1,5 +1,5 @@
 <template>
-    <div class="action-listing modal" ref="modal">
+    <div class="action-listing" data-modal ref="modal">
         <button type="button" class="action" @click.stop="showBrownser">
             <div class="action__explanation">
                 <svg height="24px" aria-hidden="false" viewBox="0 0 24 24">
@@ -38,13 +38,14 @@ export default {
     methods : {
         ...mapActions('imagePostModule',['open']),
         ...mapMutations('imagePostModule',['SET_FILE']),
+        ...mapMutations('postModule',['SET_ACTION_LIST_VISIBLE']),
         show(){
             this.$refs['input'].files = null;
             this.$refs['input'].value = null;
-            this.$refs['modal'].classList.add('show');
+            this.SET_ACTION_LIST_VISIBLE(true);
         },
         showBrownser(){
-            this.$refs['modal'].classList.remove('show')
+            this.SET_ACTION_LIST_VISIBLE(false);
             this.$refs['input'].click();
         },
         openImagePostDisplay(){

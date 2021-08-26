@@ -31,7 +31,8 @@ export default {
         },
         SET_VISIBILITY(state, visibility){
             state.visible = visibility;
-        }
+        },
+
     },
 
     actions: {
