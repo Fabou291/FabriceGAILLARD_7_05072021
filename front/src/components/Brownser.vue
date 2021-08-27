@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapActions, mapMutations, mapState } from 'vuex';
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
 export default {
     data() {
         return {
@@ -33,7 +33,8 @@ export default {
         }
     },
     computed: {
-        ...mapState('inputPostChannelModule',['getContent','listFile'])
+        ...mapState('inputPostChannelModule',['listFile']),
+        ...mapGetters('inputPostChannelModule',['getContent'])
     },
     methods : {
         ...mapActions('imagePostModule',['open']),
@@ -49,7 +50,7 @@ export default {
             this.$refs['input'].click();
         },
         openImagePostDisplay(){
-            this.open({ listFile : this.$refs['input'].files, content: this.getContent() })
+            this.open({ listFile : this.$refs['input'].files, content: this.getContent })
         }
     }
 };

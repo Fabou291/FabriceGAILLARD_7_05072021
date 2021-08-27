@@ -46,7 +46,7 @@ export default {
     },
     methods: {
         ...mapActions('postModule',['getListPost','addPost']),
-        ...mapMutations('inputPostChannelModule',['SET_CONTENT','SET_TEXTAREA']),
+        ...mapMutations('inputPostChannelModule',['SET_TEXTAREA']),
         ...mapMutations('imagePostModule',['SET_CHANNEL_ID']),
         add(content){ this.addPost({ content, channelId : this.channelId }) }
     },
@@ -54,14 +54,14 @@ export default {
         this.channelId = this.$route.params.id;
         this.getListPost(this.channelId);
     },
-    update(){
-        this.channelId = this.$route.params.id;
-    },
     mounted(){
-        this.SET_CONTENT(this.$refs['formPost'].getDataText);
         this.SET_TEXTAREA(this.$refs['formPost'].textarea);
         this.SET_CHANNEL_ID(this.channelId);
-    }
+    },
+    beforeRouteUpdate(to) {
+        this.channelId = to.params.id;
+        this.getListPost(this.channelId);
+    },
 };
 </script>
 

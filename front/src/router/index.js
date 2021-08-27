@@ -11,7 +11,10 @@ const routes = [
       {
         path: 'channel/:id',
         name: 'Channel',
-        component : Channel
+        component : Channel,
+        meta : {
+          key : route => `UserProfile-${route.params.id}`
+        }
       }
     ],
     meta: { requiresAuth: true, reload: true }

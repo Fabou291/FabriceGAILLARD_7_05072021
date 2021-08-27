@@ -19,7 +19,6 @@ export default {
     },
     methods : {
         fixPositionSidebar(){
-            console.log(document.getElementById('sidebarContent').scrollTop)
             this.style.marginTop = document.getElementById('sidebarContent').scrollTop*-1 + "px";
         }
     }

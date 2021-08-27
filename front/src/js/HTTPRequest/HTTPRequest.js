@@ -1,3 +1,4 @@
+import router from "../../router/index.js";
 export default class HTTPRequest{
     static baseUrl = "http://localhost:3000/api/";
 
@@ -30,7 +31,10 @@ export default class HTTPRequest{
                     const { accessToken } = await response.json();
                     window.localStorage.setItem('accessToken', accessToken)
                     return await this.fetch(uri, method, headers, body );
-                } catch(e){ return e; }
+                } catch(e){
+                    router.push({ name: "Login" })
+                    console.log(e)
+                }
             }
         } 
 

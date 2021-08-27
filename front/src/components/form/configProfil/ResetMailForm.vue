@@ -33,7 +33,7 @@ export default {
         },
         async fetch(){
             await HTTPRequest.put(`user/${this.user.id}/reset-email`, { oldMail : this.oldMail, email : this.email })
-            console.log('C\'est fait');            
+       
         },
         setCustomValidity(){
             ['oldMail','email'].forEach(ref=>{

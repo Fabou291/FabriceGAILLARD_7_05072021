@@ -41,7 +41,7 @@ CREATE TABLE channel(
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     channel_group_id INTEGER NOT NULL,
-    CONSTRAINT FK_channel_channel_group_id FOREIGN KEY (channel_group_id) REFERENCES channel_group(id)
+    CONSTRAINT FK_channel_channel_group_id FOREIGN KEY (channel_group_id) REFERENCES channel_group(id) ON DELETE CASCADE
 
 );
 
@@ -55,8 +55,9 @@ CREATE TABLE post(
     user_id INTEGER NOT NULL,
     channel_id INTEGER DEFAULT NULL,
     post_id INTEGER DEFAULT NULL,
-    CONSTRAINT FK_post_user_id FOREIGN KEY (user_id) REFERENCES user(id),
-    CONSTRAINT FK_post_channel_id FOREIGN KEY (channel_id) REFERENCES channel(id),
+    CONSTRAINT FK_post_user_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE,
+    CONSTRAINT FK_post_channel_id FOREIGN KEY (channel_id) REFERENCES channel(id) ON DELETE CASCADE,
+    CONSTRAINT FK_post_id FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE ,
     CONSTRAINT FK_not_NULL CHECK ((NOT post_id IS NULL) OR (NOT channel_id IS NULL)),
     CONSTRAINT FK_not_NULL_POST_IMG CHECK ((NOT content IS NULL) OR (NOT image_url IS NULL))
 
@@ -69,7 +70,7 @@ CREATE TABLE log_fail(
     ip VARCHAR(50) NOT NULL,
     message VARCHAR(150) NOT NULL,
     user_id INTEGER NOT NULL,
-    CONSTRAINT FK_log_user_id FOREIGN KEY (user_id) REFERENCES user(id)
+    CONSTRAINT FK_log_user_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
     
 );
 
@@ -78,7 +79,7 @@ CREATE TABLE blocked_user(
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     user_id INTEGER NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    CONSTRAINT FK_blocked_user_id FOREIGN KEY (user_id) REFERENCES user(id)
+    CONSTRAINT FK_blocked_user_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE
 
 );
 
@@ -86,8 +87,8 @@ CREATE TABLE interaction(
     emoji_id SMALLINT NOT NULL,
     user_id INTEGER NOT NULL,
     post_id INTEGER NOT NULL,
-    CONSTRAINT FK_interaction_post_user_id FOREIGN KEY (user_id) REFERENCES user(id),
-    CONSTRAINT FK_interaction_post_comment_id FOREIGN KEY (post_id) REFERENCES post(id),
+    CONSTRAINT FK_interaction_post_user_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE, 
+    CONSTRAINT FK_interaction_post_comment_id FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
     UNIQUE KEY interaction_post_unique (emoji_id,user_id,post_id)
 );
 

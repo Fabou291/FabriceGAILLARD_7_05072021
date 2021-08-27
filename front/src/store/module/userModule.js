@@ -58,10 +58,8 @@ export default {
 
         async getById(context, userId) {
             try {
-                console.log(userId)
                 context.commit("UPDATE", await HTTPRequest.get(`user/${userId}`));
             } catch (error) {
-
                 context.dispatch("errorModule/handleError", error, { root: true });
             }
         },

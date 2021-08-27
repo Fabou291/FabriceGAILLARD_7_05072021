@@ -2,7 +2,7 @@ const JWT = require("jsonwebtoken");
 const createError = require("http-errors");
 
 const getAccessToken = (userId) => {
-    return JWT.sign({ userId }, process.env.SECRET_ACCESS_TOKEN, { expiresIn: "1s" });
+    return JWT.sign({ userId }, process.env.SECRET_ACCESS_TOKEN, { expiresIn: "1h" });
 };
 
 const getRefreshToken = (userId) => {

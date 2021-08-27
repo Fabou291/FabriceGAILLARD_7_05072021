@@ -105,7 +105,6 @@ export default {
         ...mapState('emojiModule',['emojisShortCodeIndex', 'display']),
         ...mapState('postModule',['idPostToReply', 'listPost', 'ActionListVisible']),
         isEmpty(){
-            console.log(this.textarea.innerHTML == '')
             return this.textarea.innerHTML == '';
         },
         getNameToReply(){
@@ -204,7 +203,7 @@ export default {
         },
 
         submit() {
-            const value = this.handlerDivEditable.getTextContent().trim();
+            const value = this.HandlerDivEditable.getTextContent().trim();
             if (value == "") return;
 
             this.$emit("submit", value)

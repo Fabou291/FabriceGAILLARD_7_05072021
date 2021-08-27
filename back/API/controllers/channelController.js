@@ -104,13 +104,11 @@ const findAllPostOfChannel = (req,res,next) => {
                         if(list_user_id != null) get(post.id).listReaction.push({ emoji_id, list_user_id });
                     });
 
-                    console.log("#####################################################################################", listPost)
 
                     //Ajoute les post recursif (comment) au post, puis delete les post recursif 
                     for (let i = 0; i<listPost.length; i++) {
                         const post = listPost[i]
                         if(post.post_id != null){
-                            if(!get(post.post_id)) console.log(post.post_id,"#####################################################################################", listPost)
                             get(post.post_id).listComment.push(
                                 listPost.splice(listPost.indexOf(post),1)[0]
                             );

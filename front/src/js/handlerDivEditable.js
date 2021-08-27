@@ -74,8 +74,8 @@ class HandlerDivEditable{
 
     getTextContent() {
         let str = "";
-        this.div.childNodes.forEach((node) => {
-            if (node.nodeType == 1) { // 1 => Span
+        this.node.childNodes.forEach((node) => {
+            if (node.nodeType == node.ELEMENT_NODE) { 
                 str += node.querySelector("img") ? node.querySelector("img").alt : node.textContent;
             } else str += node.textContent || "";
         });
