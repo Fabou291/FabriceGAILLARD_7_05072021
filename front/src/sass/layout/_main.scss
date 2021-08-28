@@ -3,7 +3,7 @@
     flex : 1;
     display: flex;
     margin-left : $sidebar-width;
-    min-height: 100vh;
+    min-height: calc(100vh - 20px); // $header-height
 
     @include setMediaScreen(tablette){
         margin-left : 0

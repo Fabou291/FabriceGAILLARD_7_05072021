@@ -1,6 +1,5 @@
 .scroll-y{
-    height : 100vh;
-
+    height : calc(100vh  - 20px); // $header-height
     @include setScrollBar(transparent);
     overflow-y: scroll;
 

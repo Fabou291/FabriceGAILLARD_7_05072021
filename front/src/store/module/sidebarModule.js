@@ -29,7 +29,8 @@ export default {
             const channelinList  = state.listGroup
                 .find(e => e.id == channel.channelGroupId)
                 .listChannel
-                .find(e => e.id == channel.id)
+                .find(e => e.id == channel.id);
+                
             channelinList.name = channel.name;
             channelinList.description = channel.description;
         },
