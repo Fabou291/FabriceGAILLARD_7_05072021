@@ -18,10 +18,12 @@ $grey-215: rgb(215, 215, 215);
 $green: #1db954;
 $orange: #faa81a;
 $red: #ed4245;
+$blue: rgb(35,164,244);;
 
 $success : $green;
 $danger : $red;
-$warning : $danger;
+$warning : $orange;
+$info : $blue;
 
 // Background color variales
 $background-color-primary: $grey-11;

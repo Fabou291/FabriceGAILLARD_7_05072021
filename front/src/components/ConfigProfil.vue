@@ -68,6 +68,13 @@
                                 </li>
                             </ul>
 
+
+                            <hr />
+
+                            <div class="link-btn link-btn--info" @click="logout">
+                                Déconnexion
+                            </div>
+
                             <hr />
 
                             <div class="link-btn link-btn--danger" @click="remove">
@@ -268,6 +275,11 @@ export default {
         },
         switchSidebarVisibility(){
             this.sidebar.visible = !this.sidebar.visible;
+        },
+        logout(){
+            window.localStorage.removeItem('accessToken');
+            this.$router.push({ name : 'Login' })
+            this.shutDownConfigDisplay()
         }
     },
     components: {  ModifyUserForm, ResetMailForm, ResetPasswordForm },

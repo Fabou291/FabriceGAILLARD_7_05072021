@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="two-side">
         <PanelCreateChannel/>
         <ConfigChannel/>
         <ConfigProfil/>
@@ -18,8 +18,6 @@
                 </div>
             </div>
         </div>
-
-
     </div>
 </template>
 
@@ -46,6 +44,8 @@ export default {
 </script>
 
 <style lang="scss">
-
+    .two-side{
+        background: linear-gradient(90deg, #151515 0%, #151515 50%, #121212 51%, #121212 100%);
+    }
 
 </style>

@@ -158,6 +158,11 @@ export default {
     background: linear-gradient(90deg, $grey-25 0%, $grey-25 50%, $grey-32 51%, $grey-32 100%);
     padding: 0 !important;
 
+    textarea{
+        resize: none;
+        @include setScrollBar($success)
+    }
+
     &__main {
         position: relative;
         padding: 100px 30px 30px 30px;
@@ -267,16 +272,25 @@ export default {
         color: $grey-166;
     }
 
-    &--danger {
-        color: $danger;
-        &:hover {
-            color: white;
-            background-color: $danger;
-        }
-        &:visited {
-            color: $danger;
+    $link-btn-colors: (
+        danger : $danger, 
+        info : $info
+    );
+
+    @each $name, $color in $link-btn-colors {
+        &--#{$name} {
+            color: $color;
+            &:hover {
+                color: white;
+                background-color: $color;
+            }
+            &:visited {
+                color: $color;
+            }
         }
     }
+
+    
 }
 
 .list-close-btn{

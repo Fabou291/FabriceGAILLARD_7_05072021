@@ -79,7 +79,6 @@ export default {
                 commit : commitName
             })
             .then(() => {
-                console.log(this.listPost.length - this.pagination.lengthListPost < this.pagination.limit)
                 if(this.listPost.length - this.pagination.lengthListPost < this.pagination.limit) this.pagination.limitReached = true;
                 this.pagination.lengthListPost = this.listPost.length;
             })
@@ -90,7 +89,7 @@ export default {
             this.pagination.currentPage = 0;
         },
         handleScroll(){
-            const isBottomOfChannel = this.scrollY.scrollTop + window.innerHeight === this.scrollY.scrollHeight;
+            const isBottomOfChannel = this.scrollY.scrollTop + this.scrollY.getBoundingClientRect().height >= this.scrollY.scrollHeight*90/100;
             if(isBottomOfChannel && !this.pagination.limitReached) this.getlistPostOfChannel("PUSH_LIST_POST");            
         }
     },
