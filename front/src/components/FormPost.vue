@@ -21,14 +21,14 @@
                 @keypress.enter.prevent="submit"
                 @keydown.esc="escape"
                 @input="parseEmoji(); parseUrl(); textarea.normalize();"
-                
+                @focusout="HandlerDivEditable.setTempDatas"
 
                 class="form-post__field"
                 contenteditable="true"
                 :title="placeholder"
                 ref="textarea"
                 spellcheck="false"
-                
+                v-html="value"    
 
             ></div>
 
@@ -114,7 +114,7 @@ export default {
         }
     },
     methods: {
-        ...mapMutations('emojiModule', ['SET_POSITION', 'SET_VISIBILITY', 'SET_FORM_POST_COMPONENT_TARGET']),
+        ...mapMutations('emojiModule', ['SET_POSITION', 'SET_VISIBILITY', 'SET_HANDLER_DIV_EDITABLE']),
         ...mapMutations('postModule', ['SET_ID_POST_TO_REPLY']),
 
         getInfoSticky(bound){
@@ -147,10 +147,7 @@ export default {
         },
         showEmojiDisplay(){
             this.SET_VISIBILITY(true);
-            this.SET_FORM_POST_COMPONENT_TARGET({
-                textarea : this.textarea,
-                selectionBeforeFocusOut : this.selectionBeforeFocusOut,
-            });
+            this.SET_HANDLER_DIV_EDITABLE(this.HandlerDivEditable);
 
             const bound = this.$refs['emojiFormBtn'].getBoundingClientRect();
 
@@ -232,15 +229,19 @@ export default {
         ///NEW
 
         parseEmoji(){
+            this.HandlerDivEditable.setTempDatas();
             this.HandlerDivEditable.append(
                 this.EmojiParser.parse()
             )
+            this.HandlerDivEditable.setTempDatas();
         },
 
         parseUrl(){
+            this.HandlerDivEditable.setTempDatas();
             this.HandlerDivEditable.append(
                 this.UrlParser.parse()
             )
+            this.HandlerDivEditable.setTempDatas();
         }
 
     },

@@ -133,7 +133,7 @@ export default {
         },
     },
     methods: {
-        ...mapMutations('emojiModule', ['SET_SIZE']),
+        ...mapMutations('emojiModule', ['SET_SIZE','SET_VISIBILITY']),
         ...mapActions('emojiModule',['changeSkin']),
         aze: function(actived) {
             this.actived = actived;
@@ -170,7 +170,38 @@ export default {
             this.filterValue = value;
         },
         applyEmoji(emoji) {
-            this.display.formPost.textarea.innerHTML = emoji.sc;
+            //this.SET_VISIBILITY(false);
+            const tempSelection = this.display.handlerDivEditable.temp.selection
+
+            const a = [...tempSelection.focusNode.textContent];
+
+            let reference = (tempSelection.focusNode.parentNode.tagName == 'SPAN') 
+                ? tempSelection.focusNode.parentNode 
+                : tempSelection.focusNode ;
+
+            if(this.display.handlerDivEditable.node.innerHTML == ''){
+                reference = document.createTextNode('');
+                this.display.handlerDivEditable.node.appendChild(reference);
+            }
+
+            const span =  document.createElement('span');
+            span.setAttribute('contenteditable','false');
+            //span.style.userSelect =  "none";
+            span.innerHTML = 
+                `<img width="19px" alt="${emoji.sc}" src="${require("@/assets/twemoji/svg/" +
+                    this.emojisShortCodeIndex.get(emoji.sc).u.join("-").toLowerCase() +
+                ".svg")}">`;
+
+            this.display.handlerDivEditable.append([{
+                    reference,
+                    toAppend : [
+                        document.createTextNode(a.splice(0,tempSelection.focusOffset).join('')),
+                        span,
+                        document.createTextNode(a.join(''))                
+                    ]
+                }]);
+
+
         }
     },
     mounted(){

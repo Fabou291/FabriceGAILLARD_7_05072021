@@ -37,7 +37,7 @@ export default {
             width : 0,
             height : 0,
             visible : false,
-            formPost : null
+            handlerDivEditable : null
         }
     },
     mutations : {
@@ -66,8 +66,8 @@ export default {
         SET_VISIBILITY(state, visibility){
             state.display.visible = visibility;
         },
-        SET_FORM_POST_COMPONENT_TARGET(state, formPostComponentTarget){
-            state.display.formPost = formPostComponentTarget;
+        SET_HANDLER_DIV_EDITABLE(state, handlerDivEditable){
+            state.display.handlerDivEditable = handlerDivEditable;
         },
     },
     actions : {
