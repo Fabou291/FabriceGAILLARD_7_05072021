@@ -4,8 +4,8 @@
             <EmojiPanel/>        
         <div class="channel__caption" id="channel__caption">
             <span class="tag-content">CHANNEL</span>
-            <h1 class="channel__title">Bienvenue sur Groupe #1</h1>
-            <p class="channel__description">C'est le début du salon #Groupe 1.</p>            
+            <h1 class="channel__title">Bienvenue sur {{ channel.name }}</h1>
+            <p class="channel__description">{{ channel.description || 'Aucune description' }}</p>            
         </div>
 
         <div class="channel__formPost">
@@ -17,7 +17,10 @@
                 <Post class ="post" :post="post" />
                     <Post class ="post post--recursive" :post="comment" v-for="comment in post.listComment" :key="comment.id" />              
             </template>
-            <div v-if="pagination.limitReached">END OF CHANNEL</div>
+            <div class="channel__end" v-if="pagination.limitReached">
+                <span >Ceci est la fin du channel</span>
+                <span class="channel__end-name">{{ channel.name }}</span>
+            </div>
         </div>
     </section>
 </template>
@@ -38,6 +41,11 @@ export default {
     data() {
         return {
             channelId : null,
+            channel : {
+                id : null,
+                name : null,
+                description : null,
+            },
             pagination : {
                 currentPage : 0,
                 limitReached :false,
@@ -45,21 +53,27 @@ export default {
                 limit : 10,
                 scrollY : null,
             },
-
         };
     },
     computed: {
         ...mapGetters('userModule',['user']),
+        ...mapState('sidebarModule',['listGroup']),
+        ...mapGetters('sidebarModule',['getChannelById']),
         ...mapState('postModule',['listPost']),
+    },
+    watch : {
+        listGroup(){
+            this.channel = this.getChannelById(this.$route.params.id)
+        }
     },
     methods: {
         ...mapActions('postModule',['getListPost','addPost']),
         ...mapMutations('inputPostChannelModule',['SET_TEXTAREA']),
         ...mapMutations('imagePostModule',['SET_CHANNEL_ID']),
-        add(content){ this.addPost({ content, channelId : this.channelId }) },
+        add(content){ this.addPost({ content, channelId : this.channel.id }) },
         getlistPostOfChannel(commitName){
             this.getListPost({
-                channelId : this.channelId,
+                channelId : this.channel.id,
                 limit : this.pagination.limit,
                 offset : this.pagination.limit * (++this.pagination.currentPage-1),
                 commit : commitName
@@ -81,20 +95,20 @@ export default {
         }
     },
     created() {
-        this.channelId = this.$route.params.id;
+        this.channel.id = this.$route.params.id;
         this.getlistPostOfChannel("SET_LIST_POST")
     },
     mounted(){
         this.scrollY =  document.getElementById('scrollY');
         this.scrollY.addEventListener('scroll', () => this.handleScroll(),true);
         this.SET_TEXTAREA(this.$refs['formPost'].textarea);
-        this.SET_CHANNEL_ID(this.channelId);
+        this.SET_CHANNEL_ID(this.channel.id);
     },
     unmounted() {
         this.scrollY.removeEventListener('scroll', () => this.handleScroll(),true);
     },
     beforeRouteUpdate(to) {
-        this.channelId = to.params.id;
+        this.channel = this.getChannelById(to.params.id)
         this.resetPagination();
         this.getlistPostOfChannel("SET_LIST_POST");
     },
@@ -148,6 +162,24 @@ $FormPostPaddingTop : 20px;
             position: relative;
             margin: 25px 0 0 0;
         }
+
+        &__end {
+            margin-top : 10px;
+            border-top : 1px solid $grey-59;
+            padding : 20px;
+            font-size : 13px;
+            @include setFlexCenter();
+            flex-direction: column;
+            color : $grey-142;
+            gap : 5px;
+        }
+
+        &__end-name {
+            color : white;
+            @include setCircularStdFont('Black');
+            font-size : 27px;
+        }
+
     }
 
     .tag-content {

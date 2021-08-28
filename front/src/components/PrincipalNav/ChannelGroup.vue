@@ -15,7 +15,7 @@
 
         <ul v-show="visible">
             <li class="sidebar-item" :class="{ 'sidebar-item--active' : $route.params.id == channel.id }" v-for="channel in group.listChannel" :key="channel.id">
-                <router-link class="sidebar-item__link" :to="`/channel/${channel.id}`">
+                <router-link class="sidebar-item__link" :to="`/channel/${channel.id}`" @click="SET_VISIBILITY(false)">
                     <svg class="sidebar-item__link-icon" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -39,9 +39,10 @@
 </template>
 
 <script>
-import {  mapGetters, mapMutations } from "vuex";
+import {  mapGetters,  mapMutations } from "vuex";
 import DropDownBtn from "@/components/btn/DropDownBtn.vue";
 import ButtonPopUp from "@/components/ButtonPopUp.vue";
+
 
 
 export default {
@@ -58,6 +59,7 @@ export default {
         group: { type: Object, required: true },
     },
     methods: {
+        ...mapMutations('sidebarModule',['SET_VISIBILITY']),
         ...mapMutations('createChannelDisplay',['OPEN']),
         ...mapMutations('configChannelModule',['OPEN_CONFIG','CLOSE_CONFIG']),
         switchVisibility() {

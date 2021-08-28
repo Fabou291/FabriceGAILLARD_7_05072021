@@ -26,8 +26,12 @@ export default {
             );
         },
         MODIFY_CHANNEL(state,channel){
-            const listChannel  = state.listGroup.find(e => e.id == channel.channelGroupId).listChannel;
-            listChannel[listChannel.findIndex(e => e.id == channel.id)] = channel;
+            const channelinList  = state.listGroup
+                .find(e => e.id == channel.channelGroupId)
+                .listChannel
+                .find(e => e.id == channel.id)
+            channelinList.name = channel.name;
+            channelinList.description = channel.description;
         },
         SET_VISIBILITY(state, visibility){
             state.visible = visibility;

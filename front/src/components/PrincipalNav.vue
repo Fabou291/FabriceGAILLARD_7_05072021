@@ -68,7 +68,7 @@ export default {
         }
     },
     async created() {
-        this.setListGroup();
+        await this.setListGroup();
         
     }
 };
