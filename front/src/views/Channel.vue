@@ -17,7 +17,7 @@
                 <Post class ="post" :post="post" />
                     <Post class ="post post--recursive" :post="comment" v-for="comment in post.listComment" :key="comment.id" />              
             </template>
-
+            <div v-if="pagination.limitReached">END OF CHANNEL</div>
         </div>
     </section>
 </template>
@@ -38,6 +38,14 @@ export default {
     data() {
         return {
             channelId : null,
+            pagination : {
+                currentPage : 0,
+                limitReached :false,
+                lengthListPost : 0,
+                limit : 10,
+                scrollY : null,
+            },
+
         };
     },
     computed: {
@@ -48,19 +56,47 @@ export default {
         ...mapActions('postModule',['getListPost','addPost']),
         ...mapMutations('inputPostChannelModule',['SET_TEXTAREA']),
         ...mapMutations('imagePostModule',['SET_CHANNEL_ID']),
-        add(content){ this.addPost({ content, channelId : this.channelId }) }
+        add(content){ this.addPost({ content, channelId : this.channelId }) },
+        getlistPostOfChannel(commitName){
+            this.getListPost({
+                channelId : this.channelId,
+                limit : this.pagination.limit,
+                offset : this.pagination.limit * (++this.pagination.currentPage-1),
+                commit : commitName
+            })
+            .then(() => {
+                console.log(this.listPost.length - this.pagination.lengthListPost < this.pagination.limit)
+                if(this.listPost.length - this.pagination.lengthListPost < this.pagination.limit) this.pagination.limitReached = true;
+                this.pagination.lengthListPost = this.listPost.length;
+            })
+        },
+        resetPagination(){
+            this.pagination.limitReached = false;
+            this.pagination.lengthListPost = 0;
+            this.pagination.currentPage = 0;
+        },
+        handleScroll(){
+            const isBottomOfChannel = this.scrollY.scrollTop + window.innerHeight === this.scrollY.scrollHeight;
+            if(isBottomOfChannel && !this.pagination.limitReached) this.getlistPostOfChannel("PUSH_LIST_POST");            
+        }
     },
     created() {
         this.channelId = this.$route.params.id;
-        this.getListPost(this.channelId);
+        this.getlistPostOfChannel("SET_LIST_POST")
     },
     mounted(){
+        this.scrollY =  document.getElementById('scrollY');
+        this.scrollY.addEventListener('scroll', () => this.handleScroll(),true);
         this.SET_TEXTAREA(this.$refs['formPost'].textarea);
         this.SET_CHANNEL_ID(this.channelId);
     },
+    unmounted() {
+        this.scrollY.removeEventListener('scroll', () => this.handleScroll(),true);
+    },
     beforeRouteUpdate(to) {
         this.channelId = to.params.id;
-        this.getListPost(this.channelId);
+        this.resetPagination();
+        this.getlistPostOfChannel("SET_LIST_POST");
     },
 };
 </script>

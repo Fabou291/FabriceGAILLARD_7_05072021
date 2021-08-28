@@ -71,11 +71,11 @@ const findAllPostOfChannel = (req,res,next) => {
         mysqlDataBase.query(
             `SELECT p.*, GROUP_CONCAT(i.user_id) as list_user_id, i.emoji_id FROM (
                 SELECT p.*, u.username as user_username, u.avatar as user_avatar FROM (
-                    SELECT p.* FROM (SELECT * FROM post WHERE channel_id = ? AND post_id IS NULL ORDER BY created_at DESC LIMIT 10 OFFSET 0) as p
+                    SELECT p.* FROM (SELECT * FROM post WHERE channel_id = ? AND post_id IS NULL ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}) as p
                     UNION
                     SELECT c.* FROM 
                     (SELECT * FROM post WHERE post_id IS NOT NULL ORDER BY created_at DESC) as c
-                    JOIN (SELECT * FROM post WHERE channel_id = ? AND post_id IS NULL ORDER BY created_at DESC LIMIT 10 OFFSET 0) as p
+                    JOIN (SELECT * FROM post WHERE channel_id = ? AND post_id IS NULL ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}) as p
                     ON p.id = c.post_id
                 ) as p
                 LEFT JOIN user as u

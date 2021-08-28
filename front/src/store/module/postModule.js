@@ -5,7 +5,7 @@ export default {
         idPostInModifyMode: null,
         idPostToReply: null,
         ActionListVisible : false,
-        listPost: null,
+        listPost: [],
     },
     mutations: {
         SET_ACTION_LIST_VISIBLE(state, visibility) {
@@ -21,6 +21,10 @@ export default {
 
         SET_LIST_POST(state, listPost) {
             state.listPost = listPost;
+        },
+
+        PUSH_LIST_POST(state, listPost) {
+            state.listPost.push(...listPost);
         },
 
         ADD_POST(state, data) {
@@ -55,13 +59,14 @@ export default {
         },
     },
     actions: {
-        async getListPost(state, channelId) {
+        async getListPost(state, req) {
             try {
-                state.commit("SET_LIST_POST", await HTTPRequest.get(`channel/${channelId}/post?limit=10&offset=0`));
+                state.commit(req.commit, await HTTPRequest.get(`channel/${req.channelId}/post?limit=${req.limit}&offset=${req.offset}`));
             } catch (e) {
                 console.log(e);
             }
         },
+        
 
         async addPost({ state, commit, dispatch, rootGetters }, payload) {
             try {
