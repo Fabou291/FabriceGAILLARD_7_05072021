@@ -4,11 +4,13 @@
   "private": true,
 
   "scripts": {
+    "preinstall": "npx npm-force-resolutions",
     "front": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "back": "nodemon ./back/server.js"
   },
+  "resolutions": { "glob-parent": "^6.0.1" },
   "dependencies": {
     "bcrypt": "^5.0.1",
     "core-js": "^3.6.5",
