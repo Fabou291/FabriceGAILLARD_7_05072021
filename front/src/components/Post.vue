@@ -1,5 +1,5 @@
 <template>
-    <div :id="`post-id-${post.id}`">
+    <div :id="`post-id-${post.id}`" tabindex="0">
         <InteractionPost class="post__interaction" :isOnRecursifPost="isRecursif" v-show="!isInModifyMode" :user_id="parseInt(post.user_id)" @replyPost="setIdPostToReply(post.id)" @removePost="remove" @modifyPost="SET_ID_POST_IN_MODIFY_MODE(post.id)"/>
         <div class="post__sidebar"></div>
         <div class="post__main">
@@ -79,6 +79,17 @@
     margin : 0 0 20px 0;
     position : relative;
 
+    &:focus-within{
+        .post__main {
+            background-color : $grey-38;
+        }
+    }
+    &:focus, &:focus-visible, &:focus-within{
+        .post__interaction{
+            display : block;
+        }
+    }
+
 
     &.post--recursive{
         
@@ -97,9 +108,10 @@
             border-radius : 0;
         }
 
-        &:hover{
+
+        &:hover, &:focus-within{
             .post__main {
-                background-color : lighten($grey-25, 1);
+                background-color : darken($grey-32,1);
             }
             .post__sidebar {
                 background-color: lighten($grey-47,7);
@@ -110,7 +122,7 @@
     &:hover{
         
         .post__main {
-            background-color : lighten($grey-32, 1);
+            background-color : $grey-38;
         }
             
         
@@ -188,7 +200,7 @@
         letter-spacing: -0.1px;
         font-size: 16px;
         color: $grey-193;
-        overflow-wrap: anywhere;
+        word-wrap: break-word;
     }
 
     &__image{

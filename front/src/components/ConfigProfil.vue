@@ -71,15 +71,15 @@
 
                             <hr />
 
-                            <div class="link-btn link-btn--info" @click="logout">
+                            <button class="link-btn link-btn--info config-sidebar__btn" @click="logout">
                                 Déconnexion
-                            </div>
+                            </button>
 
                             <hr />
 
-                            <div class="link-btn link-btn--danger" @click="remove">
+                            <button class="link-btn link-btn--danger config-sidebar__btn" @click="remove">
                                 Supprimer le compte
-                            </div>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -320,7 +320,7 @@ export default {
 .card-section {
     display: flex;
     font-size: 13px;
-    @include textEllipsis(); //JE COMPRENDS PAS POURQUOI AUCUN NE FAIT EFFET
+    @include textEllipsis(); 
 
     &:not(:last-child) {
         margin: 0 0 20px 0;

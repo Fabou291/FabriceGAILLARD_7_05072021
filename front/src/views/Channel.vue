@@ -102,6 +102,7 @@ export default {
         }
     },
     created() {
+        this.channel = this.getChannelById(this.channel.id)
         this.channel.id = this.$route.params.id;
         this.getlistPostOfChannel("SET_LIST_POST")
     },
@@ -154,7 +155,16 @@ $FormPostPaddingTop : 20px;
             font-size: 13px;
             letter-spacing: 0.3px;
             margin: 0;
-            padding: 0 0 34px 0;
+            text-overflow : ellipsis;
+            overflow: hidden;
+
+            word-wrap: break-word;
+            max-height: 3.6em;
+            height: 3.6em;
+            line-height: 1.2em;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical; 
         }
 
         &__formPost {

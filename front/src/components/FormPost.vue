@@ -19,7 +19,8 @@
                 
 
                 @keypress.enter.prevent="submit"
-                @keydown.esc="escape"
+                @keydown.shift.enter.exact="addLine"
+                @keydown.esc.exact="escape"
                 @input="parseEmoji(); parseUrl(); textarea.normalize(); $emit('updateInput', HandlerDivEditable.getTextContent());"
                 @focusout="HandlerDivEditable.setTempDatas"
 
@@ -28,7 +29,8 @@
                 :title="placeholder"
                 ref="textarea"
                 spellcheck="false"
-                v-html="value"    
+                v-html="value" 
+                tabindex="0"
 
             ></div>
 
@@ -111,7 +113,7 @@ export default {
             //Vu que ca sera restreint à répondre auniquement au post (et non au post recursif)
             //je peux aller piocher dans l'array listPost sans me soucier
             return this.listPost.find(e => e.id == this.idPostToReply).user_username
-        }
+        },
     },
     methods: {
         ...mapMutations('emojiModule', ['SET_POSITION', 'SET_VISIBILITY', 'SET_HANDLER_DIV_EDITABLE']),
@@ -227,7 +229,6 @@ export default {
         },
 
         ///NEW
-
         parseEmoji(){
             this.HandlerDivEditable.setTempDatas();
             this.HandlerDivEditable.append(
@@ -235,14 +236,16 @@ export default {
             )
             this.HandlerDivEditable.setTempDatas();
         },
-
         parseUrl(){
             this.HandlerDivEditable.setTempDatas();
             this.HandlerDivEditable.append(
                 this.UrlParser.parse()
             )
             this.HandlerDivEditable.setTempDatas();
-        }
+        },
+        addLine(){
+            console.log('addLine')
+        },
 
     },
     mounted() {
@@ -262,6 +265,9 @@ export default {
 .form-post {
     border-radius: 4px;
     background-color: $grey-47;
+
+
+
     &__container{
         
         color: $grey-142;
@@ -287,12 +293,15 @@ export default {
         overflow: hidden;
         padding: 7px;
         word-break: break-all;
+        border-radius: 4px;
         @include setCircularStdFont("Book");
 
         @include setMediaScreen(mobile){
             order : 1;
             min-width : 100%;
         }
+
+
 
         &:not(:empty) {
             color: lighten($grey-142, 30%);

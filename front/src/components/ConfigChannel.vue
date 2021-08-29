@@ -37,7 +37,7 @@
 
                             <hr />
 
-                            <div class="link-btn link-btn--danger" @click.stop="remove">
+                            <div class="link-btn link-btn--danger" @click.stop="removeChannel">
                                 Supprimer le channel
                             </div>
                         </div>
@@ -141,8 +141,10 @@ export default {
     methods: {
         ...mapMutations("configChannelModule", ["OPEN", "CLOSE_CONFIG"]),
         ...mapActions("configChannelModule", ["modify", "remove"]),
-        switchSidebarVisibility(){
-            this.sidebar.visible = !this.sidebar.visible;
+        switchSidebarVisibility(){ this.sidebar.visible = !this.sidebar.visible;  },
+        async removeChannel() {
+            await this.remove();
+            if(this.activeChannel.id == this.$route.params.id) this.$router.push({name : 'Home'})
         }
     },
     components: { InputDefaultIcon, BtnDefault },
@@ -210,6 +212,10 @@ export default {
 }
 .config-sidebar {
     top: 0 !important;
+
+    &__btn{
+        text-align : left;
+    }
 
     @include setMediaScreen(tablette) {
         padding: 0px !important;

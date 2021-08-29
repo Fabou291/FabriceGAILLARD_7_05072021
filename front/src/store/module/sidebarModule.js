@@ -8,6 +8,7 @@ export default {
     },
     getters : {
         getChannelById: state => id => {
+            if(!state.listGroup) return {}
             return state.listGroup.reduce( (a,e) => a = a.concat(e.listChannel), []).find(e => e.id == id);
         }
     },
