@@ -57,6 +57,22 @@ export default {
                 : state.listPost.find((e) => e.id == post.id);
             listPost.content = post.content;
         },
+
+        UPDATE_USER_OF_POST(state, user){
+            const updateUser = (post) => {
+                Object.assign(
+                    post, 
+                    { user_username : user.username, user_description : user.description, user_avatar : user.avatar }
+                )
+            }
+            
+            state.listPost.forEach(post => {
+                if(post.user_id == user.id) updateUser(post);
+                post.listComment.forEach(comment => { 
+                    if(post.user_id == user.id) updateUser(comment); 
+                })
+            });
+        }
     },
     actions: {
         async getListPost(state, req) {
@@ -68,7 +84,7 @@ export default {
         },
         
 
-        async addPost({ state, commit, dispatch, rootGetters }, payload) {
+        async addPost({ state, commit, dispatch, rootState }, payload) {
             try {
                 const typeFormData = payload.file ? true : false;
                 let body = { ...payload, postId: state.idPostToReply };
@@ -81,7 +97,7 @@ export default {
                     image_url: response.imageUrl,
                     content: payload.content,
                     post_id: state.idPostToReply,
-                    user: rootGetters["userModule/user"],
+                    user: rootState.userModule.user,
                 });
                 dispatch("setIdPostToReply", null);
             } catch (e) {

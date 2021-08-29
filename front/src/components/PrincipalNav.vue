@@ -13,7 +13,7 @@
                     <div class="user__id">#{{ user.id }}</div>
                 </div>
                 
-                <button class="user__btn-setting" @click="openConfigDisplay()">
+                <button class="user__btn-setting" @click="openConfigDisplay()" >
                     <svg aria-hidden="false" class="user__btn-setting-icon" width="20" height="20" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -38,7 +38,7 @@
 import ChannelGroup from "@/components/PrincipalNav/ChannelGroup.vue"
 import UserStatuButton from "@/components/userStatuButton.vue"
 import Avatar from '@/components/Avatar.vue';
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapState } from 'vuex';
 
 export default {
     components : {
@@ -54,7 +54,7 @@ export default {
     },
     computed : {
         ...mapState('sidebarModule', ['listGroup', 'visible']),
-        ...mapGetters('userModule',['user']),
+        ...mapState('userModule',['user']),
     },
     methods : {
         ...mapActions('sidebarModule',['setListGroup','switchVisibility']),

@@ -30,7 +30,7 @@ router.beforeEach(async (to, from, next) => {
         const { userId } = JWT.decode(accessToken);
      
         
-        if(store.state.userModule.id == null) await store.dispatch('userModule/getById', userId ,{root : true})
+        if(store.state.userModule.user.id == null) await store.dispatch('userModule/getById', userId ,{root : true})
         else return next();
     }
     return next();

@@ -135,7 +135,7 @@
 
                                 <div class="user-card__section-container">
                                     <div class="card-section">
-                                        <div>
+                                        <div class="card-section__caption">
                                             <div class="card-section__entitled">NOM DE L'UTILISATEUR</div>
                                             {{ user.username }}
                                         </div>
@@ -156,7 +156,7 @@
                                     </div>
 
                                     <div class="card-section">
-                                        <div>
+                                        <div class="card-section__caption">
                                             <div class="card-section__entitled">ADRESSE E-MAIL</div>
                                             *********@*********
                                         </div>
@@ -177,7 +177,7 @@
                                     </div>
 
                                     <div class="card-section">
-                                        <div>
+                                        <div class="card-section__caption">
                                             <div class="card-section__entitled">MOT DE PASSE</div>
                                             ********************
                                         </div>
@@ -223,7 +223,7 @@
 
 <script>
 
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 import ModifyUserForm from "@/components/form/configProfil/ModifyUserForm.vue";
 import ResetMailForm from "@/components/form/configProfil/ResetMailForm.vue";
@@ -245,7 +245,7 @@ export default {
         },
     },
     computed: {
-        ...mapGetters("userModule", ["user"]),
+        ...mapState("userModule", ["user"]),
         ...mapState("userModule", ["configDisplay"]),
     },
     methods: {
@@ -320,9 +320,14 @@ export default {
 .card-section {
     display: flex;
     font-size: 13px;
+    @include textEllipsis(); //JE COMPRENDS PAS POURQUOI AUCUN NE FAIT EFFET
 
     &:not(:last-child) {
         margin: 0 0 20px 0;
+    }
+
+    &__caption {
+        @include textEllipsis();
     }
 
     &__entitled {
@@ -334,7 +339,7 @@ export default {
 
     &__btn {
         margin-left: auto;
-        width: 100px;
+        
 
         &-text-content{
             display : block;

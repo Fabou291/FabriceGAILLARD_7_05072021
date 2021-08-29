@@ -1,6 +1,6 @@
 <template>
     <div :id="`post-id-${post.id}`">
-        <InteractionPost class="post__interaction" v-show="!isInModifyMode" :user_id="parseInt(post.user_id)" @replyPost="setIdPostToReply(post.id)" @removePost="remove" @modifyPost="SET_ID_POST_IN_MODIFY_MODE(post.id)"/>
+        <InteractionPost class="post__interaction" :isOnRecursifPost="isRecursif" v-show="!isInModifyMode" :user_id="parseInt(post.user_id)" @replyPost="setIdPostToReply(post.id)" @removePost="remove" @modifyPost="SET_ID_POST_IN_MODIFY_MODE(post.id)"/>
         <div class="post__sidebar"></div>
         <div class="post__main">
             
@@ -55,7 +55,8 @@
             getContent(){ return this.parseContent() }
         },
         props : {
-            post : { type : Object, required : true }
+            post : { type : Object, required : true },
+            isRecursif : { type: Boolean, required : true }
         },
         methods : {
             ...mapActions('postModule', ["modifyPost", "removePost","setIdPostToReply"]),
@@ -132,6 +133,7 @@
     &__main {
         background-color: $grey-32;
         padding: 20px;
+        min-width: 0;
 
         @include setMediaScreen(mobile){
             padding : 10px;
@@ -145,6 +147,7 @@
 
     &__infos {
         flex : 1;
+        min-width: 0;
     }
 
 
@@ -168,14 +171,16 @@
     }
 
     &__user-username{
-
+        
         @include setCircularStdFont('Medium');
         font-size : 15px;
+        @include textEllipsis();
     }
 
     &__date{
         color : $grey-113;
         font-size : 11px;
+        white-space: nowrap;
     }
 
     &__content{

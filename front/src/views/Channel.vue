@@ -14,11 +14,15 @@
 
         <div class="channel__posts">
             <template v-for="post in listPost" :key="post">
-                <Post class ="post" :post="post" />
-                    <Post class ="post post--recursive" :post="comment" v-for="comment in post.listComment" :key="comment.id" />              
+                <Post class ="post" :post="post" :isRecursif="false" />
+                    <Post class ="post post--recursive" :post="comment" v-for="comment in post.listComment" :key="comment.id" :isRecursif="true" />              
             </template>
-            <div class="channel__end" v-if="pagination.limitReached">
+            <div class="channel__end" v-if="pagination.limitReached && listPost.length != 0">
                 <span >Ceci est la fin du channel</span>
+                <span class="channel__end-name">{{ channel.name }}</span>
+            </div>
+            <div class="channel__end" v-if="listPost.length == 0">
+                <span >Il n'y à encore aucune publication dans ce channel</span>
                 <span class="channel__end-name">{{ channel.name }}</span>
             </div>
         </div>
@@ -56,7 +60,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters('userModule',['user']),
+        ...mapState('userModule',['user']),
         ...mapState('sidebarModule',['listGroup']),
         ...mapGetters('sidebarModule',['getChannelById']),
         ...mapState('postModule',['listPost']),
@@ -64,10 +68,14 @@ export default {
     watch : {
         listGroup(){
             this.channel = this.getChannelById(this.$route.params.id)
+        },
+        user(){
+            this.UPDATE_USER_OF_POST(this.user)
         }
     },
     methods: {
         ...mapActions('postModule',['getListPost','addPost']),
+        ...mapMutations('postModule',['UPDATE_USER_OF_POST']),
         ...mapMutations('inputPostChannelModule',['SET_TEXTAREA']),
         ...mapMutations('imagePostModule',['SET_CHANNEL_ID']),
         add(content){ this.addPost({ content, channelId : this.channel.id }) },

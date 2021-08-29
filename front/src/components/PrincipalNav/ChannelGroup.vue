@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import {  mapGetters,  mapMutations } from "vuex";
+import {  mapState, mapMutations } from "vuex";
 import DropDownBtn from "@/components/btn/DropDownBtn.vue";
 import ButtonPopUp from "@/components/ButtonPopUp.vue";
 
@@ -53,7 +53,7 @@ export default {
         };
     },
     computed: {
-        ...mapGetters('userModule', ['user']),
+        ...mapState('userModule', ['user']),
     },
     props: {
         group: { type: Object, required: true },

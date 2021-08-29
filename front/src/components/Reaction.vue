@@ -10,7 +10,7 @@ import { mapState } from 'vuex'
 
 export default {
     props : {
-        reaction : { type : Object, required : true}
+        reaction : { type : Object, required : true }
     },
     computed : {
         ...mapState('emojiModule',['emojisDataIndexed']),

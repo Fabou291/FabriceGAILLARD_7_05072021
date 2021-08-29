@@ -13,7 +13,7 @@
 <script>
 import BtnDefault from "@/components/btn/btnDefault.vue";
 import HTTPRequest from "@/js/HTTPRequest/HTTPRequest.js"
-import { mapGetters } from 'vuex';
+import { mapState } from 'vuex';
 
 export default {
     data() {
@@ -23,7 +23,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('userModule',['user']),
+        ...mapState('userModule',['user']),
         
     },
     methods: {

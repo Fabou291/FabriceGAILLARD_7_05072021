@@ -31,15 +31,13 @@ import ImagePostDisplay from "@/components/ImagePostDisplay.vue"
 
 
 
+
 //import EmojiPanel from "../components/EmojiPanel/EmojiPanel.vue";
 
 export default {
     name: "Home",
-    components: { Header, PrincipalNav, PanelCreateChannel, ConfigChannel,ConfigProfil, ImagePostDisplay
- 
+    components: { Header, PrincipalNav, PanelCreateChannel, ConfigChannel,ConfigProfil, ImagePostDisplay },
 
-        //EmojiPanel,
-    },
 };
 </script>
 

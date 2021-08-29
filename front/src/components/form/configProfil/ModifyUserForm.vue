@@ -11,7 +11,7 @@
 
 <script>
 import BtnDefault from "@/components/btn/btnDefault.vue";
-import {  mapActions, mapGetters } from 'vuex';
+import { mapState, mapActions, mapMutations } from 'vuex';
 
 export default {
     data() {
@@ -21,10 +21,11 @@ export default {
         }
     },
     computed : {
-        ...mapGetters('userModule',['user']),
+        ...mapState('userModule',['user']),
     },
     methods: {
         ...mapActions('userModule',['modify']),
+        ...mapMutations('userModule',['SET_CONFIG_DISPLAY_VISIBLE']),
         checkValidity(){
             if(!this.$refs['form'].reportValidity()) return;
             this.modify({
@@ -32,6 +33,7 @@ export default {
                username : this.username,
                description : this.description,
             })
+            this.SET_CONFIG_DISPLAY_VISIBLE(false);
         }
     },
     created(){

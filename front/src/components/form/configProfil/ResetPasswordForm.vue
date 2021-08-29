@@ -15,7 +15,7 @@
 
 <script>
 import BtnDefault from "@/components/btn/btnDefault.vue";
-import {  mapGetters } from 'vuex';
+import {  mapState } from 'vuex';
 import HTTPRequest from "@/js/HTTPRequest/HTTPRequest.js"
 
 
@@ -28,7 +28,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('userModule',['user']),
+        ...mapState('userModule',['user']),
     },
     methods: {
         checkValidity(){

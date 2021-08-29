@@ -227,6 +227,7 @@ export default {
     }
 
     &__group {
+        display : flex;
         color: $grey-166;
         font-size: 12px;
         padding: 0 0 10px 0;
@@ -234,6 +235,7 @@ export default {
 
     &__group-title {
         @include setCircularStdFont("Black");
+        @include textEllipsis();
         text-transform: uppercase;
     }
 
