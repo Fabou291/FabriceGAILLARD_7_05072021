@@ -17,10 +17,8 @@
 
             <footer class="upload-img-modal__footer">
                 <BtnDefault type="button" @click.stop="close">Annuler</BtnDefault>
-                <BtnDefault type="submit" class="btn-default--green upload-img-modal__btn" @click.prevent="submit">
-                    Valider
-                </BtnDefault>
-            </footer>                    
+                <BtnDefault type="submit" class="btn-default--green upload-img-modal__btn" @click.prevent="submit"> Valider </BtnDefault>
+            </footer>
         </div>
     </div>
 </template>
@@ -86,6 +84,7 @@ export default {
         },
         updateInput(content){
             this.input = content;
+            console.log(this.input)
         }
     },
 

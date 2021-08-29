@@ -187,6 +187,7 @@
     }
 
     &__image{
+        display : block;
         max-width : 100%;
         max-height : 400px;
         margin : 8px 0 0 0;

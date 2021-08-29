@@ -3,6 +3,8 @@ export default class ContentParser {
     content;
     emojisShortCodeIndex;
 
+    urlReg = /https?:\/\/[www.]?[\w]+\.[\w()]+[-a-zA-Z0-9()@:%_+.~#?&/=]+/g;
+
     constructor(content, emojisShortCodeIndex){
         this.content = content;
         this.emojisShortCodeIndex = emojisShortCodeIndex;
@@ -24,7 +26,7 @@ export default class ContentParser {
                 const start = match.index;
                 this.content = 
                     this.content.substring(0,start) 
-                    + this.createImgTemplate(shortCode) 
+                    + this.createImgEmojiTemplate(shortCode) 
                     + this.content.substring(match[0].length + start);
             }
         });
@@ -32,13 +34,27 @@ export default class ContentParser {
         return this;
     }
 
+    parseUrlImage(){
+        const urlImgReg = /https?:\/\/[www.]?[\w]+\.[\w()]+[-a-zA-Z0-9()@:%_+.~#?&/=]+.(png|jpg|jpeg|jfif|pjpeg|pjp|gif|webp|tiff|svg|apng|avif)$/
+        const listImage = [];
+        [...this.content.matchAll(this.urlReg)].forEach(match => {
+            const url = match[0];
+            if(urlImgReg.test(url)){ 
+                this.content = this.content.replace(url, '');
+                listImage.push( `<img class="post__image" src="${url}"/>` )
+            }
+        })  
+        return listImage;      
+    }
+
     parseUrl(){
-        const reg = /https?:\/\/[www.]?[\w]+\.[\w()]+[-a-zA-Z0-9()@:%_+.~#?&/=]+/g;
-        this.content = this.content.replaceAll(reg, "<a href='$&'>$&</a>");
+        const listImage = this.parseUrlImage();
+
+        this.content = this.content.replaceAll(this.urlReg, "<a href='$&'>$&</a>") + listImage.reduce((a,image) => a += image, '');
         return this;
     }
 
-    createImgTemplate(shortCode){
+    createImgEmojiTemplate(shortCode){
         return `
             <img width="15px" alt="${shortCode}" src="${require("@/assets/twemoji/svg/" +
                     this.emojisShortCodeIndex[shortCode].u.join("-").toLowerCase() +

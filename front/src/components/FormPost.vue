@@ -20,7 +20,7 @@
 
                 @keypress.enter.prevent="submit"
                 @keydown.esc="escape"
-                @input="parseEmoji(); parseUrl(); textarea.normalize();"
+                @input="parseEmoji(); parseUrl(); textarea.normalize(); $emit('updateInput', HandlerDivEditable.getTextContent());"
                 @focusout="HandlerDivEditable.setTempDatas"
 
                 class="form-post__field"
