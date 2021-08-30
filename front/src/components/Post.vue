@@ -204,8 +204,8 @@ export default {
     &__interaction {
         position: absolute;
         display: none;
-        top: -20px;
-        right: 10px;
+        top: -10px;
+        right: 5px;
     }
 
     &__aside {

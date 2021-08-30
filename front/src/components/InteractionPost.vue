@@ -58,7 +58,8 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import handlerDisplayEmoji from "@/js/handlerDisplayEmoji.js"
+import handlerDisplayEmoji from "@/js/handlerDisplayEmoji.js";
+
 export default {
     props: {
         user_id: { type: Number, required: true },
@@ -88,6 +89,7 @@ export default {
             this.OPEN();
         },
     },
+
 };
 </script>
 
@@ -95,8 +97,15 @@ export default {
 .interaction-post {
     color: $grey-142;
     border-radius: 4px;
-    overflow: hidden;
-    box-shadow: 0px 0px 1px black;
+
+    box-shadow: 0px 1px 1px rgba(black,0.3);
+    background-color: $grey-59;
+    color : $grey-193;
+    transition : box-shadow 0.2s, color 0.2s;
+
+    &:hover, &:focus-within{
+        box-shadow: 0px 3px 6px rgba(black,0.3);
+    }
 
     &__list {
         display: flex;
@@ -105,13 +114,13 @@ export default {
     }
 
     &__btn {
-        background-color: darken($grey-32, 1%);
-        width: 38px;
-        height: 35px;
+        width: 32px;
+        height: 32px;
         vertical-align: center;
+
         &:hover {
-            background-color: lighten($grey-32, 3%);
-            color: lighten($grey-142, 4%);
+            background-color: lighten($grey-59, 5);
+            color : white;
         }
     }
 }

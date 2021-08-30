@@ -1,30 +1,35 @@
 <template>
     
-    <section class="channel" id="channel">
+    <section class="channel" id="channel" >
+        <div v-show="channel.id">
             <EmojiPanel/>        
-        <div class="channel__caption" id="channel__caption">
-            <span class="tag-content">CHANNEL</span>
-            <h1 class="channel__title">Bienvenue sur {{ channel.name }}</h1>
-            <p class="channel__description">{{ channel.description || 'Aucune description' }}</p>            
-        </div>
-
-        <div class="channel__formPost">
-            <FormPost @submit="add" ref="formPost"  :canBrownse="true" :canGIF="true" :canEmoji="true" :canRespond="true" :sticky="true" />            
-        </div>
-
-        <div class="channel__posts">
-            <template v-for="post in listPost" :key="post">
-                <Post class ="post" :post="post" :isRecursif="false" />
-                    <Post class ="post post--recursive" :post="comment" v-for="comment in post.listComment" :key="comment.id" :isRecursif="true" />              
-            </template>
-            <div class="channel__end" v-if="pagination.limitReached && listPost.length != 0">
-                <span >Ceci est la fin du channel</span>
-                <span class="channel__end-name">{{ channel.name }}</span>
+            <div class="channel__caption" id="channel__caption">
+                <span class="tag-content">CHANNEL</span>
+                <h1 class="channel__title">Bienvenue sur {{ channel.name }}</h1>
+                <p class="channel__description">{{ channel.description || 'Aucune description' }}</p>            
             </div>
-            <div class="channel__end" v-if="listPost.length == 0">
-                <span >Il n'y à encore aucune publication dans ce channel</span>
-                <span class="channel__end-name">{{ channel.name }}</span>
+
+            <div class="channel__formPost">
+                <FormPost @submit="add" ref="formPost"  :canBrownse="true" :canGIF="true" :canEmoji="true" :canRespond="true" :sticky="true" />            
             </div>
+
+            <div class="channel__posts">
+                <template v-for="post in listPost" :key="post">
+                    <Post class ="post" :post="post" :isRecursif="false" />
+                        <Post class ="post post--recursive" :post="comment" v-for="comment in post.listComment" :key="comment.id" :isRecursif="true" />              
+                </template>
+                <div class="channel__end" v-if="pagination.limitReached && listPost.length != 0">
+                    <span >Ceci est la fin du channel</span>
+                    <span class="channel__end-name">{{ channel.name }}</span>
+                </div>
+                <div class="channel__end" v-if="listPost.length == 0">
+                    <span >Il n'y à encore aucune publication dans ce channel</span>
+                    <span class="channel__end-name">{{ channel.name }}</span>
+                </div>
+            </div>
+        </div>
+        <div v-if="!channel.id">
+            AUCUN CHANNEL NE CORRESPOND OUPS 404
         </div>
     </section>
 </template>
@@ -32,8 +37,9 @@
 <script>
 import FormPost from "@/components/FormPost.vue";
 import Post from "@/components/Post.vue";
-import { mapActions, mapGetters,  mapMutations,  mapState } from "vuex";
+import { mapActions,  mapMutations,  mapState } from "vuex";
 import EmojiPanel from "../components/EmojiPanel/EmojiPanel.vue";
+import HTTPRequest from "@/js/HTTPRequest/HTTPRequest.js";
 
 export default {
     name: "Home",
@@ -44,7 +50,6 @@ export default {
     },
     data() {
         return {
-            channelId : null,
             channel : {
                 id : null,
                 name : null,
@@ -56,19 +61,16 @@ export default {
                 lengthListPost : 0,
                 limit : 10,
                 scrollY : null,
+                inProgress : false
             },
         };
     },
     computed: {
         ...mapState('userModule',['user']),
         ...mapState('sidebarModule',['listGroup']),
-        ...mapGetters('sidebarModule',['getChannelById']),
         ...mapState('postModule',['listPost']),
     },
     watch : {
-        listGroup(){
-            this.channel = this.getChannelById(this.$route.params.id)
-        },
         user(){
             this.UPDATE_USER_OF_POST(this.user)
         }
@@ -89,36 +91,54 @@ export default {
             .then(() => {
                 if(this.listPost.length - this.pagination.lengthListPost < this.pagination.limit) this.pagination.limitReached = true;
                 this.pagination.lengthListPost = this.listPost.length;
+                this.pagination.inProgress = false;
             })
         },
         resetPagination(){
             this.pagination.limitReached = false;
             this.pagination.lengthListPost = 0;
             this.pagination.currentPage = 0;
+            this.pagination.inProgress = false;
         },
         handleScroll(){
-            const isBottomOfChannel = this.scrollY.scrollTop + this.scrollY.getBoundingClientRect().height >= this.scrollY.scrollHeight*90/100;
-            if(isBottomOfChannel && !this.pagination.limitReached) this.getlistPostOfChannel("PUSH_LIST_POST");            
+            const isBottomOfChannel = this.scrollY.scrollTop + this.scrollY.getBoundingClientRect().height >= this.scrollY.scrollHeight;
+            if(isBottomOfChannel && !this.pagination.limitReached && !this.pagination.inProgress){
+                this.pagination.inProgress = true;
+                this.getlistPostOfChannel("PUSH_LIST_POST");
+            }             
+        },
+        async getChannelById(channel_id){
+            const response = await HTTPRequest.get(`channel/${channel_id}`);
+            if(response.length == 0) return { id : null, name : null, description : null }
+            const { id, name, description } = response[0];
+            return { id, name, description };
+        },
+        init(){
+            this.getlistPostOfChannel("SET_LIST_POST");
+            this.SET_TEXTAREA(this.$refs['formPost'].textarea);
+            this.SET_CHANNEL_ID(this.channel.id); 
+            this.scrollY.addEventListener('scroll', this.handleScroll,false);
         }
     },
-    created() {
-        this.channel = this.getChannelById(this.channel.id)
-        this.channel.id = this.$route.params.id;
-        this.getlistPostOfChannel("SET_LIST_POST")
-    },
     mounted(){
-        this.scrollY =  document.getElementById('scrollY');
-        this.scrollY.addEventListener('scroll', () => this.handleScroll(),true);
-        this.SET_TEXTAREA(this.$refs['formPost'].textarea);
-        this.SET_CHANNEL_ID(this.channel.id);
+        this.getChannelById(this.$route.params.id).then(channel => {
+            this.channel = channel;
+            if(this.channel){
+                this.scrollY =  document.getElementById('scrollY');
+                this.init();
+            }
+        })
     },
     unmounted() {
-        this.scrollY.removeEventListener('scroll', () => this.handleScroll(),true);
+        this.scrollY.removeEventListener('scroll', this.handleScroll,false);
     },
     beforeRouteUpdate(to) {
-        this.channel = this.getChannelById(to.params.id)
-        this.resetPagination();
-        this.getlistPostOfChannel("SET_LIST_POST");
+        this.scrollY.removeEventListener('scroll', this.handleScroll,false);
+        this.getChannelById(to.params.id).then(channel => {
+            this.resetPagination();
+            this.channel = channel;
+            if(this.channel) this.init();
+        })
     },
 };
 </script>

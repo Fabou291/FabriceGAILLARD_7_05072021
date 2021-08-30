@@ -35,12 +35,12 @@ import { mapMutations } from 'vuex';
       }
     },
     mounted(){
-      window.addEventListener('click', this.shutDownByClick, true)
+      window.addEventListener('mousedown', this.shutDownByClick, true)
       window.addEventListener('keyup', this.shutDownModalsByKeyCode, true)
 
     },
     unmounted(){
-      window.removeListener('click', this.shutDownByClick, true)
+      window.removeListener('mousedown', this.shutDownByClick, true)
       window.removeListener('keyup', this.shutDownModalsByKeyCode, true)
     }
   }

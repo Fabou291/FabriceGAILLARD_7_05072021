@@ -37,7 +37,7 @@ CREATE TABLE channel(
 
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
-    description VARCHAR(150),
+    description VARCHAR(255),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     channel_group_id INTEGER NOT NULL,

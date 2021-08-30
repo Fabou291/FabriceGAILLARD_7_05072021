@@ -94,14 +94,18 @@
                         </InputDefaultIcon>
 
                         <label class="create-panel__label" for="name">DESCRIPTION DU CHANNEL</label>
-                        <textarea
-                            name=""
-                            id=""
-                            rows="10"
-                            class="input-default input-default--colorA"
+                        <TextareaCounter 
+                            :name="''"
+                            :id="''"
+                            :rows="10"
+                            :maxLength="255"
+                            :className="'input-default input-default--colorA'"
                             v-model="description"
-                            placeholder="Apprend à tous le monde comment utiliser ce channel !"
-                        ></textarea>
+                            :placeholder="'Apprend à tous le monde comment utiliser ce channel !'"
+                        />
+
+                        
+
                         <BtnDefault
                             type="submit"
                             class="form-channel__submit btn-default--green create-panel__btn"
@@ -118,6 +122,7 @@
 <script>
 import InputDefaultIcon from "@/components/field/inputDefaultIcon.vue";
 import BtnDefault from "@/components/btn/btnDefault.vue";
+import TextareaCounter from "@/components/form/TextareaCounter.vue";
 import { mapState, mapMutations, mapActions } from "vuex";
 export default {
     data() {
@@ -147,7 +152,7 @@ export default {
             if(this.activeChannel.id == this.$route.params.id) this.$router.push({name : 'Home'})
         }
     },
-    components: { InputDefaultIcon, BtnDefault },
+    components: { InputDefaultIcon, BtnDefault, TextareaCounter },
 };
 </script>
 

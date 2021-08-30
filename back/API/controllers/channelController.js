@@ -62,7 +62,7 @@ const findAllPostOfChannel = (req,res,next) => {
                     ON p.id = c.post_id
                 ) as p
                 LEFT JOIN user as u
-                ON p.user_id = u.id        
+                ON p.user_id = u.id
             ) as p
             LEFT OUTER JOIN reaction as i
             ON i.post_id = p.id 
