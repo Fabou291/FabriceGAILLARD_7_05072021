@@ -7,6 +7,16 @@ export default {
         ActionListVisible : false,
         listPost: [],
     },
+    getters: {
+        getPostById : () => (id,listPost) => {
+
+            for (const post of listPost) {
+                if(post.id == id) return post
+                if(post.listComment.length > 0) this.getPostById(id, post.listComment );
+            }
+            return null;
+        }
+    },
     mutations: {
         SET_ACTION_LIST_VISIBLE(state, visibility) {
             state.ActionListVisible = visibility;
@@ -45,6 +55,17 @@ export default {
                 listReaction: [],
             });
         },
+
+        ADD_REACTION(state, data){
+            state;
+            if(!data.listReaction) data.listReaction.push();
+            else{
+                const reaction = data.listReaction.find(e => e.emoji_id == data.emojiId);
+                if(reaction) reaction.push(data.user_id).filter((element,index, array) => array.indexOf(element) == index)
+                else data.listReaction.push({ emoji_id : data.emojiId, list_user_id : [ data.userId ] });
+            }
+        },
+
 
         REMOVE_POST(state, post) {
             const listPost = post.post_id ? state.listPost.find((e) => e.id == post.post_id).listComment : state.listPost;
@@ -123,6 +144,19 @@ export default {
                 console.log(e);
             }
         },
+
+        async addReaction(context, body) {
+            try {
+                if ((await HTTPRequest.post(`reaction/`, body)).affectedRows) {
+                    const listReaction = context.getters.getPostById(body.postId, context.state.listPost).listReaction;
+                    context.commit("ADD_REACTION", {...body, listReaction});
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        },
+
+
 
         setIdPostToReply(state, id) {
             state.commit("SET_ID_POST_IN_MODIFY_MODE", null);

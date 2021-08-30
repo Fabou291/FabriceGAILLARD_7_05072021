@@ -14,10 +14,10 @@ import { mapMutations } from 'vuex';
     },
     components : { Headband },
     methods: {
-      ...mapMutations('emojiModule',['SET_VISIBILITY']),
+      ...mapMutations('emojiModule',['CLOSE']),
       ...mapMutations('postModule',['SET_ACTION_LIST_VISIBLE']),
       shutDownModals() {
-          this.SET_VISIBILITY(false);
+          this.CLOSE();
           this.SET_ACTION_LIST_VISIBLE(false);
       },
       shutDownModalsByKeyCode(e){

@@ -64,7 +64,7 @@ const findAllPostOfChannel = (req,res,next) => {
                 LEFT JOIN user as u
                 ON p.user_id = u.id        
             ) as p
-            LEFT OUTER JOIN interaction as i
+            LEFT OUTER JOIN reaction as i
             ON i.post_id = p.id 
             GROUP BY p.id, i.emoji_id
             ORDER BY p.created_at DESC;`,
@@ -78,13 +78,13 @@ const findAllPostOfChannel = (req,res,next) => {
                     const exist = post => listPost.findIndex(e => e.id == post.id) != -1;
                     const get = id => listPost.find(e => e.id == id);
 
-                    //Ajoute les interactions à tous les post (post et comment)
+                    //Ajoute les reactions à tous les post (post et comment)
                     listRow.forEach(row => {
                         const { emoji_id, list_user_id, ...rest } = row; 
                         const post = { ...rest, created_at : DateHandler.getDateFromNow(rest.created_at), listReaction : [], listComment : [] };
 
                         if(!exist(post)) listPost.push(post)
-                        if(list_user_id != null) get(post.id).listReaction.push({ emoji_id, list_user_id });
+                        if(list_user_id != null) get(post.id).listReaction.push({ emoji_id, list_user_id :  list_user_id.split(',') });
                     });
 
 

@@ -22,6 +22,7 @@ const channelGroupRouter = require("./routes/channelGroupRouter.js");
 const channelRouter = require("./routes/channelRouter.js");
 const postRouter = require("./routes/postRouter.js");
 const commentRouter = require("./routes/commentRouter.js");
+const reactionRouter = require("./routes/reactionRouter.js");
 
 
 app.use(express.json());
@@ -33,6 +34,7 @@ app.use('/api/channel-group', channelGroupRouter);
 app.use('/api/post', postRouter);
 app.use('/api/channel', channelRouter);
 app.use('/api/comment', commentRouter);
+app.use('/api/reaction', reactionRouter);
 
 
 

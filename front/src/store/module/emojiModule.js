@@ -37,17 +37,18 @@ export default {
             width : 0,
             height : 0,
             visible : false,
-            handlerDivEditable : null
+            handlerDivEditable : null,
+            postId : null
         }
     },
     mutations : {
         CLOSE(state){
-            state.visible = false;
-            state.activeGroupChannel = { id : null, name : null };
+            state.display.visible = false;
+            state.display.handlerDivEditable = null;
+            state.display.postId = null;
         },
-        OPEN(state, activeGroupChannel){
-            state.activeGroupChannel = activeGroupChannel;
-            state.visible = true;
+        OPEN(state){
+            state.display.visible = true;
         },
         CHANGE_SKIN(state, index){
             state.skin = state.skinColors[index];
@@ -69,6 +70,9 @@ export default {
         SET_HANDLER_DIV_EDITABLE(state, handlerDivEditable){
             state.display.handlerDivEditable = handlerDivEditable;
         },
+        SET_POST_ID(state, postId){
+            state.display.postId = postId;
+        },
     },
     actions : {
         changeSkin({commit, dispatch}, index){
@@ -86,5 +90,6 @@ export default {
 
             commit('SET_EMOJIS_DATA_INDEXED',emojisDataIndexed); 
         },
+
     }
 };

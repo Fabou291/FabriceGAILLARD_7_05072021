@@ -83,13 +83,13 @@ CREATE TABLE blocked_user(
 
 );
 
-CREATE TABLE interaction(
+CREATE TABLE reaction(
     emoji_id SMALLINT NOT NULL,
     user_id INTEGER NOT NULL,
     post_id INTEGER NOT NULL,
-    CONSTRAINT FK_interaction_post_user_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE, 
-    CONSTRAINT FK_interaction_post_comment_id FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
-    UNIQUE KEY interaction_post_unique (emoji_id,user_id,post_id)
+    CONSTRAINT FK_reaction_post_user_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE, 
+    CONSTRAINT FK_reaction_post_comment_id FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
+    UNIQUE KEY reaction_post_unique (emoji_id,user_id,post_id)
 );
 
 
@@ -186,7 +186,7 @@ INSERT INTO post (content, post_id, user_id)
     ("com", 19, 1);
 
 
-INSERT INTO interaction (emoji_id, user_id, post_id)
+INSERT INTO reaction (emoji_id, user_id, post_id)
     VALUES
     (12, 1, 1), (5, 1, 1), (5, 2, 1),
 
@@ -229,4 +229,4 @@ SELECT * FROM user;
 SELECT * FROM channel_group;
 SELECT * FROM channel;
 SELECT * FROM post;
-SELECT * FROM interaction;
+SELECT * FROM reaction;

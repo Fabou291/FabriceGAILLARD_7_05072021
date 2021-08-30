@@ -77,6 +77,7 @@ import {   mapMutations, mapState } from "vuex";
 import EmojiParser from '@/js/editableDivParser/emojiParser.js';
 import UrlParser from '@/js/editableDivParser/urlParser.js';
 import HandlerDivEditable from '@/js/handlerDivEditable.js';
+import handlerDisplayEmoji from "@/js/handlerDisplayEmoji.js";
 export default {
     data() {
         return {
@@ -116,90 +117,19 @@ export default {
         },
     },
     methods: {
-        ...mapMutations('emojiModule', ['SET_POSITION', 'SET_VISIBILITY', 'SET_HANDLER_DIV_EDITABLE']),
+        ...mapMutations('emojiModule', ['SET_POSITION', 'OPEN', 'SET_HANDLER_DIV_EDITABLE']),
         ...mapMutations('postModule', ['SET_ID_POST_TO_REPLY']),
 
-        getInfoSticky(bound){
-            const paddingForm = 10;
-            return{
-                marginTop : document.getElementById('channel__caption').getBoundingClientRect().bottom + document.getElementById('scrollY').scrollTop + bound.height + paddingForm,
-                position : 'sticky',
-                top : 85,
-                channelPosition : 'relative'
-            }
-        },
-        getInfoAbsolute(bound){
-            return{
-                marginTop : bound.bottom,
-                position : 'unset',
-                top : 0,
-                channelPosition : 'unset'
-            }
-        },
-        getPxOutOfRange(y){
-            let diff = 0;
-            const heightTotalOfPanelEmoji = 454;
 
-            if( (y+heightTotalOfPanelEmoji) > window.innerHeight)
-                diff = (y+heightTotalOfPanelEmoji) - window.innerHeight;
-            
-            if( y < 0 ) diff =  y;
-
-            return diff;
-        },
         showEmojiDisplay(){
-            this.SET_VISIBILITY(true);
             this.SET_HANDLER_DIV_EDITABLE(this.HandlerDivEditable);
-
-            const bound = this.$refs['emojiFormBtn'].getBoundingClientRect();
-
-
-            const {marginTop, top, position, channelPosition} = this.sticky ? this.getInfoSticky(bound) : this.getInfoAbsolute(bound);
-            
-
-            
-
-            const displayEmojiStickyTop = document.getElementById('displayEmojiStickyTop');
-            displayEmojiStickyTop.style.position = position;
-
-            const espace = 20;
-            const paddingContainer = 30;
-
-            document.getElementById('channel').style.position = channelPosition ;
-
-            const height =  (bound.top/window.innerHeight > 0.5) ? 454 + bound.height + espace*2 : 0 ;
-
-
-            
-
-
-            const outOfRange = this.sticky ? 0 : this.getPxOutOfRange(marginTop  + espace - paddingContainer - height);
-
-
-            displayEmojiStickyTop.style.marginTop = marginTop  + espace - paddingContainer - height - outOfRange + 'px';
-            displayEmojiStickyTop.style.top = top + 'px';
-
-
-
-
-            
-           
-
-
-            
-            /*this.SET_POSITION({
-                y : top - 20 ,                
-            })*/
-            
-            
+            handlerDisplayEmoji.setPositionOfDisplay(this.$refs['emojiFormBtn'],this.sticky);
+            this.OPEN();
         },
 
-        escape(){
-            this.$emit('escape')
-        },
-        showBrownser(){
-            this.$refs['brownser'].show();
-        },
+        escape(){ this.$emit('escape') },
+
+        showBrownser(){ this.$refs['brownser'].show(); },
 
         submit() {
             const value = this.HandlerDivEditable.getTextContent().trim();
@@ -217,6 +147,7 @@ export default {
             selection.getRangeAt(0).insertNode(document.createTextNode(paste));
             this.parseEmoji();
         },
+
         drop(event) {
             let drop = event.dataTransfer.getData("text");
 
@@ -236,6 +167,7 @@ export default {
             )
             this.HandlerDivEditable.setTempDatas();
         },
+
         parseUrl(){
             this.HandlerDivEditable.setTempDatas();
             this.HandlerDivEditable.append(
@@ -243,10 +175,10 @@ export default {
             )
             this.HandlerDivEditable.setTempDatas();
         },
-        addLine(){
-            console.log('addLine')
-        },
 
+        addLine(){
+            console.log('retour chariot')
+        },
     },
     mounted() {
         this.textarea = this.$refs["textarea"];

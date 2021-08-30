@@ -133,8 +133,9 @@ export default {
         },
     },
     methods: {
-        ...mapMutations('emojiModule', ['SET_SIZE','SET_VISIBILITY']),
+        ...mapMutations('emojiModule', ['SET_SIZE','CLOSE','SET_POST_ID']),
         ...mapActions('emojiModule',['changeSkin']),
+        ...mapActions('postModule',['addReaction']),
         aze: function(actived) {
             this.actived = actived;
         },
@@ -170,7 +171,12 @@ export default {
             this.filterValue = value;
         },
         applyEmoji(emoji) {
-            //this.SET_VISIBILITY(false);
+            if(this.display.handlerDivEditable) this.addEmojiToForm(emoji);
+            else if(this.display.postId) this.addEmojiReaction(emoji);
+            else console.log('Error')
+            this.CLOSE();
+        },
+        addEmojiToForm(emoji){
             const tempSelection = this.display.handlerDivEditable.temp.selection
 
             const a = [...tempSelection.focusNode.textContent];
@@ -200,8 +206,12 @@ export default {
                         document.createTextNode(a.join(''))                
                     ]
                 }]);
-
-
+        },
+        addEmojiReaction(emoji){
+            this.addReaction({
+                postId : this.display.postId,
+                emojiId : emoji.i
+            })
         }
     },
     mounted(){

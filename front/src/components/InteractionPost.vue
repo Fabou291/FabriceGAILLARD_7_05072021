@@ -2,7 +2,7 @@
     <div class="interaction-post">
         <ul class="interaction-post__list">
             <li class="interaction-post__list-item">
-                <button type="button" class="interaction-post__btn">
+                <button type="button" class="interaction-post__btn" ref="interactionPostBtn" @click="raction">
                     <svg width="20" height="20" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -58,6 +58,7 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
+import handlerDisplayEmoji from "@/js/handlerDisplayEmoji.js"
 export default {
     props: {
         user_id: { type: Number, required: true },
@@ -71,16 +72,21 @@ export default {
     },
     methods: {
         ...mapMutations('postModule', ['SET_ID_POST_TO_REPLY']),
+        ...mapMutations('emojiModule', ['OPEN']),
         modify() {
             this.$emit("modifyPost");
             this.SET_ID_POST_TO_REPLY(null);
         },
-        reply() {
-            this.$emit("replyPost")
+        reply() { this.$emit("replyPost") },
+        remove(){ this.$emit("removePost"); },
+        raction(){ 
+            this.showEmojiDisplay();
+            this.$emit("reactToPost");
         },
-        remove(){
-            this.$emit("removePost");
-        }
+        showEmojiDisplay(){
+            handlerDisplayEmoji.setPositionOfDisplay(this.$refs['interactionPostBtn'],false);
+            this.OPEN();
+        },
     },
 };
 </script>

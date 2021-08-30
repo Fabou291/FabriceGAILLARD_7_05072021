@@ -1,6 +1,6 @@
 <template>
     <div :id="`post-id-${post.id}`" tabindex="0">
-        <InteractionPost class="post__interaction" :isOnRecursifPost="isRecursif" v-show="!isInModifyMode" :user_id="parseInt(post.user_id)" @replyPost="setIdPostToReply(post.id)" @removePost="remove" @modifyPost="SET_ID_POST_IN_MODIFY_MODE(post.id)"/>
+        <InteractionPost class="post__interaction" @reactToPost="reactToPost" :isOnRecursifPost="isRecursif" v-show="!isInModifyMode" :user_id="parseInt(post.user_id)" @replyPost="setIdPostToReply(post.id)" @removePost="remove" @modifyPost="SET_ID_POST_IN_MODIFY_MODE(post.id)"/>
         <div class="post__sidebar"></div>
         <div class="post__main">
             
@@ -38,6 +38,7 @@
     import FormPost from '@/components/FormPost.vue';
 
 
+
     export default {
         components : {
             Avatar, InteractionPost, Reaction, FormPost
@@ -48,7 +49,6 @@
             }
         },
         computed:{
-            ...mapState(["emoji","actualPostInModifyMode"]),
             ...mapState('postModule',["idPostInModifyMode"]),
             ...mapState('emojiModule',["emojisShortCodeIndex"]),
             isInModifyMode(){ return this.idPostInModifyMode == this.post.id },
@@ -61,12 +61,14 @@
         methods : {
             ...mapActions('postModule', ["modifyPost", "removePost","setIdPostToReply"]),
             ...mapMutations('postModule', ["SET_ID_POST_IN_MODIFY_MODE"]),
+            ...mapMutations('emojiModule', ["SET_POST_ID"]),
             parseContent(){
                 let contentParser = new ContentParser(this.post.content, this.emojisShortCodeIndex);
                 return contentParser.parseEmoji().parseUrl().content;            
             },
             modify(content){ this.modifyPost({ ...this.post, content }) },
             remove(){ this.removePost({ ...this.post }) },
+            reactToPost(){ this.SET_POST_ID(this.post.id) }
         }
 
     };
