@@ -8,11 +8,14 @@ export default {
         listPost: [],
     },
     getters: {
-        getPostById : () => (id,listPost) => {
-
+        getPostById : (state, getters) => (id,listPost) => {
+            state;
             for (const post of listPost) {
                 if(post.id == id) return post
-                if(post.listComment.length > 0) this.getPostById(id, post.listComment );
+                if(post.listComment.length > 0){
+                    const a = getters.getPostById(id, post.listComment );
+                    if(a) return a;
+                }
             }
             return null;
         }
@@ -61,9 +64,19 @@ export default {
             if(!data.listReaction) data.listReaction.push();
             else{
                 const reaction = data.listReaction.find(e => e.emoji_id == data.emojiId);
-                if(reaction) reaction.push(data.user_id).filter((element,index, array) => array.indexOf(element) == index)
+                if(reaction) reaction.list_user_id.push(data.userId)
                 else data.listReaction.push({ emoji_id : data.emojiId, list_user_id : [ data.userId ] });
             }
+        },
+
+        REMOVE_REACTION(state, data){
+            state;
+            const list_user_id = data.listReaction.find(e => e.emoji_id == data.emojiId).list_user_id;
+            list_user_id.splice( list_user_id.indexOf(data.userId), 1 );
+            
+            if(list_user_id.length == 0) 
+                data.listReaction.splice(data.listReaction.findIndex(e => e.emoji_id == data.emojiId),1)
+
         },
 
 
@@ -147,15 +160,35 @@ export default {
 
         async addReaction(context, body) {
             try {
+
                 if ((await HTTPRequest.post(`reaction/`, body)).affectedRows) {
                     const listReaction = context.getters.getPostById(body.postId, context.state.listPost).listReaction;
-                    context.commit("ADD_REACTION", {...body, listReaction});
+                    context.commit("ADD_REACTION", {
+                        ...body,
+                        listReaction, 
+                        userId : context.rootState.userModule.user.id.toString()
+                    });
                 }
             } catch (e) {
                 console.log(e);
             }
         },
 
+        async removeReaction(context, body) {
+            try {
+                if ((await HTTPRequest.delete(`reaction/`, body)).affectedRows) {
+                    const listReaction = context.getters.getPostById(body.postId, context.state.listPost).listReaction;
+                    context.commit("REMOVE_REACTION", {
+                        ...body,
+                        listReaction, 
+                        userId : context.rootState.userModule.user.id.toString()
+                    });
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        },
+        
 
 
         setIdPostToReply(state, id) {

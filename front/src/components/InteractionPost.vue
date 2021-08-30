@@ -81,7 +81,7 @@ export default {
         remove(){ this.$emit("removePost"); },
         raction(){ 
             this.showEmojiDisplay();
-            this.$emit("reactToPost");
+            this.$emit("addReactionToPost");
         },
         showEmojiDisplay(){
             handlerDisplayEmoji.setPositionOfDisplay(this.$refs['interactionPostBtn'],false);

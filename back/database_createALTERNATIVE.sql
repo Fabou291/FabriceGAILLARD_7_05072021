@@ -84,6 +84,7 @@ CREATE TABLE blocked_user(
 );
 
 CREATE TABLE reaction(
+    id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     emoji_id SMALLINT NOT NULL,
     user_id INTEGER NOT NULL,
     post_id INTEGER NOT NULL,
