@@ -1,5 +1,5 @@
 export default class keepFocus {
-    tabbableElements = `a, input, textarea, button`;
+    tabbableElements = "a, input, textarea, button, *[contenteditable]";
 
     allTabbableElements;
     context;

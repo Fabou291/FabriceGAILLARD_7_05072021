@@ -1,5 +1,5 @@
 <template>
-    <div class="display-settings-panel" ref="display-settings-panel" v-if="listFile != null" @mousedown="close" >
+    <div class="display-settings-panel" ref="display-settings-panel"  @mousedown="close" >
         <div class="upload-img-modal" @mousedown.stop>
             
             <header class="upload-img-modal__header">
@@ -12,7 +12,7 @@
 
             <div class="upload-img-modal__main">
                 <label class="upload-img-modal__label" for="postContent" >AJOUTER UN COMMENTAIRE <span>(FACULTATIF)</span></label>
-                <FormPost id="postContent" class="input-default-icon" @submit="submit" @updateInput="updateInput" :canEmoji="true" :value="content" />
+                <FormPost id="postContent" class="input-default-icon" @submit="submit" :focus="true" @updateInput="updateInput" :canEmoji="true" :value="content" />
             </div>
 
             <footer class="upload-img-modal__footer">
@@ -27,14 +27,15 @@
 import FormPost from "@/components/FormPost.vue";
 import BtnDefault from "@/components/btn/btnDefault.vue"
 import { mapActions, mapState, mapGetters } from 'vuex';
-
+import FocusHandler from "@/js/FocusHandler.js";
 
 
 export default {
     components: { FormPost, BtnDefault  },
     data() {
         return{
-            input : null
+            input : null,
+            focusHandler : null
         }
     },
     computed: {
@@ -42,17 +43,13 @@ export default {
         ...mapState('inputPostChannelModule',['textarea']),
         ...mapGetters('sidebarModule',['getChannelById']),
     },
-    watch : {
-        listFile(){
-            if(this.listFile){
-                this.handleImage(this.listFile[0]);
-                this.updateInput(this.content)
-            }
-        }
-    },
     methods: {
         ...mapActions('imagePostModule', ['close']),
         ...mapActions('postModule', ['addPost']),
+        handleFocus() {
+            this.focusHandler = new FocusHandler(this.$refs["display-settings-panel"]);
+            this.focusHandler.setEvent();
+        },
         submit() {
             this.addPost({
                 content : this.input,
@@ -85,9 +82,17 @@ export default {
         updateInput(content){
             this.input = content;
             console.log(this.input)
-        }
+        },
     },
-
+    mounted() {
+        this.handleFocus();
+        this.handleImage(this.listFile[0]);
+        this.updateInput(this.content);
+    },
+    unmounted() {
+                console.log("unmounted")
+        this.focusHandler.removeEvent();
+    },
 
 
 };

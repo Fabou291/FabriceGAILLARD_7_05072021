@@ -155,6 +155,7 @@ export default {
     methods: {
         ...mapMutations("configChannelModule", ["CLOSE_CONFIG"]),
         ...mapActions("configChannelModule", ["modify", "remove"]),
+        ...mapState('imagePostModule',['listFile']),
         switchSidebarVisibility() {
             this.sidebar.visible = !this.sidebar.visible;
         },

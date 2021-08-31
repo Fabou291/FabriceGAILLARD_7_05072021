@@ -3,7 +3,7 @@
         <PanelCreateChannel/>
         <ConfigChannel v-if="visible" />
         <ConfigProfil v-if="configDisplay.visible"/>
-        <ImagePostDisplay/>
+        <ImagePostDisplay v-if="listFile != null"/>
 
         <Header />
         <div class="container-full">
@@ -41,6 +41,7 @@ export default {
     computed: {
         ...mapState("configChannelModule", ["visible"]),
         ...mapState("userModule", ["configDisplay"]),
+        ...mapState("imagePostModule", ["listFile"]),
     },
 
 };

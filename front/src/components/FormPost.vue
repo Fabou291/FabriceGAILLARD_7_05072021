@@ -97,7 +97,8 @@ export default {
         canEmoji : { type: Boolean, default : false },
         placeholder : { type : String, default : "Envoyer un message dans ce groupe" },
         canRespond : {type : Boolean, default : false },
-        sticky : { type : Boolean, default : false }
+        sticky : { type : Boolean, default : false },
+        focus : { type : Boolean, default : false }
     },
     watch : {
         idPostToReply(){
@@ -182,6 +183,7 @@ export default {
     },
     mounted() {
         this.textarea = this.$refs["textarea"];
+        if(this.focus) this.textarea.focus();
         this.EmojiParser = new EmojiParser(this.textarea, this.emojisShortCodeIndex);
         this.HandlerDivEditable = new HandlerDivEditable(this.textarea);
         this.UrlParser = new UrlParser(this.textarea);

@@ -1,5 +1,5 @@
 <template>
-    <div class="display-emoji">
+    <div class="display-emoji" ref="displayEmoji">
         <div class="display-emoji__sticky-top" id="displayEmojiStickyTop" >
 
             <div class="emoji-panel" data-modal="" ref="emojiPanel" v-show="display.visible" >
@@ -218,7 +218,7 @@ export default {
         /*console.log(this.$refs['emojiPanel'].getBoundingClientRect())
         const bound = this.$refs['emojiPanel'].getBoundingClientRect();
         this.SET_SIZE({ width: bound.width, height: bound.height})*/
-    }
+    },
 };
 </script>
 
