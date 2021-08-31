@@ -28,8 +28,19 @@
                 </div>
             </div>
         </div>
-        <div v-if="!channel.id">
-            AUCUN CHANNEL NE CORRESPOND OUPS 404
+        <div class="channel-404" v-if="!channel.id">
+            <h1 class="channel-404__title"> Il semblerai que tu te sois égaré(e)! </h1>
+            <div class="channel-404__cache">
+                <svg version="1.1" width="64px" height="239px">
+                    <g transform="matrix(1 0 0 1 -754.5 -303.5 )">
+                        <path fill="none" stroke="currentColor"  d="M 42.8439306358382 0.624277456647405  L 12.2080924855492 31.2601156069364  L 43 58.4277456647399  L 0.0693641618497622 111.606936416185  L 59.606936416185 164.208092485549  L 0.0693641618497622 234.728323699422  " stroke-width="3"  transform="matrix(1 0 0 1 756 305 )"/>
+                    </g>
+                </svg>
+            </div>
+            <div class="channel-404__anchor">
+                <p > Il n'y a aucun channel ici! </p>
+                <router-link to="" class="btn-default btn-default--green"> Retour </router-link>                    
+            </div>
         </div>
     </section>
 </template>
@@ -237,5 +248,101 @@ $FormPostPaddingTop : 20px;
         font-size: 12px;
         @include setCircularStdFont("Bold");
         color: white;
+    }
+
+    @keyframes reveal-cache {
+        from {
+            clip-path: inset(0 0 100% 0);
+        }
+        to{
+            clip-path: inset(0 0 0 0);
+        }
+    }
+
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+        to{
+             opacity: 1;
+        }
+    }
+
+    @keyframes translate {
+        from {
+            transform: translateX(20px);
+        }
+        to{
+            transform: translateX(0);
+        }
+    }
+
+    .channel-404{
+        display : grid;
+        grid-template-columns: 1fr auto 1fr;
+        margin : auto;
+        gap : 20px;
+        align-items : center;
+        height : 100%;
+        padding-bottom : 100px;
+
+        a, a:visited {
+            color : white
+        }
+
+        @include setMediaScreen(tablette){
+            gap : 10px;
+        }
+
+        @include setMediaScreen(mobile){
+            gap : 5px;
+        }
+
+        &__title {
+            @include setCircularStdFont('Black');
+            font-size : 49px;
+            letter-spacing : -2;
+            text-align : right;
+            min-width : 307px;
+            justify-self : end;
+            animation : fade-in 1s, translate 1s forwards ;
+
+            @include setMediaScreen(tablette){
+                font-size : 35px;
+                min-width : 0px;
+                max-width : 200px;
+            }
+
+            @include setMediaScreen(mobile){
+                font-size : 25px;
+                min-width : 115px;
+            }
+
+        }
+        &__cache {
+            animation : reveal-cache 1s ;
+            color : $info;
+            @include setMediaScreen(mobile){ 
+                svg {
+                    transform : scale(0.8);
+                }
+            }
+        }
+        &__anchor{
+            @include setCircularStdFont('Book');
+            font-size : 25px;
+            letter-spacing : -1.5;
+            color : $grey-215;
+            max-width : 147px;
+            animation : fade-in 1s, translate 1s forwards ;
+
+            @include setMediaScreen(tablette){
+                font-size : 25px;
+                min-width : 0px;
+            }
+            @include setMediaScreen(mobile){
+                font-size : 15px;
+            }
+        }
     }
 </style>

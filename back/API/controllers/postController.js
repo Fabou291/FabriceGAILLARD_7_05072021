@@ -1,4 +1,5 @@
-const {mysqlDataBase} = require("../../config/mysqlConfig.js");
+const {mysqlDataBase, mysqlAsyncQuery} = require("../../config/mysqlConfig.js");
+const imageHelper = require("../helpers/ImageHelper.js");
 
 const findAll = (req,res,next) => {
     mysqlDataBase.query('SELECT * FROM post',function(error, results, fields){
@@ -30,13 +31,15 @@ const modify = (req,res,next) => {
     })
 }
 
-const remove = (req,res,next) => {
-    const  post = req.body.post;
-    req.userId = 1
-    mysqlDataBase.query( "DELETE FROM post WHERE id = ? AND user_id = ?", [req.params.id, req.userId], function(error, results, fields){
-        if(error) next(error)
-        else res.status(200).send(results)
-    })
+const remove = async (req,res,next) => {
+    try{
+        const post = (await mysqlAsyncQuery("SELECT * FROM post WHERE id = ? AND user_id = ?", [req.params.id, req.userId]))[0];
+        if(post.image_url != null) await imageHelper.remove(post.image_url);
+
+        const results = await mysqlAsyncQuery("DELETE FROM post WHERE id = ? AND user_id = ?", [req.params.id, req.userId]);
+        res.status(200).send(results);
+       
+    } catch(error){ next(error) }
 }
 
 

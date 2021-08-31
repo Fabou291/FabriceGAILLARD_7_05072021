@@ -1,6 +1,7 @@
 const {mysqlDataBase, mysqlAsyncQuery} = require("../../config/mysqlConfig.js");
 const createError = require("http-errors");
 const bcrypt = require("bcrypt");
+const imageHelper = require("../helpers/ImageHelper.js");
 
 const findAll = (req,res,next) => {
     mysqlDataBase.query('SELECT * FROM user', function (error, results, fields) {
@@ -35,20 +36,20 @@ const create = (req,res,next) => {
 
 }
 
-const modify = (req,res,next) => {
+const modify = async (req,res,next) => {
     try{
-        if(req.file) req.body.avatar = req.file.filename;
-        mysqlDataBase.query(
-            `
-                UPDATE user
-                SET username = ?, avatar = ?, description = ?
-                WHERE id = ?
-            `,
-            [ req.body.username, req.body.avatar, req.body.description, req.userId ],
-            function (error, results, fields) {
-                if (error) next(error);
-                else res.status(200).send({ avatar : req.body.avatar});
-        });        
+        if(req.file){
+            req.body.avatar = req.file.filename;
+            const user = (await mysqlAsyncQuery("SELECT * FROM user WHERE id = ? AND id = ?", [req.params.id, req.userId]))[0];
+            if(user.avatar != null && !/avatarDefaultSet/.test(user.avatar)) await imageHelper.remove(user.avatar);
+        } 
+
+        await mysqlAsyncQuery(
+            "UPDATE user SET username = ?, avatar = ?, description = ? WHERE id = ? AND id = ?", 
+            [ req.body.username, req.body.avatar, req.body.description, req.params.id, req.userId ]
+        );
+
+        res.status(200).send({ avatar : req.body.avatar});
     }
     catch(e){
         next(e)
@@ -102,17 +103,17 @@ const resetMail = (req,res,next) => {
     }
 }
 
-const remove = (req,res,next) => {
-    mysqlDataBase.query(
-        `
-            DELETE FROM user
-            WHERE id = ? AND id = ? 
-        `,
-        [ req.params.id, req.userId ],
-        function (error, results, fields) {
-            if (error) next(error);
-            else res.status(200).send(results);
-    });  
+const remove = async (req,res,next) => {
+
+    try{
+        const user = (await mysqlAsyncQuery("SELECT * FROM user WHERE id = ? AND _id = ?", [req.params.id, req.userId]))[0];
+        if(user.image_url != null) await imageHelper.remove(user.image_url);
+
+        const results = await mysqlAsyncQuery("DELETE FROM user WHERE id = ? AND _id = ?", [req.params.id, req.userId]);
+        res.status(200).send(results);
+       
+    } catch(error){ next(error) }
+    
 }
 
 
