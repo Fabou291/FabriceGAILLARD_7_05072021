@@ -188,7 +188,7 @@ export default {
         //this.textarea.addEventListener('focusout',this.HandlerDivEditable.getSelection,true)
     },
     beforeUnmount() {
-        //this.textarea.addEventListener('focusout',this.HandlerDivEditable.getSelection,true)
+        //this.textarea.removeEventListener('focusout',this.HandlerDivEditable.getSelection,true)
     }
 };
 </script>

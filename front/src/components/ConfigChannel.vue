@@ -1,8 +1,18 @@
 <template>
-    <div class="container-full l-config" v-if="visible">
+    <div
+        class="container-full l-config"
+        role="dialog"
+        ref="configuration_channel"
+        aria-labelledby="configuration_channel"
+        aria-modal="true"
+    >
         <div class="scroll-y">
             <div class="container">
-                <div class="sidebar config-sidebar" :class="{ 'sidebar--active': sidebar.visible }" @click="switchSidebarVisibility">
+                <div
+                    class="sidebar config-sidebar"
+                    :class="{ 'sidebar--active': sidebar.visible }"
+                    @click="switchSidebarVisibility"
+                >
                     <div class="sidebar__container config-sidebar__container" @click.stop="">
                         <button class="l-config__close-btn list-close-btn" @click="switchSidebarVisibility">
                             <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24">
@@ -37,9 +47,13 @@
 
                             <hr />
 
-                            <div class="link-btn link-btn--danger" @click.stop="removeChannel">
+                            <button
+                                type="button"
+                                class="link-btn link-btn--danger config-sidebar__btn"
+                                @click.stop="removeChannel"
+                            >
                                 Supprimer le channel
-                            </div>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -83,7 +97,6 @@
                             :label="'NOM DU CHANNEL'"
                             :focus="true"
                             v-model="name"
-                            ref="InputDefaultIcon"
                         >
                             <svg width="24" height="24" viewBox="0 0 24 24">
                                 <path
@@ -94,7 +107,7 @@
                         </InputDefaultIcon>
 
                         <label class="create-panel__label" for="name">DESCRIPTION DU CHANNEL</label>
-                        <TextareaCounter 
+                        <TextareaCounter
                             :name="''"
                             :id="''"
                             :rows="10"
@@ -103,8 +116,6 @@
                             v-model="description"
                             :placeholder="'Apprend à tous le monde comment utiliser ce channel !'"
                         />
-
-                        
 
                         <BtnDefault
                             type="submit"
@@ -124,35 +135,49 @@ import InputDefaultIcon from "@/components/field/inputDefaultIcon.vue";
 import BtnDefault from "@/components/btn/btnDefault.vue";
 import TextareaCounter from "@/components/form/TextareaCounter.vue";
 import { mapState, mapMutations, mapActions } from "vuex";
+import FocusHandler from "@/js/FocusHandler.js";
 export default {
     data() {
         return {
             name: null,
             description: null,
-            sidebar : {
-                visible : false
-            }
+            sidebar: {
+                visible: false,
+            },
+            focusHandler : null
         };
     },
     computed: {
         ...mapState("configChannelModule", ["visible", "activeChannel"]),
     },
     watch: {
-        activeChannel() {
-            this.name = this.activeChannel.name;
-            this.description = this.activeChannel.description;
-        },
     },
     methods: {
-        ...mapMutations("configChannelModule", ["OPEN", "CLOSE_CONFIG"]),
+        ...mapMutations("configChannelModule", ["CLOSE_CONFIG"]),
         ...mapActions("configChannelModule", ["modify", "remove"]),
-        switchSidebarVisibility(){ this.sidebar.visible = !this.sidebar.visible;  },
+        switchSidebarVisibility() {
+            this.sidebar.visible = !this.sidebar.visible;
+        },
         async removeChannel() {
             await this.remove();
-            if(this.activeChannel.id == this.$route.params.id) this.$router.push({name : 'Home'})
-        }
+            if (this.activeChannel.id == this.$route.params.id) this.$router.push({ name: "Home" });
+        },
+        handleFocus() {
+            this.focusHandler = new FocusHandler(this.$refs["configuration_channel"]);
+            this.focusHandler.setEvent();
+        },
     },
     components: { InputDefaultIcon, BtnDefault, TextareaCounter },
+    created() {
+        this.name = this.activeChannel.name;
+        this.description = this.activeChannel.description;
+    },
+    mounted() {
+        this.handleFocus();
+    },
+    unmounted() {
+        this.focusHandler.removeEvent();
+    },
 };
 </script>
 
@@ -165,9 +190,9 @@ export default {
     background: linear-gradient(90deg, $grey-25 0%, $grey-25 50%, $grey-32 51%, $grey-32 100%);
     padding: 0 !important;
 
-    textarea{
+    textarea {
         resize: none;
-        @include setScrollBar($success)
+        @include setScrollBar($success);
     }
 
     &__main {
@@ -218,8 +243,8 @@ export default {
 .config-sidebar {
     top: 0 !important;
 
-    &__btn{
-        text-align : left;
+    &__btn {
+        text-align: left;
     }
 
     @include setMediaScreen(tablette) {
@@ -238,7 +263,7 @@ export default {
     }
 
     &__group {
-        display : flex;
+        display: flex;
         color: $grey-166;
         font-size: 12px;
         padding: 0 0 10px 0;
@@ -286,8 +311,8 @@ export default {
     }
 
     $link-btn-colors: (
-        danger : $danger, 
-        info : $info
+        danger: $danger,
+        info: $info,
     );
 
     @each $name, $color in $link-btn-colors {
@@ -302,17 +327,16 @@ export default {
             }
         }
     }
-
-    
 }
 
-.list-close-btn{
-    right : 10px;
-    width : 25px;
-    height : 25px;
-    display : none;
-    @include setMediaScreen(tablette){
-        display : flex;
+.list-close-btn {
+    right: 10px;
+    width: 25px;
+    top: 70px;
+    height: 25px;
+    display: none;
+    @include setMediaScreen(tablette) {
+        display: flex;
     }
 }
 </style>

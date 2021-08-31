@@ -21,14 +21,9 @@
             modelValue : { required : true  },
             focus : {type : Boolean, default : false}
         },
-        methods : {
-            focusInput(){
-                this.$refs['input'].focus();
-            }
+        mounted() {
+            if(focus) this.$refs['input'].focus()
         },
-        mounted(){
-            if(this.focus) this.focusInput();
-        }
     }
 </script>
 

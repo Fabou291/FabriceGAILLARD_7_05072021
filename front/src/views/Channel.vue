@@ -81,7 +81,7 @@ export default {
         ...mapMutations('inputPostChannelModule',['SET_TEXTAREA']),
         ...mapMutations('imagePostModule',['SET_CHANNEL_ID']),
         add(content){ this.addPost({ content, channelId : this.channel.id }) },
-        getlistPostOfChannel(commitName){
+        /*getlistPostOfChannel(commitName){
             this.getListPost({
                 channelId : this.channel.id,
                 limit : this.pagination.limit,
@@ -93,19 +93,34 @@ export default {
                 this.pagination.lengthListPost = this.listPost.length;
                 this.pagination.inProgress = false;
             })
+        },*/
+        async getlistPostOfChannel(commitName){
+            this.pagination.inProgress = true;
+            await this.getListPost({
+                channelId : this.channel.id,
+                limit : this.pagination.limit,
+                offset : this.pagination.limit * (++this.pagination.currentPage-1),
+                commit : commitName
+            })
+
+            if(this.listPost.length - this.pagination.lengthListPost < this.pagination.limit) this.pagination.limitReached = true;
+            this.pagination.lengthListPost = this.listPost.length;
+            this.pagination.inProgress = false;
+
         },
         resetPagination(){
+            this.pagination.inProgress = true;
+            this.scrollY.removeEventListener('scroll', this.handleScroll,false);
+            this.scrollY.scrollTo(0,0);
             this.pagination.limitReached = false;
             this.pagination.lengthListPost = 0;
             this.pagination.currentPage = 0;
             this.pagination.inProgress = false;
         },
-        handleScroll(){
+        async handleScroll(){
             const isBottomOfChannel = this.scrollY.scrollTop + this.scrollY.getBoundingClientRect().height >= this.scrollY.scrollHeight;
-            if(isBottomOfChannel && !this.pagination.limitReached && !this.pagination.inProgress){
-                this.pagination.inProgress = true;
-                this.getlistPostOfChannel("PUSH_LIST_POST");
-            }             
+            if(isBottomOfChannel && !this.pagination.limitReached && !this.pagination.inProgress) await this.getlistPostOfChannel("PUSH_LIST_POST");
+                         
         },
         async getChannelById(channel_id){
             const response = await HTTPRequest.get(`channel/${channel_id}`);
@@ -113,8 +128,8 @@ export default {
             const { id, name, description } = response[0];
             return { id, name, description };
         },
-        init(){
-            this.getlistPostOfChannel("SET_LIST_POST");
+        async init(){
+            await this.getlistPostOfChannel("SET_LIST_POST");
             this.SET_TEXTAREA(this.$refs['formPost'].textarea);
             this.SET_CHANNEL_ID(this.channel.id); 
             this.scrollY.addEventListener('scroll', this.handleScroll,false);
@@ -133,7 +148,6 @@ export default {
         this.scrollY.removeEventListener('scroll', this.handleScroll,false);
     },
     beforeRouteUpdate(to) {
-        this.scrollY.removeEventListener('scroll', this.handleScroll,false);
         this.getChannelById(to.params.id).then(channel => {
             this.resetPagination();
             this.channel = channel;

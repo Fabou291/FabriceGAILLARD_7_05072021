@@ -56,6 +56,9 @@ export default {
             if(this.oldPassword == this.password) this.$refs['password'].setCustomValidity('Le nouveau mot de passe doit être différent du mot de passe actuel');        
         }
     },
+    mounted(){
+        this.$refs['oldPassword'].focus();
+    },
     components : { BtnDefault },
 }
 

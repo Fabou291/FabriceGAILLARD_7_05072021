@@ -1,7 +1,15 @@
 $sidebar-anim : 0.2s;
+
+@keyframes visibilitySH {
+    from {
+        visibility: visible;
+    }
+    to {
+        visibility: hidden;
+    }
+}
+
 .sidebar{
-
-
 
     position: fixed;
     top: 20px;
@@ -12,6 +20,7 @@ $sidebar-anim : 0.2s;
 
     @include setMediaScreen(tablette){
         transition : background-color $sidebar-anim ease;
+        animation : visibilitySH 0s $sidebar-anim forwards;
         width: 100%;
         pointer-events: none;
         .sidebar__container{
@@ -27,7 +36,7 @@ $sidebar-anim : 0.2s;
         
         @include setMediaScreen(tablette){
             pointer-events: unset;
-            
+            animation : visibility 0s $sidebar-anim reverse backwards;
             overflow: hidden;
 
             background-color : rgba(black,0.6);

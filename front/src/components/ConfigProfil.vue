@@ -1,5 +1,9 @@
 <template>
-    <div class="container-full l-config" v-if="configDisplay.visible">
+    <div class="container-full l-config"
+        ref="configProfil"
+        aria-labelledby="configProfil"
+        aria-modal="true" 
+    >
         <div class="scroll-y">
             <div class="container">
                 <div class="sidebar config-sidebar" :class="{ 'sidebar--active': sidebar.visible }" @click="switchSidebarVisibility">
@@ -35,6 +39,7 @@
                                         href="#"
                                         class="link-btn"
                                         :class="{ 'link-btn--active': activeZone == 0 }"
+                                        ref="myAccount"
                                         @click.prevent="changeZone(0)"
                                         >Mon compte</a
                                     >
@@ -228,6 +233,7 @@ import { mapActions, mapState } from "vuex";
 import ModifyUserForm from "@/components/form/configProfil/ModifyUserForm.vue";
 import ResetMailForm from "@/components/form/configProfil/ResetMailForm.vue";
 import ResetPasswordForm from "@/components/form/configProfil/ResetPasswordForm.vue";
+import FocusHandler from "@/js/FocusHandler.js";
 
 export default {
     data() {
@@ -236,17 +242,21 @@ export default {
             listFile: null,
             sidebar : {
                 visible : false
-            }
+            },
+            focusHandler : null
         };
     },
     watch: {
         listFile() {
             if (this.listFile) this.modifyAvatar();
         },
+        activeZone() {
+            console.log('coucou')
+            //this.focusHandler.setAllTabbableElements()
+        }
     },
     computed: {
         ...mapState("userModule", ["user"]),
-        ...mapState("userModule", ["configDisplay"]),
     },
     methods: {
         ...mapActions("userModule", ["shutDownConfigDisplay", "remove", "modify"]),
@@ -280,7 +290,20 @@ export default {
             window.localStorage.removeItem('accessToken');
             this.$router.push({ name : 'Login' })
             this.shutDownConfigDisplay()
-        }
+        },
+        handleFocus() {
+            this.focusHandler = new FocusHandler(this.$refs["configProfil"]);
+            this.focusHandler.setEvent();
+            this.$refs["myAccount"].focus();
+        },
+    },
+    mounted() {
+        this.handleFocus();
+
+    },
+    unmounted() {
+        console.log('e')
+        this.focusHandler.removeEvent();
     },
     components: {  ModifyUserForm, ResetMailForm, ResetPasswordForm },
 };
@@ -372,6 +395,10 @@ export default {
         overflow: hidden;
         @include setSizeFullContainer();
 
+        &:focus-visible{
+            border : 3px solid white;
+        }
+
         &:hover .btn-change-avatar__showcase {
             @include setFlexCenter();
         }
@@ -402,7 +429,7 @@ export default {
         right: 5px;
         top: 5px;
         z-index: 2;
-        &:hover {
+        &:hover,&:focus-visible {
             background-color: darken($grey-215, 10%);
         }
     }

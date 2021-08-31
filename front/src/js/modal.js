@@ -1,4 +1,4 @@
-function shutDownModals(e){
+/*function shutDownModals(e){
     let node = e.target;
 
     while( node != null && node.nodeType != Node.DOCUMENT_NODE){
@@ -10,5 +10,5 @@ function shutDownModals(e){
 }
 
 window.addEventListener('click', shutDownModals)
-window.addEventListener('keyup', e => { if(e.code == 'Escape') shutDownModals(e); })
+window.addEventListener('keyup', e => { if(e.code == 'Escape') shutDownModals(e); })*/
 

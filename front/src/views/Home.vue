@@ -1,8 +1,8 @@
 <template>
     <div class="two-side">
         <PanelCreateChannel/>
-        <ConfigChannel/>
-        <ConfigProfil/>
+        <ConfigChannel v-if="visible" />
+        <ConfigProfil v-if="configDisplay.visible"/>
         <ImagePostDisplay/>
 
         <Header />
@@ -28,6 +28,7 @@ import PanelCreateChannel from "@/components/PanelCreateChannel.vue";
 import ConfigChannel from "@/components/ConfigChannel.vue";
 import ConfigProfil from "@/components/ConfigProfil.vue";
 import ImagePostDisplay from "@/components/ImagePostDisplay.vue"
+import { mapState } from 'vuex';
 
 
 
@@ -37,6 +38,10 @@ import ImagePostDisplay from "@/components/ImagePostDisplay.vue"
 export default {
     name: "Home",
     components: { Header, PrincipalNav, PanelCreateChannel, ConfigChannel,ConfigProfil, ImagePostDisplay },
+    computed: {
+        ...mapState("configChannelModule", ["visible"]),
+        ...mapState("userModule", ["configDisplay"]),
+    },
 
 };
 </script>
