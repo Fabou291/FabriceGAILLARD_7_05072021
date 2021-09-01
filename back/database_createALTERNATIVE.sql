@@ -85,12 +85,12 @@ CREATE TABLE blocked_user(
 
 CREATE TABLE reaction(
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
-    emoji_id SMALLINT NOT NULL,
+    emoji_unicode VARCHAR(150) NOT NULL,
     user_id INTEGER NOT NULL,
     post_id INTEGER NOT NULL,
     CONSTRAINT FK_reaction_post_user_id FOREIGN KEY (user_id) REFERENCES user(id) ON DELETE CASCADE, 
     CONSTRAINT FK_reaction_post_comment_id FOREIGN KEY (post_id) REFERENCES post(id) ON DELETE CASCADE,
-    UNIQUE KEY reaction_post_unique (emoji_id,user_id,post_id)
+    UNIQUE KEY reaction_post_unique (emoji_unicode,user_id,post_id)
 );
 
 
@@ -187,19 +187,7 @@ INSERT INTO post (content, post_id, user_id)
     ("com", 19, 1);
 
 
-INSERT INTO reaction (emoji_id, user_id, post_id)
-    VALUES
-    (12, 1, 1), (5, 1, 1), (5, 2, 1),
 
-    (10, 1, 2), (10, 2, 2),
-
-    (9, 1, 3), (9, 2, 3),
-    (9, 3, 3), (9, 4, 3), (9, 5, 3),
-
-    (40, 1, 4), (40, 2, 4),
-    (40, 3, 4),
-    
-    (20, 3, 20);
 
 DROP TABLE avatar_set;
 

@@ -63,19 +63,19 @@ export default {
             state;
             if(!data.listReaction) data.listReaction.push();
             else{
-                const reaction = data.listReaction.find(e => e.emoji_id == data.emojiId);
+                const reaction = data.listReaction.find(e => e.emoji_unicode == data.emojiUnicode);
                 if(reaction){
                     reaction.list_user_id.push(data.userId)
                     reaction.list_reaction_id.push(data.id)
                 } 
-                else data.listReaction.push({ emoji_id : data.emojiId, list_user_id : [ data.userId ], list_reaction_id : [ data.id ] });
+                else data.listReaction.push({ emoji_unicode : data.emojiUnicode, list_user_id : [ data.userId ], list_reaction_id : [ data.id ] });
             }
         },
 
         REMOVE_REACTION(state, data){
             state;
             console.log(data);
-            const reaction = data.listReaction.find(e => e.emoji_id == data.emojiId);
+            const reaction = data.listReaction.find(e => e.emoji_unicode == data.emojiUnicode);
             const list_user_id = reaction.list_user_id;
 
             console.log(data);

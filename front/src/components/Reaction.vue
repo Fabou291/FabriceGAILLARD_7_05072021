@@ -16,7 +16,7 @@ export default {
         ...mapState('emojiModule',['emojisDataIndexed']),
         ...mapState('userModule',['user']),
         getUnicodeByIndex(){
-            return this.emojisDataIndexed[this.reaction.emoji_id].u.join('-').toLowerCase();
+            return this.reaction.emoji_unicode.split(',').join('-').toLowerCase();
         },
         getLength(){
             return this.reaction.list_user_id.length;
@@ -32,9 +32,9 @@ export default {
         },
         remove(){ 
             const index = this.reaction.list_user_id.indexOf(this.user.id.toString());
-            this.$emit('removeReaction', this.reaction.list_reaction_id[index], this.reaction.emoji_id)
+            this.$emit('removeReaction', this.reaction.list_reaction_id[index], this.reaction.emoji_unicode)
         },
-        add(){ this.$emit('addReaction', this.reaction.emoji_id) }
+        add(){ this.$emit('addReaction', this.reaction.emoji_unicode) }
     }
 
 

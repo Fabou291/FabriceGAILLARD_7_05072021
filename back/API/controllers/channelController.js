@@ -59,14 +59,14 @@ SELECT p.*, i.* FROM (
 ) as p
 LEFT OUTER JOIN 
 (
-    SELECT emoji_id,post_id, GROUP_CONCAT(DISTINCT user_id ORDER BY id) as list_user_id, GROUP_CONCAT(DISTINCT id ORDER BY id) as list_reaction_id FROM reaction GROUP BY emoji_id ORDER BY id
+    SELECT emoji_unicode,post_id, GROUP_CONCAT(DISTINCT user_id ORDER BY id) as list_user_id, GROUP_CONCAT(DISTINCT id ORDER BY id) as list_reaction_id FROM reaction GROUP BY emoji_unicode ORDER BY id
 )
 as i
 ON i.post_id = p.id 
-GROUP BY p.id, i.emoji_id
+GROUP BY p.id, i.emoji_unicode
 ORDER BY p.created_at DESC;
 
-SELECT emoji_id, GROUP_CONCAT(DISTINCT user_id ORDER BY id) as list_user_id, GROUP_CONCAT(DISTINCT id ORDER BY id) as list_reaction_id FROM reaction GROUP BY emoji_id ORDER BY id;
+SELECT emoji_unicode, GROUP_CONCAT(DISTINCT user_id ORDER BY id) as list_user_id, GROUP_CONCAT(DISTINCT id ORDER BY id) as list_reaction_id FROM reaction GROUP BY emoji_unicode ORDER BY id;
 */
 
 const findAllPostOfChannel = (req,res,next) => {
@@ -74,7 +74,7 @@ const findAllPostOfChannel = (req,res,next) => {
     const offset = req.query.offset || 0;
 
         mysqlDataBase.query(
-            `SELECT p.*, GROUP_CONCAT(i.user_id ORDER BY i.id) as list_user_id, GROUP_CONCAT(i.id ORDER BY i.id) as list_reaction_id, i.emoji_id FROM (
+            `SELECT p.*, GROUP_CONCAT(i.user_id ORDER BY i.id) as list_user_id, GROUP_CONCAT(i.id ORDER BY i.id) as list_reaction_id, i.emoji_unicode FROM (
                 SELECT p.*, u.username as user_username, u.avatar as user_avatar FROM (
                     SELECT p.* FROM (SELECT * FROM post WHERE channel_id = ? AND post_id IS NULL ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}) as p
                     UNION
@@ -88,7 +88,7 @@ const findAllPostOfChannel = (req,res,next) => {
             ) as p
             LEFT OUTER JOIN reaction as i
             ON i.post_id = p.id 
-            GROUP BY p.id, i.emoji_id
+            GROUP BY p.id, i.emoji_unicode
             ORDER BY p.created_at DESC;`,
             [req.params.id, req.params.id],
             (error, listRow, fields) => {
@@ -102,11 +102,11 @@ const findAllPostOfChannel = (req,res,next) => {
 
                     //Ajoute les reactions à tous les post (post et comment)
                     listRow.forEach(row => {
-                        const { emoji_id, list_user_id, list_reaction_id, ...rest } = row; 
+                        const { emoji_unicode, list_user_id, list_reaction_id, ...rest } = row; 
                         const post = { ...rest, created_at : DateHandler.getDateFromNow(rest.created_at), listReaction : [], listComment : [] };
 
                         if(!exist(post)) listPost.push(post)
-                        if(list_user_id != null) get(post.id).listReaction.push({ emoji_id, list_user_id : list_user_id.split(','), list_reaction_id : list_reaction_id.split(',') });
+                        if(list_user_id != null) get(post.id).listReaction.push({ emoji_unicode, list_user_id : list_user_id.split(','), list_reaction_id : list_reaction_id.split(',') });
                     });
 
 

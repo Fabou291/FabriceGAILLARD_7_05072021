@@ -210,7 +210,7 @@ export default {
         addEmojiReaction(emoji){
             this.addReaction({
                 postId : this.display.postId,
-                emojiId : emoji.i
+                emojiUnicode : emoji.u.join(',')
             })
         }
     },

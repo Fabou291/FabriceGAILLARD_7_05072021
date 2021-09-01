@@ -96,11 +96,11 @@ export default {
         remove() {
             this.removePost({ ...this.post });
         },
-        addReactionToPost(emoji_id) {
-            this.addReaction({ postId: this.post.id, emojiId: emoji_id });
+        addReactionToPost(emoji_unicode) {
+            this.addReaction({ postId: this.post.id, emojiUnicode: emoji_unicode });
         },
-        removeReactionToPost(reaction_id, emojiId) {
-            this.removeReaction({ postId: this.post.id, id: reaction_id, emojiId });
+        removeReactionToPost(reaction_id, emojiUnicode) {
+            this.removeReaction({ postId: this.post.id, id: reaction_id, emojiUnicode });
         },
 
     },
