@@ -64,8 +64,11 @@ export default {
             if(!data.listReaction) data.listReaction.push();
             else{
                 const reaction = data.listReaction.find(e => e.emoji_id == data.emojiId);
-                if(reaction) reaction.list_user_id.push(data.userId)
-                else data.listReaction.push({ emoji_id : data.emojiId, list_user_id : [ data.userId ] });
+                if(reaction){
+                    reaction.list_user_id.push(data.userId)
+                    reaction.list_reaction_id.push(data.id)
+                } 
+                else data.listReaction.push({ emoji_id : data.emojiId, list_user_id : [ data.userId ], list_reaction_id : [ data.id ] });
             }
         },
 
@@ -170,14 +173,14 @@ export default {
 
         async addReaction(context, body) {
             try {
-                if ((await HTTPRequest.post(`reaction/`, body)).affectedRows) {
-                    const listReaction = context.getters.getPostById(body.postId, context.state.listPost).listReaction;
-                    context.commit("ADD_REACTION", {
-                        ...body,
-                        listReaction, 
-                        userId : context.rootState.userModule.user.id.toString()
-                    });
-                }
+                const id = (await HTTPRequest.post(`reaction/`, body)).insertId;
+                const listReaction = context.getters.getPostById(body.postId, context.state.listPost).listReaction;
+                context.commit("ADD_REACTION", {
+                    ...body,
+                    id,
+                    listReaction, 
+                    userId : context.rootState.userModule.user.id.toString()
+                });
             } catch (e) {
                 console.log(e);
             }

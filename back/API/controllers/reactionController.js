@@ -4,7 +4,7 @@ const createError = require("http-errors");
 const create = (req,res,next) => {
     mysqlDataBase.query( "INSERT INTO reaction (user_id, emoji_id, post_id) VALUES(?,?,?)", [req.userId, req.body.emojiId, req.body.postId], function(error, results, fields){
         if(error) next(error)
-        else res.status(200).send(results)
+        else res.status(200).send({ insertId : results.insertId})
     })
 }
 
