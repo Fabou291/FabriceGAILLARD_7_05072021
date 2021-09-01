@@ -53,8 +53,11 @@ export default {
         CHANGE_SKIN(state, index){
             state.skin = state.skinColors[index];
         },
-        SET_EMOJIS_DATA_INDEXED(emojisDataIndexed){
-            this.emojisDataIndexed = emojisDataIndexed; 
+        UPDATE_EMOJIS_DATA_INDEXED(state, index){
+            let j = 0;           
+            const color = state.skinColors[index];
+            for (const i of state.indexesColor)
+                state.emojisDataIndexed[i].u = state.unicodeSkin[color][j++];
         },
         SET_POSITION(state, payload){
             state.display.x = payload.x;
@@ -75,20 +78,9 @@ export default {
         },
     },
     actions : {
-        changeSkin({commit, dispatch}, index){
+        changeSkin({commit}, index){
             commit('CHANGE_SKIN',index);
-            dispatch('updateEmojisDataIndexedBySkin', index)
-        },
-        updateEmojisDataIndexedBySkin({commit, state}, index){
-            let j = 0;
-            let emojisDataIndexed = JSON.parse(JSON.stringify(state.emojisDataIndexed));
-            
-            const color = state.skinColors[index];
-
-            for (const i of state.indexesColor)
-                emojisDataIndexed[i].u = state.unicodeSkin[color][j++];
-
-            commit('SET_EMOJIS_DATA_INDEXED',emojisDataIndexed); 
+            commit('UPDATE_EMOJIS_DATA_INDEXED',index); 
         },
 
     }
