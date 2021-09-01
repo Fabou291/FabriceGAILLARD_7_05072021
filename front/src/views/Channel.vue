@@ -1,5 +1,4 @@
 <template>
-    
     <section class="channel" id="channel" >
         <div v-show="channel.id">
             <EmojiPanel/>        
@@ -18,18 +17,20 @@
                     <Post class ="post" :post="post" :isRecursif="false" />
                         <Post class ="post post--recursive" :post="comment" v-for="comment in post.listComment" :key="comment.id" :isRecursif="true" />              
                 </template>
-                <div class="channel__end" v-if="pagination.limitReached && listPost.length != 0">
+                <LoadingSpinner v-if="pagination.inProgress"/>
+                <div class="channel__end" v-if="pagination.limitReached && listPost.length != 0 && !pagination.inProgress">
                     <span >Ceci est la fin du channel</span>
                     <span class="channel__end-name">{{ channel.name }}</span>
                 </div>
-                <div class="channel__end" v-if="listPost.length == 0">
+                <div class="channel__end" v-if="listPost.length == 0 && !pagination.inProgress">
                     <span >Il n'y à encore aucune publication dans ce channel</span>
                     <span class="channel__end-name">{{ channel.name }}</span>
                 </div>
             </div>
         </div>
-        <div class="channel-404" v-if="!channel.id">
-            <h1 class="channel-404__title"> Il semblerai que tu te sois égaré(e)! </h1>
+
+        <div class="channel-404" v-if="!channel.id && !pagination.inProgress">
+            <h1 class="channel-404__title"> Il semblerait que tu te sois égaré(e)! </h1>
             <div class="channel-404__cache">
                 <svg version="1.1" width="64px" height="239px">
                     <g transform="matrix(1 0 0 1 -754.5 -303.5 )">
@@ -42,6 +43,7 @@
                 <router-link to="" class="btn-default btn-default--green"> Retour </router-link>                    
             </div>
         </div>
+
     </section>
 </template>
 
@@ -51,6 +53,7 @@ import Post from "@/components/Post.vue";
 import { mapActions,  mapMutations,  mapState } from "vuex";
 import EmojiPanel from "../components/EmojiPanel/EmojiPanel.vue";
 import HTTPRequest from "@/js/HTTPRequest/HTTPRequest.js";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
 export default {
     name: "Home",
@@ -58,6 +61,7 @@ export default {
         FormPost,
         Post,
         EmojiPanel,
+        LoadingSpinner
     },
     data() {
         return {
@@ -72,7 +76,7 @@ export default {
                 lengthListPost : 0,
                 limit : 10,
                 scrollY : null,
-                inProgress : false
+                inProgress : true,
             },
         };
     },
@@ -88,7 +92,7 @@ export default {
     },
     methods: {
         ...mapActions('postModule',['getListPost','addPost']),
-        ...mapMutations('postModule',['UPDATE_USER_OF_POST']),
+        ...mapMutations('postModule',['UPDATE_USER_OF_POST', 'SET_LIST_POST']),
         ...mapMutations('inputPostChannelModule',['SET_TEXTAREA']),
         ...mapMutations('imagePostModule',['SET_CHANNEL_ID']),
         add(content){ this.addPost({ content, channelId : this.channel.id }) },
@@ -160,6 +164,7 @@ export default {
     },
     beforeRouteUpdate(to) {
         this.getChannelById(to.params.id).then(channel => {
+            this.SET_LIST_POST([]);
             this.resetPagination();
             this.channel = channel;
             if(this.channel) this.init();
@@ -345,4 +350,9 @@ $FormPostPaddingTop : 20px;
             }
         }
     }
+
+
+
+    
+
 </style>

@@ -1,0 +1,9 @@
+@keyframes bubble {
+	50% {
+		transform: scale(1);
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+	}
+}

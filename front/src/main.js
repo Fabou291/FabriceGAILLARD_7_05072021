@@ -7,6 +7,7 @@ import JWT from "jsonwebtoken";
 import '@/sass/base/_reset.scss';
 import '@/sass/base/_typography.scss';
 import '@/sass/base/_base.scss';
+import '@/sass/base/_animation.scss';
 import '@/sass/layout/_sidebar.scss';
 import '@/sass/layout/_left-side.scss';
 import '@/sass/layout/_right-side.scss';
