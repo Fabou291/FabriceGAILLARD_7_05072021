@@ -44,15 +44,37 @@ const findAllByGroup = (req, res, next) => {
     );
 };
 
+/*
+SELECT p.*, i.* FROM (
+    SELECT p.*, u.username as user_username, u.avatar as user_avatar FROM (
+        SELECT p.* FROM (SELECT * FROM post WHERE channel_id = 1 AND post_id IS NULL ORDER BY created_at DESC LIMIT 10 OFFSET 0) as p
+        UNION
+        SELECT c.* FROM 
+        (SELECT * FROM post WHERE post_id IS NOT NULL ORDER BY created_at DESC) as c
+        JOIN (SELECT * FROM post WHERE channel_id = 1 AND post_id IS NULL ORDER BY created_at DESC LIMIT 10 OFFSET 0) as p
+        ON p.id = c.post_id
+    ) as p
+    LEFT JOIN user as u
+    ON p.user_id = u.id
+) as p
+LEFT OUTER JOIN 
+(
+    SELECT emoji_id,post_id, GROUP_CONCAT(DISTINCT user_id ORDER BY id) as list_user_id, GROUP_CONCAT(DISTINCT id ORDER BY id) as list_reaction_id FROM reaction GROUP BY emoji_id ORDER BY id
+)
+as i
+ON i.post_id = p.id 
+GROUP BY p.id, i.emoji_id
+ORDER BY p.created_at DESC;
 
-
+SELECT emoji_id, GROUP_CONCAT(DISTINCT user_id ORDER BY id) as list_user_id, GROUP_CONCAT(DISTINCT id ORDER BY id) as list_reaction_id FROM reaction GROUP BY emoji_id ORDER BY id;
+*/
 
 const findAllPostOfChannel = (req,res,next) => {
     const limit = req.query.limit || 18446744073709551615; //La plus grande limit possible
     const offset = req.query.offset || 0;
 
         mysqlDataBase.query(
-            `SELECT p.*, GROUP_CONCAT(i.user_id) as list_user_id, i.emoji_id FROM (
+            `SELECT p.*, GROUP_CONCAT(i.user_id ORDER BY i.id) as list_user_id, GROUP_CONCAT(i.id ORDER BY i.id) as list_reaction_id, i.emoji_id FROM (
                 SELECT p.*, u.username as user_username, u.avatar as user_avatar FROM (
                     SELECT p.* FROM (SELECT * FROM post WHERE channel_id = ? AND post_id IS NULL ORDER BY created_at DESC LIMIT ${limit} OFFSET ${offset}) as p
                     UNION
@@ -80,11 +102,11 @@ const findAllPostOfChannel = (req,res,next) => {
 
                     //Ajoute les reactions à tous les post (post et comment)
                     listRow.forEach(row => {
-                        const { emoji_id, list_user_id, ...rest } = row; 
+                        const { emoji_id, list_user_id, list_reaction_id, ...rest } = row; 
                         const post = { ...rest, created_at : DateHandler.getDateFromNow(rest.created_at), listReaction : [], listComment : [] };
 
                         if(!exist(post)) listPost.push(post)
-                        if(list_user_id != null) get(post.id).listReaction.push({ emoji_id, list_user_id :  list_user_id.split(',') });
+                        if(list_user_id != null) get(post.id).listReaction.push({ emoji_id, list_user_id : list_user_id.split(','), list_reaction_id : list_reaction_id.split(',') });
                     });
 
 

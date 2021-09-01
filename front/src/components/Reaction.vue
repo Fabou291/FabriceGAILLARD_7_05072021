@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import {  mapState } from 'vuex'
 
 export default {
     props : {
@@ -30,9 +30,13 @@ export default {
             if(this.userIsIncluded) this.remove()
             else this.add()
         },
-        remove(){ this.$emit('removeReaction', this.reaction.emoji_id) },
+        remove(){ 
+            const index = this.reaction.list_user_id.indexOf(this.user.id.toString());
+            this.$emit('removeReaction', this.reaction.list_reaction_id[index], this.reaction.emoji_id)
+        },
         add(){ this.$emit('addReaction', this.reaction.emoji_id) }
     }
+
 
 }
 </script>

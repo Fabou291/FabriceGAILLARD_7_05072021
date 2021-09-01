@@ -18,7 +18,7 @@ export default {
                 }
             }
             return null;
-        }
+        },
     },
     mutations: {
         SET_ACTION_LIST_VISIBLE(state, visibility) {
@@ -71,11 +71,21 @@ export default {
 
         REMOVE_REACTION(state, data){
             state;
-            const list_user_id = data.listReaction.find(e => e.emoji_id == data.emojiId).list_user_id;
-            list_user_id.splice( list_user_id.indexOf(data.userId), 1 );
+            console.log(data);
+            const reaction = data.listReaction.find(e => e.emoji_id == data.emojiId);
+            const list_user_id = reaction.list_user_id;
+
+            console.log(data);
             
-            if(list_user_id.length == 0) 
-                data.listReaction.splice(data.listReaction.findIndex(e => e.emoji_id == data.emojiId),1)
+            if(list_user_id.length == 1){
+                console.log(data.listReaction.indexOf(reaction));
+                data.listReaction.splice(data.listReaction.indexOf(reaction),1);
+            }
+            else{
+                const index = reaction.list_reaction_id.indexOf(data.id);
+                console.log(index);
+                list_user_id.splice( index, 1 );
+            }
 
         },
 
@@ -160,7 +170,6 @@ export default {
 
         async addReaction(context, body) {
             try {
-
                 if ((await HTTPRequest.post(`reaction/`, body)).affectedRows) {
                     const listReaction = context.getters.getPostById(body.postId, context.state.listPost).listReaction;
                     context.commit("ADD_REACTION", {
@@ -174,16 +183,17 @@ export default {
             }
         },
 
-        async removeReaction(context, body) {
+        async removeReaction(context, payload) {
             try {
-                if ((await HTTPRequest.delete(`reaction/`, body)).affectedRows) {
-                    const listReaction = context.getters.getPostById(body.postId, context.state.listPost).listReaction;
-                    context.commit("REMOVE_REACTION", {
-                        ...body,
-                        listReaction, 
-                        userId : context.rootState.userModule.user.id.toString()
-                    });
-                }
+                console.log(payload)
+                await HTTPRequest.delete(`reaction/${payload.id}`);
+
+                const listReaction = context.getters.getPostById(payload.postId, context.state.listPost).listReaction;
+                context.commit("REMOVE_REACTION", {
+                    ...payload,
+                    listReaction
+                });
+
             } catch (e) {
                 console.log(e);
             }

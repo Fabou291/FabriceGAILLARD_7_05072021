@@ -68,8 +68,8 @@ export default class HTTPRequest{
         return await this.fetch(uri, 'POST', headers, body);
     }
 
-    static async delete(uri, body = {}){
-        return await this.fetch(uri, 'DELETE', this.getJsonHeader(), JSON.stringify(body));
+    static async delete(uri){
+        return await this.fetch(uri, 'DELETE', this.getJsonHeader());
     }
 
     static async put(uri, body, formData = false){

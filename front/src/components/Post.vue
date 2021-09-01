@@ -43,7 +43,7 @@
                 <img :src="`http://localhost:3000/images/${post.image_url}`" v-if="post.image_url" class="post__image" alt="" />
 
                 <div class="post__reaction">
-                    <Reaction v-for="reaction in post.listReaction" :key="reaction" :reaction="reaction" @addReaction="addReactionToPost" @removeReaction="removeReactionToPost" />
+                    <Reaction v-for="reaction in post.listReaction" :key="reaction" :reaction="reaction" @addReaction="addReactionToPost"  @removeReaction="removeReactionToPost"  />
                 </div>
             </div>
         </div>
@@ -99,9 +99,10 @@ export default {
         addReactionToPost(emoji_id) {
             this.addReaction({ postId: this.post.id, emojiId: emoji_id });
         },
-        removeReactionToPost(emoji_id) {
-            this.removeReaction({ postId: this.post.id, emojiId: emoji_id });
+        removeReactionToPost(reaction_id, emojiId) {
+            this.removeReaction({ postId: this.post.id, id: reaction_id, emojiId });
         },
+
     },
 };
 </script>
