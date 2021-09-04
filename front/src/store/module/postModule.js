@@ -147,6 +147,7 @@ export default {
                     user: rootState.userModule.user,
                 });
                 dispatch("setIdPostToReply", null);
+                return response.id;
             } catch (e) {
                 console.log(e);
             }

@@ -95,7 +95,10 @@ export default {
         ...mapMutations('postModule',['UPDATE_USER_OF_POST', 'SET_LIST_POST']),
         ...mapMutations('inputPostChannelModule',['SET_TEXTAREA']),
         ...mapMutations('imagePostModule',['SET_CHANNEL_ID']),
-        add(content){ this.addPost({ content, channelId : this.channel.id }) },
+        async add(content){ 
+            const id = await this.addPost({ content, channelId : this.channel.id });
+            document.querySelector(`#post-id-${id}`).focus();
+        },
         /*getlistPostOfChannel(commitName){
             this.getListPost({
                 channelId : this.channel.id,
@@ -130,7 +133,6 @@ export default {
             this.pagination.limitReached = false;
             this.pagination.lengthListPost = 0;
             this.pagination.currentPage = 0;
-            this.pagination.inProgress = false;
         },
         async handleScroll(){
             const isBottomOfChannel = this.scrollY.scrollTop + this.scrollY.getBoundingClientRect().height >= this.scrollY.scrollHeight;
@@ -163,12 +165,14 @@ export default {
         this.scrollY.removeEventListener('scroll', this.handleScroll,false);
     },
     beforeRouteUpdate(to) {
+        this.SET_LIST_POST([]);
+        this.resetPagination();
+
         this.getChannelById(to.params.id).then(channel => {
-            this.SET_LIST_POST([]);
-            this.resetPagination();
             this.channel = channel;
             if(this.channel) this.init();
-        })
+        })            
+
     },
 };
 </script>

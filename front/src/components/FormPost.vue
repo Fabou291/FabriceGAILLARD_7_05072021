@@ -1,8 +1,8 @@
 <template>
-    <form class="form-post"  action="">
-        <div class="form-post__container" >
+    <form class="form-post" action="">
+        <div class="form-post__container">
             <div v-if="canBrownse">
-                <button type="button" class="form-post__brownse-btn form-post-btn"  @click.stop="showBrownser">
+                <button type="button" class="form-post__brownse-btn form-post-btn" @click.stop="showBrownser">
                     <svg width="24" height="24" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -10,31 +10,44 @@
                         ></path>
                     </svg>
                 </button>
-            
-                <Brownser ref="brownser" v-show="ActionListVisible" />            
+
+                <Brownser ref="brownser" v-show="ActionListVisible" />
             </div>
             <div
-
-                @drop.prevent="" @dragenter.prevent="" @dragstart.prevent="" @drag.prevent="" 
-                
-
-                @keypress.enter.prevent="submit"
+                @drop.prevent=""
+                @dragenter.prevent=""
+                @dragstart.prevent=""
+                @drag.prevent=""
+                @paste.prevent="paste"
+                @keypress.enter.exact.prevent="submit"
                 @keydown.shift.enter.exact="addLine"
                 @keydown.esc.exact="escape"
-                @input="parseEmoji(); parseUrl(); textarea.normalize(); $emit('updateInput', HandlerDivEditable.getTextContent());"
+                @input="
+                    parseEmoji();
+                    parseUrl();
+                    parseImgHasTextAround();
+                    parseTextZero();
+                    textarea.normalize();
+                    $emit('updateInput', HandlerDivEditable.getTextContent());
+                    HandlerDivEditable.CursorHandler.replaceCursor();
+                "
                 @focusout="HandlerDivEditable.setTempDatas"
-
+                @keydown.left.exact.prevent="HandlerDivEditable.move"
+                @keydown.right.exact.prevent="HandlerDivEditable.move"
+                @keydown.exact="keydownHandler"
                 class="form-post__field"
                 contenteditable="true"
                 :title="placeholder"
                 ref="textarea"
                 spellcheck="false"
-                v-html="value" 
                 tabindex="0"
+            >&#xFEFF;<span contenteditable="false"><img width="19px" alt=":grinning:" src="/img/1f600.7c010dc6.svg"/></span>&nbsp;<span
+                    contenteditable="false"
+                    ><img width="19px" alt=":smiley:" src="/img/1f603.66f6c781.svg"/></span
+                >&nbsp;<span contenteditable="false"><img width="19px" alt=":smile:" src="/img/1f604.626aaed4.svg"/></span
+                >&nbsp;<span contenteditable="false"><img width="19px" alt=":grin:" src="/img/1f601.ab226fe8.svg"/></span>&nbsp;azertyuiop</div>
 
-            ></div>
-
-            <button type="button" class="form-post-btn form-post-btn__gif-btn" v-if="canGIF" >
+            <button type="button" class="form-post-btn form-post-btn__gif-btn" v-if="canGIF">
                 <svg width="24" height="24" viewBox="0 0 24 24">
                     <path
                         fill="currentColor"
@@ -43,7 +56,7 @@
                 </svg>
             </button>
             <div class="form-post-btn__emoji-btn">
-                <button type="button" class="form-post-btn"  ref="emojiFormBtn" v-if="canEmoji" @click="showEmojiDisplay()">
+                <button type="button" class="form-post-btn" ref="emojiFormBtn" v-if="canEmoji" @click="showEmojiDisplay()">
                     <svg width="24" height="24" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -52,94 +65,97 @@
                     </svg>
                 </button>
             </div>
-          
         </div>
 
-        
         <div class="respond-info" v-if="idPostToReply && canRespond">
-            <span>Répondre à <span class="respond-info__user">{{ getNameToReply }}</span> &#8226; Post #{{ idPostToReply }}</span>
-            
-            
-            <button type="button" class="respond-info__close" @click="SET_ID_POST_TO_REPLY(null)" >
+            <span
+                >Répondre à <span class="respond-info__user">{{ getNameToReply }}</span> &#8226; Post #{{ idPostToReply }}</span
+            >
+
+            <button type="button" class="respond-info__close" @click="SET_ID_POST_TO_REPLY(null)">
                 <svg aria-hidden="false" width="16" height="16" viewBox="0 0 14 14">
-                    <path fill="currentColor" d="M7.02799 0.333252C3.346 0.333252 0.361328 3.31792 0.361328 6.99992C0.361328 10.6819 3.346 13.6666 7.02799 13.6666C10.71 13.6666 13.6947 10.6819 13.6947 6.99992C13.6947 3.31792 10.7093 0.333252 7.02799 0.333252ZM10.166 9.19525L9.22333 10.1379L7.02799 7.94325L4.83266 10.1379L3.89 9.19525L6.08466 6.99992L3.88933 4.80459L4.832 3.86259L7.02733 6.05792L9.22266 3.86259L10.1653 4.80459L7.97066 6.99992L10.166 9.19525Z"></path>
+                    <path
+                        fill="currentColor"
+                        d="M7.02799 0.333252C3.346 0.333252 0.361328 3.31792 0.361328 6.99992C0.361328 10.6819 3.346 13.6666 7.02799 13.6666C10.71 13.6666 13.6947 10.6819 13.6947 6.99992C13.6947 3.31792 10.7093 0.333252 7.02799 0.333252ZM10.166 9.19525L9.22333 10.1379L7.02799 7.94325L4.83266 10.1379L3.89 9.19525L6.08466 6.99992L3.88933 4.80459L4.832 3.86259L7.02733 6.05792L9.22266 3.86259L10.1653 4.80459L7.97066 6.99992L10.166 9.19525Z"
+                    ></path>
                 </svg>
             </button>
         </div>
-
     </form>
-
 </template>
 
 <script>
 import Brownser from "@/components/Brownser.vue";
-import {   mapMutations, mapState } from "vuex";
-import EmojiParser from '@/js/editableDivParser/emojiParser.js';
-import UrlParser from '@/js/editableDivParser/urlParser.js';
-import HandlerDivEditable from '@/js/handlerDivEditable.js';
+import { mapMutations, mapState } from "vuex";
+import EmojiParser from "@/js/editableDivParser/emojiParser.js";
+import UrlParser from "@/js/editableDivParser/urlParser.js";
+import HandlerDivEditable from "@/js//handlerDivEditable/handlerDivEditable.js";
 import handlerDisplayEmoji from "@/js/handlerDisplayEmoji.js";
 export default {
     data() {
         return {
             selection: 0,
             textarea: "",
-            EmojiParser : null,
-            HandlerDivEditable : null
+            EmojiParser: null,
+            HandlerDivEditable: null,
         };
     },
-    components : {
-        Brownser
+    components: {
+        Brownser,
     },
     props: {
-        value: { type: String, default : '' },
-        canBrownse : { type: Boolean, default : false },
-        canGIF : { type: Boolean, default : false },
-        canEmoji : { type: Boolean, default : false },
-        placeholder : { type : String, default : "Envoyer un message dans ce groupe" },
-        canRespond : {type : Boolean, default : false },
-        sticky : { type : Boolean, default : false },
-        focus : { type : Boolean, default : false }
+        value: { type: String, default: "" },
+        canBrownse: { type: Boolean, default: false },
+        canGIF: { type: Boolean, default: false },
+        canEmoji: { type: Boolean, default: false },
+        placeholder: { type: String, default: "Envoyer un message dans ce groupe" },
+        canRespond: { type: Boolean, default: false },
+        sticky: { type: Boolean, default: false },
+        focus: { type: Boolean, default: false },
     },
-    watch : {
-        idPostToReply(){
-            if(this.canRespond && this.idPostToReply) this.textarea.focus();
-        }
+    watch: {
+        idPostToReply() {
+            if (this.canRespond && this.idPostToReply) this.textarea.focus();
+        },
     },
     computed: {
-        ...mapState('emojiModule',['emojisShortCodeIndex', 'display']),
-        ...mapState('postModule',['idPostToReply', 'listPost', 'ActionListVisible']),
-        isEmpty(){
-            return this.textarea.innerHTML == '';
+        ...mapState("emojiModule", ["emojisShortCodeIndex", "display"]),
+        ...mapState("postModule", ["idPostToReply", "listPost", "ActionListVisible"]),
+        isEmpty() {
+            return this.textarea.innerHTML == "";
         },
-        getNameToReply(){
+        getNameToReply() {
             //Vu que ca sera restreint à répondre auniquement au post (et non au post recursif)
             //je peux aller piocher dans l'array listPost sans me soucier
-            return this.listPost.find(e => e.id == this.idPostToReply).user_username
+            return this.listPost.find((e) => e.id == this.idPostToReply).user_username;
         },
     },
     methods: {
-        ...mapMutations('emojiModule', ['SET_POSITION', 'OPEN', 'SET_HANDLER_DIV_EDITABLE']),
-        ...mapMutations('postModule', ['SET_ID_POST_TO_REPLY']),
+        ...mapMutations("emojiModule", ["SET_POSITION", "OPEN", "SET_HANDLER_DIV_EDITABLE"]),
+        ...mapMutations("postModule", ["SET_ID_POST_TO_REPLY"]),
 
-
-        showEmojiDisplay(){
+        showEmojiDisplay() {
             this.SET_HANDLER_DIV_EDITABLE(this.HandlerDivEditable);
-            handlerDisplayEmoji.setPositionOfDisplay(this.$refs['emojiFormBtn'],this.sticky);
+            handlerDisplayEmoji.setPositionOfDisplay(this.$refs["emojiFormBtn"], this.sticky);
             this.OPEN();
         },
 
-        escape(){ this.$emit('escape') },
+        escape() {
+            this.$emit("escape");
+        },
 
-        showBrownser(){ this.$refs['brownser'].show(); },
+        showBrownser() {
+            this.$refs["brownser"].show();
+        },
 
         submit() {
             const value = this.HandlerDivEditable.getTextContent().trim();
             if (value == "") return;
 
-            this.$emit("submit", value)
+            this.$emit("submit", value);
             this.textarea.innerHTML = "";
         },
-        
+
         paste(event) {
             let paste = (event.clipboardData || window.clipboardData).getData("text");
             const selection = window.getSelection();
@@ -161,29 +177,82 @@ export default {
         },
 
         ///NEW
-        parseEmoji(){
-            this.HandlerDivEditable.setTempDatas();
-            this.HandlerDivEditable.append(
-                this.EmojiParser.parse()
-            )
-            this.HandlerDivEditable.setTempDatas();
+        parseEmoji() {
+            this.HandlerDivEditable.append(this.EmojiParser.parse());
         },
 
-        parseUrl(){
-            this.HandlerDivEditable.setTempDatas();
-            this.HandlerDivEditable.append(
-                this.UrlParser.parse()
-            )
-            this.HandlerDivEditable.setTempDatas();
+        parseUrl() {
+            this.HandlerDivEditable.append(this.UrlParser.parse());
         },
 
-        addLine(){
-            console.log('retour chariot')
+        parseImgHasTextAround() {
+            [...this.textarea.childNodes].forEach((node) => {
+                if (node.contentEditable == "false") {
+                    const previous = node.previousSibling;
+                    const next = node.nextSibling;
+
+                    if (!next || (next.nodeType != Node.TEXT_NODE && next.contentEditable == "false")){
+                        node.after(this.HandlerDivEditable.createZeroText());
+                        //this.HandlerDivEditable.CursorHandler.addsZeroText++;
+                    }
+                        
+
+                    if (!previous || (previous.nodeType != Node.TEXT_NODE && previous.contentEditable == "false")){
+                        this.textarea.insertBefore(this.HandlerDivEditable.createZeroText(), node);
+                        //this.HandlerDivEditable.CursorHandler.addsZeroText++;
+                    }
+                        
+                }
+            });
+        },
+
+        parseTextZero() {
+            const reg = new RegExp("\u{FEFF}");
+            [...this.textarea.childNodes].forEach((node) => {
+                if (node.nodeType == Node.TEXT_NODE && node.textContent.length > 1 && reg.test(node.textContent)){
+                    node.textContent = node.textContent.replace("\u{FEFF}", "");
+                    //this.HandlerDivEditable.CursorHandler.addsZeroText--;
+                }
+                    
+            });
+        },
+
+        keydownHandler(e) {
+            this.HandlerDivEditable.setTempDatas();
+
+            if (e.keyCode == 8) this.backSpaceHandler();
+            if (e.keyCode == 46) this.deleteHandler();
+            
+        },
+
+        deleteHandler() {
+            this.HandlerDivEditable.CursorHandler.onDelete.direction = 1;
+            this.removeTextZero();
+        },
+
+        backSpaceHandler() {
+            this.HandlerDivEditable.CursorHandler.onDelete.direction = -1;
+            this.removeTextZero();
+        },
+
+        removeTextZero() {
+            const focusNode = window.getSelection().focusNode;
+            const reg = new RegExp("\u{FEFF}");
+            if (reg.test(focusNode.textContent) && focusNode.textContent.length == 1 && this.textarea.textContent.length > 1){
+                focusNode.parentNode.removeChild(focusNode);
+                console.log('removeTextZero')
+                this.HandlerDivEditable.CursorHandler.removedTextZero = true;
+            }
+                
+        },
+
+        addLine() {
+            console.log("retour chariot");
         },
     },
     mounted() {
         this.textarea = this.$refs["textarea"];
-        if(this.focus) this.textarea.focus();
+        if (this.focus) this.textarea.focus();
         this.EmojiParser = new EmojiParser(this.textarea, this.emojisShortCodeIndex);
         this.HandlerDivEditable = new HandlerDivEditable(this.textarea);
         this.UrlParser = new UrlParser(this.textarea);
@@ -191,19 +260,21 @@ export default {
     },
     beforeUnmount() {
         //this.textarea.removeEventListener('focusout',this.HandlerDivEditable.getSelection,true)
-    }
+    },
 };
 </script>
 
 <style lang="scss">
+.A_SUPR {
+    width: 30px;
+    height: 30px;
+}
+
 .form-post {
     border-radius: 4px;
     background-color: $grey-47;
 
-
-
-    &__container{
-        
+    &__container {
         color: $grey-142;
 
         display: flex;
@@ -212,12 +283,11 @@ export default {
         position: sticky;
         top: 0;
         z-index: 2;
-        
-        @include setMediaScreen(mobile){
+
+        @include setMediaScreen(mobile) {
             flex-wrap: wrap;
         }
     }
-
 
     &__field {
         flex: 1;
@@ -230,20 +300,14 @@ export default {
         border-radius: 4px;
         @include setCircularStdFont("Book");
 
-        @include setMediaScreen(mobile){
-            order : 1;
-            min-width : 100%;
+        @include setMediaScreen(mobile) {
+            order: 1;
+            min-width: 100%;
         }
-
-
 
         &:not(:empty) {
             color: lighten($grey-142, 30%);
         }
-    }
-
-
-    &__brownse-btn {
     }
 }
 
@@ -254,35 +318,34 @@ export default {
         color: lighten($grey-142, 10%);
     }
 
-    &__gif-btn{
-        margin-left : auto;
+    &__gif-btn {
+        margin-left: auto;
     }
 
-    &__emoji-btn{
-        position : relative;
+    &__emoji-btn {
+        position: relative;
     }
 }
 
 .respond-info {
-    display : flex;
-    align-items : center;
-    height : 35px;
-    background-color : $grey-21;
+    display: flex;
+    align-items: center;
+    height: 35px;
+    background-color: $grey-21;
     width: 100%;
     border-radius: 0 0 4px 4px;
-    font-size : 13px;
-    color : $grey-166;
-    
-    padding : 0px 15px;
+    font-size: 13px;
+    color: $grey-166;
 
-    &__close{
-        padding : 5px;
-        margin-left : auto;
+    padding: 0px 15px;
+
+    &__close {
+        padding: 5px;
+        margin-left: auto;
     }
 
-    &__user{
-        color : $success;
+    &__user {
+        color: $success;
     }
-
 }
 </style>

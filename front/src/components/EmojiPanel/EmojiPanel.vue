@@ -177,35 +177,28 @@ export default {
             this.CLOSE();
         },
         addEmojiToForm(emoji){
-            const tempSelection = this.display.handlerDivEditable.temp.selection
+            const handler = this.display.handlerDivEditable;
+            const tempSelection = handler.CursorHandler.temp.selection
 
-            const a = [...tempSelection.focusNode.textContent];
+            const textContentArray = [...tempSelection.focusNode.textContent];
 
-            let reference = (tempSelection.focusNode.parentNode.tagName == 'SPAN') 
-                ? tempSelection.focusNode.parentNode 
-                : tempSelection.focusNode ;
+            let reference = tempSelection.focusNode;
 
-            if(this.display.handlerDivEditable.node.innerHTML == ''){
+            if(handler.node.innerHTML == ''){
                 reference = document.createTextNode('');
-                this.display.handlerDivEditable.node.appendChild(reference);
+                handler.node.appendChild(reference);
             }
 
-            const span =  document.createElement('span');
-            span.setAttribute('contenteditable','false');
-            //span.style.userSelect =  "none";
-            span.innerHTML = 
-                `<img width="19px" alt="${emoji.sc}" src="${require("@/assets/twemoji/svg/" +
-                    this.emojisShortCodeIndex.get(emoji.sc).u.join("-").toLowerCase() +
-                ".svg")}">`;
-
             this.display.handlerDivEditable.append([{
-                    reference,
-                    toAppend : [
-                        document.createTextNode(a.splice(0,tempSelection.focusOffset).join('')),
-                        span,
-                        document.createTextNode(a.join(''))                
-                    ]
-                }]);
+                reference,
+                toAppend : [
+                    handler.createTextNode(textContentArray.splice(0,tempSelection.focusOffset).join('')),
+                    handler.createImgEmoji(this.emojisShortCodeIndex.get(emoji.sc)),
+                    handler.createTextNode('\u00a0' + textContentArray.join(''))
+                ]
+            }]);
+            
+
         },
         addEmojiReaction(emoji){
             this.addReaction({

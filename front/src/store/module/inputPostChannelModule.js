@@ -1,4 +1,4 @@
-import HandlerDivEditable from "../../js/handlerDivEditable";
+import HandlerDivEditable from "../../js/handlerDivEditable/handlerDivEditable.js";
 export default {
     namespaced: true,
     state: {

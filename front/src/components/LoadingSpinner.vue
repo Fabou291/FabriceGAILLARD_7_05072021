@@ -17,17 +17,17 @@
         &__dot {
             width: $dot-size;
             height: $dot-size;
-            border: ($dot-size / 5) solid $success;
+            border: ($dot-size / 5) solid white;
             border-radius: 50%;
             margin: 0 ($dot-size / 2);
             transform: scale(0);
-            animation : bubble $anim-speed ease infinite;
+            animation : bubble $anim-speed ease-out infinite;
 
             &:nth-child(2) {
-                animation : bubble $anim-speed ease infinite  $anim-speed * 1/3;
+                animation : bubble $anim-speed ease-out infinite  $anim-speed * 1/3;
             }
             &:nth-child(3) {
-                animation : bubble $anim-speed ease infinite  $anim-speed * 2/3;
+                animation : bubble $anim-speed ease-out infinite  $anim-speed * 2/3;
             }
         }
     }

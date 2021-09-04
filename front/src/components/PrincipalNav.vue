@@ -69,7 +69,13 @@ export default {
     },
     async created() {
         await this.setListGroup();
-        
+        if(this.$route.name == "Home"){
+            this.$router.push({
+                name : 'Channel',
+                params: { id: this.listGroup.reduce( (a, group) => a = [...a, ...group.listChannel], [] )[0].id }
+            })
+        } 
+            
     }
 };
 </script>

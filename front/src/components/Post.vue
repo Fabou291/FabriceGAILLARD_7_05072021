@@ -118,7 +118,7 @@ export default {
         background-color: $grey-21;
     }
 
-    &:focus-within,
+    &:focus-visible,
     &:hover {
         .post__main {
             background-color: $grey-38;
@@ -133,6 +133,15 @@ export default {
             border: 1px solid $grey-89;
         }
     }
+
+    &:focus-visible {
+        .post__main {
+            box-shadow: 0 0 0 1px $success inset,
+            0 0 3px 4px rgba($success,0.2) inset,
+            0 0 3px 4px rgba($success,0.2);
+        }
+    }
+
     &:focus,
     &:focus-visible,
     &:focus-within,
