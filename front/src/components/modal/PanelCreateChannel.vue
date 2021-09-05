@@ -51,8 +51,8 @@
 </template>
 
 <script>
-import BtnDefault from "@/components/btn/btnDefault.vue";
-import InputDefaultIcon from "@/components/field/inputDefaultIcon.vue";
+import BtnDefault from "@/components/btn/BtnDefault.vue";
+import InputDefaultIcon from "@/components/form/input/inputDefaultIcon.vue";
 import { mapActions, mapMutations, mapState } from "vuex";
 
 export default {

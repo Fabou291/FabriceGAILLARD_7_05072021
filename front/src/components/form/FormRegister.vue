@@ -44,35 +44,35 @@
                 />
 
 
-                <SwitchCheckbox
+                <CheckboxSwitch
                     class="form-auth__input"
                     id="rememberMe"
                     name="rememberMe"
                     :value="remember"
                     @checkSwitch="switchRemember"
-                    >Se souvenir de moi</SwitchCheckbox
+                    >Se souvenir de moi</CheckboxSwitch
                 >
             </div>
-            <RoundedBtn class="form-auth__submit-btn rounded-btn--success" type="submit" @click.prevent="post">Continuer</RoundedBtn>
+            <BtnRounded class="form-auth__submit-btn rounded-btn--success" type="submit" @click.prevent="post">Continuer</BtnRounded>
         </template>
     </FormAuthentication>
 </template>
 
 <script>
 import FormAuthentication from "@/components/authentication/FormAuthentication.vue";
-import InputEmail from "@/components/form/InputEmail.vue";
-import InputIcon from "@/components/form/InputIcon.vue";
-import InputPassword from "@/components/form/InputPassword.vue";
-import SwitchCheckbox from "@/components/form/SwitchCheckbox.vue";
-import RoundedBtn from "@/components/btn/RoundedBtn.vue";
+import InputEmail from "@/components/form/input/InputEmail.vue";
+import InputIcon from "@/components/form/input/InputIcon.vue";
+import InputPassword from "@/components/form/input/InputPassword.vue";
+import CheckboxSwitch from "@/components/form/input/CheckboxSwitch.vue";
+import BtnRounded from "@/components/btn/BtnRounded.vue";
 import { mapActions } from "vuex";
 export default {
     components: {
         FormAuthentication,
-        SwitchCheckbox,
+        CheckboxSwitch,
         InputIcon,
         InputPassword,
-        RoundedBtn,
+        BtnRounded,
         InputEmail,
     },
     data() {

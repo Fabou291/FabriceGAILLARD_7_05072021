@@ -23,17 +23,17 @@
 
 <script>
 import Header from "@/components/Header.vue";
-import PrincipalNav from "@/components/PrincipalNav.vue";
-import PanelCreateChannel from "@/components/PanelCreateChannel.vue";
-import ConfigChannel from "@/components/ConfigChannel.vue";
-import ConfigProfil from "@/components/ConfigProfil.vue";
-import ImagePostDisplay from "@/components/ImagePostDisplay.vue"
+import PrincipalNav from "@/components/sidebar/Sidebar.vue";
+import PanelCreateChannel from "@/components/modal/PanelCreateChannel.vue";
+import ConfigChannel from "@/components/display/ConfigChannel.vue";
+import ConfigProfil from "@/components/display/ConfigProfil.vue";
+import ImagePostDisplay from "@/components/modal/ImagePostDisplay.vue"
 import { mapState } from 'vuex';
 
 
 
 
-//import EmojiPanel from "../components/EmojiPanel/EmojiPanel.vue";
+//import EmojiPanel from "../components/modal/emojiPanel/EmojiPanel.vue";
 
 export default {
     name: "Home",

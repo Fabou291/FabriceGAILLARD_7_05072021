@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import BtnDefault from "@/components/btn/btnDefault.vue";
+import BtnDefault from "@/components/btn/BtnDefault.vue";
 import HTTPRequest from "@/js/HTTPRequest.js"
 import { mapState } from 'vuex';
 

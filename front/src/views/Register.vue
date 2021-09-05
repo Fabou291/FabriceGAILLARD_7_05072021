@@ -1,27 +1,27 @@
 <template>
     <div class="authentication">
-
-       <DefaultModal>
-            <template #header>
-                <AuthenticationBrand/>
-            </template>
-            <template #main>
-                <FormRegister/>
-            </template>
-            <template #footer>
-                <SuggestionLink to="/login" anchor="CONNECTEZ-VOUS" suggestion="Vous avez déja un compte ?" />
-            </template>
-       </DefaultModal>
-
+        <main class="authentication__main">
+            <DefaultModal>
+                <template #header>
+                    <AuthenticationBrand/>
+                </template>
+                <template #main>
+                    <FormRegister/>
+                </template>
+                <template #footer>
+                    <SuggestionLink to="/login" anchor="CONNECTEZ-VOUS" suggestion="Vous avez déja un compte ?" />
+                </template>
+            </DefaultModal>
+        </main>
     </div>
 </template>
 
 <script>
 
-import DefaultModal from "@/components/authentication/DefaultModal.vue";
-import AuthenticationBrand from "@/components/authentication/authenticationBrand.vue";
+import DefaultModal from "@/components/modal/DefaultModal.vue";
+import AuthenticationBrand from "@/components/authentication/AuthenticationBrand.vue";
 import SuggestionLink from "@/components/authentication/SuggestionLink.vue";
-import FormRegister from "@/components/authentication/FormRegister.vue";
+import FormRegister from "@/components/form/FormRegister.vue";
 
 
 

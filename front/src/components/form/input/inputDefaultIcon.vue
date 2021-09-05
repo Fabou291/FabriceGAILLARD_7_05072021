@@ -41,6 +41,7 @@
             box-shadow: 0 0 1px lighten($green,15%), inset 0 0 1px darken($green,15%) ;
         }       
     }
+    
     .input-default-icon-zone{
         position: relative;
         color : grey;

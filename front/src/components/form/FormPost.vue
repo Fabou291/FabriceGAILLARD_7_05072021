@@ -11,7 +11,7 @@
                     </svg>
                 </button>
 
-                <Brownser ref="brownser" v-show="ActionListVisible" />
+                <ActionList ref="brownser" v-show="ActionListVisible" />
             </div>
             <div
                 @drop.prevent=""
@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import Brownser from "@/components/Brownser.vue";
+import ActionList from "@/components/ActionList.vue";
 import { mapMutations, mapState } from "vuex";
 import EmojiParser from "@/js/editableDivParser/emojiParser.js";
 import UrlParser from "@/js/editableDivParser/urlParser.js";
@@ -102,7 +102,7 @@ export default {
         };
     },
     components: {
-        Brownser,
+        ActionList,
     },
     props: {
         value: { type: String, default: "" },

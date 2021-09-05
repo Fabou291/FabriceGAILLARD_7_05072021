@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import BtnDefault from "@/components/btn/btnDefault.vue";
+import BtnDefault from "@/components/btn/BtnDefault.vue";
 import { mapState, mapActions, mapMutations } from 'vuex';
 
 export default {

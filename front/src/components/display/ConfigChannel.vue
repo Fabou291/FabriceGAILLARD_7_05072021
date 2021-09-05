@@ -131,9 +131,9 @@
 </template>
 
 <script>
-import InputDefaultIcon from "@/components/field/inputDefaultIcon.vue";
-import BtnDefault from "@/components/btn/btnDefault.vue";
-import TextareaCounter from "@/components/form/TextareaCounter.vue";
+import InputDefaultIcon from "@/components/form/input/inputDefaultIcon.vue";
+import BtnDefault from "@/components/btn/BtnDefault.vue";
+import TextareaCounter from "@/components/form/input/TextareaCounter.vue";
 import { mapState, mapMutations, mapActions } from "vuex";
 import FocusHandler from "@/js/FocusHandler.js";
 export default {

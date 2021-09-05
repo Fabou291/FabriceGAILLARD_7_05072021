@@ -5,7 +5,7 @@
             <div class="user">
                 <div class="user__representation">
                     <Avatar class="user__avatar" @click="openConfigDisplay()" :user="{ username : user.username, avatar : `http://localhost:3000/images/${user.avatar}` }" />
-                    <UserStatuButton class="user__statu" />
+                    <BtnUserStatu class="user__statu" />
                 </div>
 
                 <div class="user__identifying">
@@ -35,15 +35,15 @@
 </template>
 
 <script>
-import ChannelGroup from "@/components/PrincipalNav/ChannelGroup.vue"
-import UserStatuButton from "@/components/userStatuButton.vue"
+import ChannelGroup from "@/components/sidebar/ChannelGroup.vue"
+import BtnUserStatu from "@/components/btn/BtnUserStatu.vue"
 import Avatar from '@/components/Avatar.vue';
 import { mapActions, mapState } from 'vuex';
 
 export default {
     components : {
         ChannelGroup,
-        UserStatuButton,
+        BtnUserStatu,
         Avatar
     },
     data(){

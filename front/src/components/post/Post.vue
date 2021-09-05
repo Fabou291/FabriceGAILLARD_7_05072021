@@ -43,7 +43,7 @@
                 <img :src="`http://localhost:3000/images/${post.image_url}`" v-if="post.image_url" class="post__image" :alt="`image du post n°${post.id}`" />
 
                 <div class="post__reaction">
-                    <Reaction v-for="reaction in post.listReaction" :key="reaction" :reaction="reaction" @addReaction="addReactionToPost"  @removeReaction="removeReactionToPost"  />
+                    <ReactionPost v-for="reaction in post.listReaction" :key="reaction" :reaction="reaction" @addReaction="addReactionToPost"  @removeReaction="removeReactionToPost"  />
                 </div>
             </div>
         </div>
@@ -52,17 +52,17 @@
 
 <script>
 import Avatar from "@/components/Avatar.vue";
-import InteractionPost from "@/components/InteractionPost.vue";
-import Reaction from "@/components/Reaction.vue";
+import InteractionPost from "@/components/post/InteractionPost.vue";
+import ReactionPost from "@/components/post/ReactionPost.vue";
 import { mapState, mapActions, mapMutations } from "vuex";
 import PostParser from "@/js/PostParser.js";
-import FormPost from "@/components/FormPost.vue";
+import FormPost from "@/components/form/FormPost.vue";
 
 export default {
     components: {
         Avatar,
         InteractionPost,
-        Reaction,
+        ReactionPost,
         FormPost,
     },
     data() {

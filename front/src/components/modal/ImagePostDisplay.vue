@@ -24,8 +24,8 @@
 </template>
 
 <script>
-import FormPost from "@/components/FormPost.vue";
-import BtnDefault from "@/components/btn/btnDefault.vue"
+import FormPost from "@/components/form/FormPost.vue";
+import BtnDefault from "@/components/btn/BtnDefault.vue"
 import { mapActions, mapState, mapGetters } from 'vuex';
 import FocusHandler from "@/js/FocusHandler.js";
 

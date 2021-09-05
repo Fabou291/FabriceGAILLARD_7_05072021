@@ -84,74 +84,74 @@ export default {
 </script>
 
 <style lang="scss">
-.form-emoji {
-    padding: 0px 19px 17px 19px;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 1px;
+    .form-emoji {
+        padding: 0px 19px 17px 19px;
+        box-shadow: rgba(0, 0, 0, 0.3) 0px 1px 1px;
 
-    &__search-bar {
-        display: flex;
-        align-items: center;
-        position: relative;
-    }
-
-
-
-    &__field {
-        display: flex;
-        align-items: center;
-        background-color: $grey-32;
-        border-radius: 4px;
-        color: $grey-127;
-        width: calc(100% - 40px);
-
-        &--active {
-            color: $grey-193;
+        &__search-bar {
+            display: flex;
+            align-items: center;
+            position: relative;
         }
-    }
 
-    &__input {
-        padding: 10px 13px;
-        flex: 1;
-        border-radius: 4px;
-        min-width: 0;
-        &::placeholder {
+
+
+        &__field {
+            display: flex;
+            align-items: center;
+            background-color: $grey-32;
+            border-radius: 4px;
             color: $grey-127;
+            width: calc(100% - 40px);
+
+            &--active {
+                color: $grey-193;
+            }
         }
-        &:focus {
-            outline: none;
+
+        &__input {
+            padding: 10px 13px;
+            flex: 1;
+            border-radius: 4px;
+            min-width: 0;
+            &::placeholder {
+                color: $grey-127;
+            }
+            &:focus {
+                outline: none;
+            }
         }
-    }
-    &__btn {
-        padding: 0 10px 0 10px;
-    }
-
-}
-
-.select-skin{
-    width: 36px;
-    border-radius: 3px;
-    border :1px solid transparent;
-    position : absolute;
-    top : 0;
-    right : 0;
-    z-index: 1;
-    &__list{
-    }
-
-    &__list-item{
-        padding : 5px;
-        cursor: pointer;
-
-    }
-
-    &--active{
-        border :1px solid black;
-        background-color : $grey-32;
-        .select-skin__list-item:hover{
-            background-color:$grey-47;
-            border-radius: 4px;           
+        &__btn {
+            padding: 0 10px 0 10px;
         }
 
     }
-}
+
+    .select-skin{
+        width: 36px;
+        border-radius: 3px;
+        border :1px solid transparent;
+        position : absolute;
+        top : 0;
+        right : 0;
+        z-index: 1;
+        &__list{
+        }
+
+        &__list-item{
+            padding : 5px;
+            cursor: pointer;
+
+        }
+
+        &--active{
+            border :1px solid black;
+            background-color : $grey-32;
+            .select-skin__list-item:hover{
+                background-color:$grey-47;
+                border-radius: 4px;           
+            }
+
+        }
+    }
 </style>

@@ -110,8 +110,7 @@ export default {
     &__list {
         display: flex;
     }
-    &__list-item {
-    }
+
 
     &__btn {
         width: 32px;

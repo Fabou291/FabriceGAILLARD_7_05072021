@@ -18,10 +18,10 @@
 
 <script>
 
-import DefaultModal from "@/components/authentication/DefaultModal.vue";
-import AuthenticationBrand from "@/components/authentication/authenticationBrand.vue";
+import DefaultModal from "@/components/modal/DefaultModal.vue";
+import AuthenticationBrand from "@/components/authentication/AuthenticationBrand.vue";
 import SuggestionLink from "@/components/authentication/SuggestionLink.vue";
-import FormLogin from "@/components/authentication/FormLogin.vue";
+import FormLogin from "@/components/form/FormLogin.vue";
 
 
 
@@ -56,22 +56,3 @@ export default {
     },
 };
 </script>
-
-<style lang="scss">
-    .authentication {
-        width: 100%;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        @include setScrollBar($grey-59);
-        padding : 10px;
-
-        @include setMediaScreen(mobile){
-            padding : 0px;
-        }
-
-        &__main{
-            flex: 1;
-        }
-    }
-</style>

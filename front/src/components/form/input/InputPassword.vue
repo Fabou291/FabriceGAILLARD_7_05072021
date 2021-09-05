@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import InputIcon from "@/components/form/InputIcon.vue";
+import InputIcon from "@/components/form/input/InputIcon.vue";
     export default {
         data() {
             return {

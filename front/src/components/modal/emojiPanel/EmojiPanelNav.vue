@@ -46,7 +46,7 @@ export default {
     }
 
     .btn-nav{
-
+        color: $grey-193;
         padding: 6px 9px;
         border-radius: 4px;
         cursor : pointer;
@@ -59,6 +59,6 @@ export default {
             color: white;
             background-color: $grey-89;
         }
-
     }
+
 </style>

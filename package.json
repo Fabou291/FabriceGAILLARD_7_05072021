@@ -8,7 +8,8 @@
     "front": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "back": "nodemon ./back/server.js"
+    "back": "nodemon ./back/server.js",
+    "sass": "sass --watch ./front/src/sass/main.scss:./front/src/assets/css/styles.css"
   },
   "resolutions": { "glob-parent": "^6.0.1" },
   "dependencies": {

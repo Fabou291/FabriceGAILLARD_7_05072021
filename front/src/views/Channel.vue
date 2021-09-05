@@ -48,10 +48,10 @@
 </template>
 
 <script>
-import FormPost from "@/components/FormPost.vue";
-import Post from "@/components/Post.vue";
+import FormPost from "@/components/form/FormPost.vue";
+import Post from "@/components/post/Post.vue";
 import { mapActions,  mapMutations,  mapState } from "vuex";
-import EmojiPanel from "../components/EmojiPanel/EmojiPanel.vue";
+import EmojiPanel from "../components/modal/emojiPanel/EmojiPanel.vue";
 import HTTPRequest from "@/js/HTTPRequest.js";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 

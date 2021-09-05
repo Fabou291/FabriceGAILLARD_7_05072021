@@ -83,9 +83,9 @@
 </template>
 
 <script>
-import EmojiPanelSearch from "@/components/EmojiPanel/EmojiPanelSearch.vue";
-import EmojiPanelNav from "@/components/EmojiPanel/EmojiPanelNav.vue";
-import EmojiPanelCategorie from "@/components/EmojiPanel/EmojiPanelCategorie.vue";
+import EmojiPanelSearch from "@/components/modal/emojiPanel/EmojiPanelSearch.vue";
+import EmojiPanelNav from "@/components/modal/emojiPanel/EmojiPanelNav.vue";
+import EmojiPanelCategorie from "@/components/modal/emojiPanel/EmojiPanelCategorie.vue";
 import { mapActions, mapMutations, mapState } from 'vuex';
 
 

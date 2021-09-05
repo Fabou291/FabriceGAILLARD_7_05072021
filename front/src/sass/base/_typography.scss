@@ -1,5 +1,5 @@
 @mixin setCircularStdFontFace() {
-    $dir: "../../assets/fonts/circularStd/";
+    $dir: "../assets/fonts/circularStd/";
 
     @each $style in $circularStd-styles {
         $name : "CircularStd-" + $style ;
