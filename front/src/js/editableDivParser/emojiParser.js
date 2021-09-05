@@ -8,12 +8,24 @@ class EmojiParser extends EditableDivParser{
         this.emojisShortCodeIndex = emojisShortCodeIndex
     }
 
+    /**
+     * @name createNode
+     * @description Crée un l'élement adequat en fonction de la situation
+     * @param {String} shortCode 
+     * @returns 
+     */
     createNode(shortCode){
         return (this.shortCodeExist(shortCode))
             ? this.createSpanImgNode(shortCode)
             : document.createTextNode(shortCode);
     }
 
+    /**
+     * @name createSpanImgNode
+     * @description Crée une Image en fonction du shortCode
+     * @param {String} shortCode 
+     * @returns 
+     */
     createSpanImgNode(shortCode){
         const span =  document.createElement('span');
         span.setAttribute('contenteditable','false');
@@ -24,6 +36,12 @@ class EmojiParser extends EditableDivParser{
         return span
     }
 
+    /**
+     * @name getListNodeToAppend
+     * @description 
+     * @param {*} shortCode 
+     * @returns 
+     */
     getListNodeToAppend(node){
         const listShortCodeNode = node.textContent
             .match(new RegExp(this.regexp,"g"))
@@ -37,10 +55,22 @@ class EmojiParser extends EditableDivParser{
             .slice(0,-1);
     }
 
+    /**
+     * @name shortCodeExist
+     * @description 
+     * @param {*} shortCode 
+     * @returns 
+     */
     shortCodeExist(shortCode){
         return this.emojisShortCodeIndex.get(shortCode);
     }
 
+    /**
+     * @name hasAValidShortCode
+     * @description 
+     * @param {*} shortCode 
+     * @returns 
+     */
     hasAValidShortCode(content){
         for (const shortCode of content.match(new RegExp(this.regexp,"g")))
             if(this.shortCodeExist(shortCode)) return true;
@@ -48,6 +78,12 @@ class EmojiParser extends EditableDivParser{
         return false;
     }
 
+    /**
+     * @name parse
+     * @description 
+     * @param {*} shortCode 
+     * @returns 
+     */
     parse(){
         const listNodes = [];
         if(this.regexp.test(this.node.textContent)){

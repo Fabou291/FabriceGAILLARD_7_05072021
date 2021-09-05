@@ -32,9 +32,9 @@
                     HandlerDivEditable.CursorHandler.replaceCursor();
                     HandlerDivEditable.parseEmpty();
                 "
-                @focusout="HandlerDivEditable.setTempDatas"
-                @keydown.left.exact.prevent="HandlerDivEditable.move"
-                @keydown.right.exact.prevent="HandlerDivEditable.move"
+                @focusout="HandlerDivEditable.CursorHandler.setTempDatas"
+                @keydown.left.exact.prevent="HandlerDivEditable.CursorHandler.move"
+                @keydown.right.exact.prevent="HandlerDivEditable.CursorHandler.move"
                 @keydown.exact="keydownHandler"
                 class="form-post__field"
                 contenteditable="true"
@@ -91,7 +91,7 @@ import { mapMutations, mapState } from "vuex";
 import EmojiParser from "@/js/editableDivParser/emojiParser.js";
 import UrlParser from "@/js/editableDivParser/urlParser.js";
 import HandlerDivEditable from "@/js//handlerDivEditable/handlerDivEditable.js";
-import handlerDisplayEmoji from "@/js/handlerDisplayEmoji.js";
+import handlerPositionDisplayEmoji from "@/js/handlerPositionDisplayEmoji.js";
 export default {
     data() {
         return {
@@ -137,7 +137,7 @@ export default {
 
         showEmojiDisplay() {
             this.SET_HANDLER_DIV_EDITABLE(this.HandlerDivEditable);
-            handlerDisplayEmoji.setPositionOfDisplay(this.$refs["emojiFormBtn"], this.sticky);
+            handlerPositionDisplayEmoji.setPositionOfDisplay(this.$refs["emojiFormBtn"], this.sticky);
             this.OPEN();
         },
 
@@ -192,16 +192,14 @@ export default {
                     const previous = node.previousSibling;
                     const next = node.nextSibling;
 
-                    if (!next || (next.nodeType != Node.TEXT_NODE && next.contentEditable == "false")){
+                    if (!next || (next.nodeType != Node.TEXT_NODE && next.contentEditable == "false"))
                         node.after(this.HandlerDivEditable.createZeroText());
-                        //this.HandlerDivEditable.CursorHandler.addsZeroText++;
-                    }
+
                         
 
-                    if (!previous || (previous.nodeType != Node.TEXT_NODE && previous.contentEditable == "false")){
+                    if (!previous || (previous.nodeType != Node.TEXT_NODE && previous.contentEditable == "false"))
                         this.textarea.insertBefore(this.HandlerDivEditable.createZeroText(), node);
-                        //this.HandlerDivEditable.CursorHandler.addsZeroText++;
-                    }
+
                         
                 }
             });
@@ -210,16 +208,15 @@ export default {
         parseTextZero() {
             const reg = new RegExp("\u{FEFF}");
             [...this.textarea.childNodes].forEach((node) => {
-                if (node.nodeType == Node.TEXT_NODE && node.textContent.length > 1 && reg.test(node.textContent)){
+                if (node.nodeType == Node.TEXT_NODE && node.textContent.length > 1 && reg.test(node.textContent))
                     node.textContent = node.textContent.replace("\u{FEFF}", "");
-                    //this.HandlerDivEditable.CursorHandler.addsZeroText--;
-                }
+
                     
             });
         },
 
         keydownHandler(e) {
-            this.HandlerDivEditable.setTempDatas();
+            this.HandlerDivEditable.CursorHandler.setTempDatas();
 
             if (e.keyCode == 8) this.backSpaceHandler();
             if (e.keyCode == 46) this.deleteHandler();
@@ -309,6 +306,10 @@ export default {
         &:not(:empty) {
             color: lighten($grey-142, 30%);
         }
+    }
+
+    &__url{
+        color : $blue;
     }
 }
 

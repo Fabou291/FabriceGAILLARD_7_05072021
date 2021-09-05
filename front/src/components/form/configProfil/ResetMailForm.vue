@@ -12,7 +12,7 @@
 
 <script>
 import BtnDefault from "@/components/btn/btnDefault.vue";
-import HTTPRequest from "@/js/HTTPRequest/HTTPRequest.js"
+import HTTPRequest from "@/js/HTTPRequest.js"
 import { mapState } from 'vuex';
 
 export default {

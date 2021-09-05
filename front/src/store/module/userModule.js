@@ -1,4 +1,4 @@
-import HTTPRequest from "../../js/HTTPRequest/HTTPRequest.js";
+import HTTPRequest from "../../js/HTTPRequest.js";
 import router from "../../router/index.js";
 
 export default {

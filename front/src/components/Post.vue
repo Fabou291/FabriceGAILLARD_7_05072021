@@ -55,7 +55,7 @@ import Avatar from "@/components/Avatar.vue";
 import InteractionPost from "@/components/InteractionPost.vue";
 import Reaction from "@/components/Reaction.vue";
 import { mapState, mapActions, mapMutations } from "vuex";
-import ContentParser from "../js/contentParser.js";
+import PostParser from "@/js/PostParser.js";
 import FormPost from "@/components/FormPost.vue";
 
 export default {
@@ -87,8 +87,8 @@ export default {
         ...mapMutations("postModule", ["SET_ID_POST_IN_MODIFY_MODE"]),
         ...mapMutations("emojiModule", ["SET_POST_ID"]),
         parseContent() {
-            let contentParser = new ContentParser(this.post.content, this.emojisShortCodeIndex);
-            return contentParser.parseEmoji().parseUrl().content;
+            let postParser = new PostParser(this.post.content, this.emojisShortCodeIndex);
+            return postParser.parseUrl().content;
         },
         modify(content) {
             this.modifyPost({ ...this.post, content });

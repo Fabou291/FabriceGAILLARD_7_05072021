@@ -52,7 +52,7 @@ import FormPost from "@/components/FormPost.vue";
 import Post from "@/components/Post.vue";
 import { mapActions,  mapMutations,  mapState } from "vuex";
 import EmojiPanel from "../components/EmojiPanel/EmojiPanel.vue";
-import HTTPRequest from "@/js/HTTPRequest/HTTPRequest.js";
+import HTTPRequest from "@/js/HTTPRequest.js";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
 export default {

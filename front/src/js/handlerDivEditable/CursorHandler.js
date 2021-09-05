@@ -13,9 +13,7 @@ class CursorHandler {
         isCollapsed : null,
     };
 
-    addsZeroText = 0;
     removedTextZero = false;
-
     onDelete = {
         direction: 0,
     };
@@ -24,16 +22,24 @@ class CursorHandler {
         this.node = node;
     }
 
+    /**
+     * @name setTempDatas
+     * @description Sauvegarde les données relative au curseur et plus, avant toute opération faite sur la divEditable
+     */
     setTempDatas() {
         this.setTempSelection();
         this.setTempCursorPosition(this.temp.selection);
-        this.setTempTextContentLength();
+        this.temp.textContentLength = this.node.textContent.length;
         this.temp.textLengthFocusNode = this.temp.selection.focusNode.textContent.length;
         this.temp.clonedNode = this.node.cloneNode(true);
         this.temp.focusNodeIndex = [...this.node.childNodes].findIndex((e) => e == this.temp.selection.focusNode);
         this.temp.isCollapsed = window.getSelection().isCollapsed;
     }
 
+    /**
+     * @name setTempSelection
+     * @description Sauvegarde les données relative à la selection avant toute opération faite sur la divEditable
+     */
     setTempSelection() {
         let { anchorOffset, focusOffset, anchorNode, focusNode } = window.getSelection();
         if (focusNode == this.node && this.node.lastChild) {
@@ -43,6 +49,11 @@ class CursorHandler {
         this.temp.selection = { anchorOffset, focusOffset, anchorNode, focusNode, selection: window.getSelection() };
     }
 
+    /**
+     * @name setTempCursorPosition
+     * @description Détermine la position qu'a le cuseur avant toute opération faire sur la divEditable
+     * @param {Object} selection 
+     */
     setTempCursorPosition(selection) {
         let position = 0;
         let offset = selection.focusOffset > selection.anchorOffset ? selection.focusOffset : selection.anchorOffset;
@@ -59,18 +70,40 @@ class CursorHandler {
         this.temp.cursorPosition = position;
     }
 
-    selectionHaveImage() {
-        for (let node of [...this.node.childNodes]) {
-            if (node.nodeType != Node.TEXT_NODE) node = node.childNodes[0];
-            if (node.nodeType != Node.ELEMENT_NODE) return true;
-        }
-        return false;
+    /**
+     * @name getNextSibling
+     * @description Récupère l'élement textuel précédent ou suivant (en fonction de la direction) 
+     * @param {Object} node 
+     * @param {Number} direction 
+     * @returns {Object | null}
+     */
+     getNextSibling(node, direction) {
+        if (node.nodeType == Node.TEXT_NODE && node.parentNode != this.node)
+            return this.getNextSibling(node.parentNode, direction);
+
+        let nextSibling = direction == NEXT ? node.nextSibling : node.previousSibling;
+        if (nextSibling == null) return null;
+        if (nextSibling.contentEditable == "false") return this.getNextSibling(nextSibling, direction);
+        if (nextSibling.nodeType == Node.ELEMENT_NODE) nextSibling = nextSibling.firstChild;
+
+        return nextSibling;
     }
 
-    setTempTextContentLength() {
-        this.temp.textContentLength = this.node.textContent.length;
+    /**
+     * @name haveSameParent
+     * @description Détermine si deux noeuds on le même parent
+     * @param {Object} node1 
+     * @param {Object} node2 
+     * @returns {Boolean}
+     */
+    haveSameParent(node1, node2) {
+        return node1.parentNode == node2.parentNode;
     }
 
+    /**
+     * @name replaceCursor
+     * @description Gère le curseur à l'evenement input, le replace
+     */
     replaceCursor() {
         const nbCharacterAfter = parseInt(this.node.textContent.length);
         const diff = nbCharacterAfter - this.temp.textContentLength;
@@ -157,33 +190,15 @@ class CursorHandler {
         this.removedTextZero = false;
     }
 
-    getNextNodeOnDelete(direction) {
-        const selection = this.temp.selection;
-        let nextSibling = direction == NEXT ? selection.focusNode.nextSibling : selection.focusNode.previousSibling;
-        let offset = direction == NEXT ? 0 : 1;
-        if (nextSibling && selection.focusOffset == offset && nextSibling.contentEditable == "false")
-            return nextSibling.nextSibling;
-    }
-
-    getNextSibling(node, direction) {
-        if (node.nodeType == Node.TEXT_NODE && node.parentNode != this.node)
-            return this.getNextSibling(node.parentNode, direction);
-
-        let nextSibling = direction == NEXT ? node.nextSibling : node.previousSibling;
-        if (nextSibling == null) return null;
-        if (nextSibling.contentEditable == "false") return this.getNextSibling(nextSibling, direction);
-        if (nextSibling.nodeType == Node.ELEMENT_NODE) nextSibling = nextSibling.firstChild;
-
-        return nextSibling;
-    }
-
-    haveSameParent(node1, node2) {
-        return node1.parentNode == node2.parentNode;
-    }
-
-    move(e) {
-        /* left = 37, up = 38, right = 39, down = 40 */
-        const direction = e.keyCode == 37 ? PREVIOUS : NEXT;
+    /**
+     * @name move
+     * @description Gère le déplacement du curseur, droite et gauche
+     * left = 37,  right = 39
+     * @param {Object} event 
+     * @returns 
+     */
+    move(event) {
+        const direction = event.keyCode == 37 ? PREVIOUS : NEXT;
         const selection = window.getSelection();
         if (selection.focusNode == this.node) return;
 

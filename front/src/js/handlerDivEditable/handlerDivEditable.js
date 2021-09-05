@@ -4,16 +4,17 @@ class HandlerDivEditable{
     node;
     CursorHandler;
 
-    constructor(divEditable){
-        this.node = divEditable;
-        this.CursorHandler = new CursorHandler(divEditable)
+    constructor(node){
+        this.node = node;
+        this.CursorHandler = new CursorHandler(node)
     }
 
 
-    setTempDatas(){
-        this.CursorHandler.setTempDatas();
-    }
-
+    /**
+     * @name append
+     * @description Ajoute un ensemble de noeud à la divEditable
+     * @param {Object} listNode 
+     */
     append(listNode){
         if(listNode.length > 0){
             //APPEND
@@ -26,6 +27,11 @@ class HandlerDivEditable{
         }
     }
 
+    /**
+     * @name getTextContent
+     * @description Récupère le contenu du de la divEditable
+     * @returns {String}
+     */
     getTextContent() {
         let str = "";
         this.node.childNodes.forEach((node) => {
@@ -36,21 +42,43 @@ class HandlerDivEditable{
         return str;
     }
 
+    /**
+     * @name parseEmpty
+     * @description Analayse la divEditable, pour la vider sous certaines conditions
+     */
     parseEmpty() {
         if (this.getTextContent().replaceAll("\u{FEFF}", "") == ""){
             this.node.innerHTML = "";
         } 
     }
 
+    /**
+     * @name createZeroText
+     * @description Crée un noeud textuel avec un caractère "vide"
+     * @returns 
+     */
     createZeroText() {
         return document.createTextNode("\u{FEFF}");
     }
 
+    /**
+     * @name createTextNode
+     * @description Crée un noeud textuel en fonction du parametre
+     * Si le paramètre est une chaine de caractère vide, le contenu sera celui d'un textZero
+     * @param {String} innerContent 
+     * @returns 
+     */
     createTextNode(innerContent) {
         if(innerContent == '') return this.createZeroText();
         else return document.createTextNode(innerContent);
     }
 
+    /**
+     * @name createImgEmoji
+     * @description Crée une image pour l'emoji
+     * @param {String} emoji 
+     * @returns 
+     */
     createImgEmoji(emoji){
         const span =  document.createElement('span');
         span.setAttribute('contenteditable','false');
@@ -61,9 +89,7 @@ class HandlerDivEditable{
         return span;
     }
 
-    move(event){
-        this.CursorHandler.move(event);
-    }
+
 
 }
 

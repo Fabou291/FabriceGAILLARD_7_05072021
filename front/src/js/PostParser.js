@@ -1,8 +1,7 @@
-export default class ContentParser {
+export default class PostParser {
 
     content;
     emojisShortCodeIndex;
-
     urlReg = /https?:\/\/[www.]?[\w]+\.[\w()]+[-a-zA-Z0-9()@:%_+.~#?&/=]+/g;
 
     constructor(content, emojisShortCodeIndex){
@@ -10,7 +9,7 @@ export default class ContentParser {
         this.emojisShortCodeIndex = emojisShortCodeIndex;
     }
 
-    parseEmoji(){
+    /*parseEmoji(){
         const reg = /:\w+:/g;
         const listMatch = [];
         let match;
@@ -33,7 +32,19 @@ export default class ContentParser {
 
         return this;
     }
+    createImgEmojiTemplate(shortCode){
+        return `
+            <img width="15px" alt="${shortCode}" src="${require("@/assets/twemoji/svg/" +
+                    this.emojisShortCodeIndex[shortCode].u.join("-").toLowerCase() +
+            ".svg")}">
+        `;
+    }*/
 
+    /**
+     * @name parseUrlImage
+     * @description Recherche les url pointant sur une image, pour les convertir en image cliquable
+     * @returns {Array}
+     */
     parseUrlImage(){
         const urlImgReg = /https?:\/\/[www.]?[\w]+\.[\w()]+[-a-zA-Z0-9()@:%_+.~#?&/=]+.(png|jpg|jpeg|jfif|pjpeg|pjp|gif|webp|tiff|svg|apng|avif)$/
         const listImage = [];
@@ -41,11 +52,17 @@ export default class ContentParser {
             const url = match[0];
             if(urlImgReg.test(url)){ 
                 this.content = this.content.replace(url, '');
-                listImage.push( `<img class="post__image" src="${url}"/>` )
+                listImage.push( `<a href="${url}"><img class="post__image" src="${url}"/></a>` )
             }
         })  
         return listImage;      
     }
+
+    /**
+     * @name parseUrlImage
+     * @description Recherche les url, pour les convertir en lien cliquable
+     * @returns {String}
+     */
 
     parseUrl(){
         const listImage = this.parseUrlImage();
@@ -54,13 +71,7 @@ export default class ContentParser {
         return this;
     }
 
-    createImgEmojiTemplate(shortCode){
-        return `
-            <img width="15px" alt="${shortCode}" src="${require("@/assets/twemoji/svg/" +
-                    this.emojisShortCodeIndex[shortCode].u.join("-").toLowerCase() +
-            ".svg")}">
-        `;
-    }
+
 
 
 }

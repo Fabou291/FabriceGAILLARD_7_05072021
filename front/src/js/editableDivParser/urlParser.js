@@ -7,6 +7,12 @@ class UrlParser extends EditableDivParser{
         super(node)
     }
 
+    /**
+     * @name parse
+     * @description Analayse l'ensemble des noeud, pour adapter leur contenu
+     * S'il correspond à une url, une span sera crée pour mettre en valeur le texte
+     * @returns {Array} listNodes
+     */
     parse(){
 
         const listNodes = [];
@@ -28,10 +34,15 @@ class UrlParser extends EditableDivParser{
     }
 
 
-
+    /**
+     * @name createSpanBlue
+     * @description Crée un element Span
+     * @param {String} text 
+     * @returns 
+     */
     createSpanBlue(text){
         const span =  document.createElement('span');
-        span.setAttribute('style','color : blue');
+        span.className = "form-post__url"
         span.textContent = text;
         return span
     }

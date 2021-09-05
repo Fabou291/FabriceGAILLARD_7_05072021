@@ -58,7 +58,7 @@
 
 <script>
 import { mapState, mapMutations } from "vuex";
-import handlerDisplayEmoji from "@/js/handlerDisplayEmoji.js";
+import handlerPositionDisplayEmoji from "@/js/handlerPositionDisplayEmoji.js";
 
 export default {
     props: {
@@ -85,7 +85,7 @@ export default {
             this.$emit("addReactionToPost");
         },
         showEmojiDisplay(){
-            handlerDisplayEmoji.setPositionOfDisplay(this.$refs['interactionPostBtn'],false);
+            handlerPositionDisplayEmoji.setPositionOfDisplay(this.$refs['interactionPostBtn'],false);
             this.OPEN();
         },
     },

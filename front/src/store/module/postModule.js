@@ -1,4 +1,4 @@
-import HTTPRequest from "../../js/HTTPRequest/HTTPRequest.js";
+import HTTPRequest from "../../js/HTTPRequest.js";
 export default {
     namespaced: true,
     state: {
