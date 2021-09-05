@@ -40,7 +40,7 @@
 
                 <p class="post__content" v-html="getContent" v-if="!isInModifyMode"></p>
 
-                <img :src="`http://localhost:3000/images/${post.image_url}`" v-if="post.image_url" class="post__image" alt="" />
+                <img :src="`http://localhost:3000/images/${post.image_url}`" v-if="post.image_url" class="post__image" :alt="`image du post n°${post.id}`" />
 
                 <div class="post__reaction">
                     <Reaction v-for="reaction in post.listReaction" :key="reaction" :reaction="reaction" @addReaction="addReactionToPost"  @removeReaction="removeReactionToPost"  />

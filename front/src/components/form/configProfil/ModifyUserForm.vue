@@ -1,5 +1,5 @@
 <template>
-    <form class="form-channel"  action="" ref="form" >
+    <form class="form-channel"  ref="form" >
         <label class="create-panel__label" for="username">NOM D'UTILISATEUR</label>
         <input type="text" ref="input" name="username" required="true" id="username" class="input-default input-default--colorA" v-model="username" placeholder="Votre nom d'utilisateur"/>
 

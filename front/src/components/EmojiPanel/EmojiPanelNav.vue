@@ -2,7 +2,7 @@
     <nav class="emoji-panel-nav">
         <ul class="emoji-panel-nav__list">
             <li class="emoji-panel-nav__list-item" v-for="button in listButton" :key="button" >
-                <button class="btn-nav" :class="{ 'btn-nav--active': button == actived }" @click="active(button)" type="button">{{ button }}</button>
+                <button class="btn-nav" :aria-label="`Afficher la section ${ button }`" :class="{ 'btn-nav--active': button == actived }" @click="active(button)" type="button">{{ button }}</button>
             </li>
         </ul>
     </nav>

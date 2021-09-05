@@ -8,7 +8,7 @@
             <div class="container">
                 <div class="sidebar config-sidebar" :class="{ 'sidebar--active': sidebar.visible }" @click="switchSidebarVisibility">
                     <div class="sidebar__container config-sidebar__container" @click.stop="">
-                        <button class="l-config__close-btn list-close-btn" @click="switchSidebarVisibility">
+                        <button type="button" class="l-config__close-btn list-close-btn" aria-label="fermer la barre lateral du profil" @click="switchSidebarVisibility">
                             <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24">
                                 <path
                                     fill="currentColor"
@@ -76,13 +76,13 @@
 
                             <hr />
 
-                            <button class="link-btn link-btn--info config-sidebar__btn" @click="logout">
+                            <button type="button" class="link-btn link-btn--info config-sidebar__btn" @click="logout">
                                 Déconnexion
                             </button>
 
                             <hr />
 
-                            <button class="link-btn link-btn--danger config-sidebar__btn" @click="remove">
+                            <button type="button" class="link-btn link-btn--danger config-sidebar__btn" @click="remove">
                                 Supprimer le compte
                             </button>
                         </div>
@@ -90,7 +90,7 @@
                 </div>
 
                 <div class="main l-config__main">
-                    <button class="l-config__show-list-btn" @click="switchSidebarVisibility">
+                    <button type="button" class="l-config__show-list-btn" @click="switchSidebarVisibility" aria-label="Afficher la barre latérale">
                         <svg
                             class="show-list-btn__icon"
                             :class="{ 'show-list-btn__icon--visible': sidebar.visible }"
@@ -106,7 +106,7 @@
                         </svg>
                     </button>
 
-                    <button type="button" class="l-config__close-btn" @click="shutDownConfigDisplay">
+                    <button type="button" class="l-config__close-btn" @click="shutDownConfigDisplay" aria-label="Fermer le panneau de configuration du profil">
                         <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24">
                             <path
                                 fill="currentColor"
@@ -123,8 +123,8 @@
                             <div class="user-card__top"></div>
                             <div class="user-card__main">
                                 <div class="user-card__avatar btn-change-avatar">
-                                    <form action="" class="form-avatar">
-                                        <input type="file" ref="inputFile" name="avatar" id="" @change="setListFile" />
+                                    <form class="form-avatar">
+                                        <input type="file" ref="inputFile" name="avatar-file" id="" @change="setListFile" />
                                     </form>
 
                                     <button type="button" class="btn-change-avatar__preview" @click="browse">
@@ -132,10 +132,10 @@
                                         <img
                                             class="btn-change-avatar__thumb"
                                             :src="`http://localhost:3000/images/${user.avatar}`"
-                                            alt="avatar de l'utilisateur"
+                                            :alt="`image de profil de ${user.avatar}`"
                                         />
                                     </button>
-                                    <button class="btn-change-avatar__action" @click="browse"></button>
+                                    <button type="button"  class="btn-change-avatar__action" @click="browse" aria-label="Changer l'avatar"></button>
                                 </div>
 
                                 <div class="user-card__section-container">

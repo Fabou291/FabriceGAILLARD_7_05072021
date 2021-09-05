@@ -1,5 +1,5 @@
 <template>
-    <form class="form-channel"  action="" ref="form" >
+    <form class="form-channel" ref="form" >
         <label class="create-panel__label" for="oldMail">ANCIENNE ADRESSE E-MAIL</label>
         <input type="email"  name="oldMail" ref="oldMail" required="true" @input="setCustomValidity" pattern="^[a-z\d._%+-]+@[a-z\d.-]+\.[a-z]{2,4}$" class="input-default input-default--colorA" v-model="oldMail" placeholder="Indiquez votre ancien mot de passe"/>
 

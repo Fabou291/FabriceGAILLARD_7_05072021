@@ -17,9 +17,9 @@
                     ></path>
                 </svg>
             </div>
-            <form action="" class="form-brownser" >
-                <input type="file" ref="input" accept="image/*" @change="openImagePostDisplay"/>
-            </form>          
+            <form class="form-brownser" >
+                <input type="file" ref="input" name="form-brownser-file" accept="image/*" @change="openImagePostDisplay"/>
+            </form>
         </button>
     </div>
 </template>

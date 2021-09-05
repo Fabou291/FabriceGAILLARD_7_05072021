@@ -3,7 +3,7 @@
         <h1 class="form-auth__title">
             <slot name="title"></slot>
         </h1>
-        <form action="">
+        <form>
             <slot name="content"></slot>
         </form>        
     </section>

@@ -1,5 +1,5 @@
 <template>
-    <button class="drop-down-btn" aria-expanded="true" >
+    <button type="button" class="drop-down-btn" aria-expanded="true" aria-label="Afficher ou cacher la liste">
         <span class="drop-down-btn__icon">
             <DropDownIcon :visible="visible" />            
         </span>

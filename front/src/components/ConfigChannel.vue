@@ -14,7 +14,7 @@
                     @click="switchSidebarVisibility"
                 >
                     <div class="sidebar__container config-sidebar__container" @click.stop="">
-                        <button class="l-config__close-btn list-close-btn" @click="switchSidebarVisibility">
+                        <button type="button" class="l-config__close-btn list-close-btn" @click="switchSidebarVisibility" aria-label="fermer la barre laterale">
                             <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24">
                                 <path
                                     fill="currentColor"
@@ -59,7 +59,7 @@
                 </div>
 
                 <div class="main l-config__main">
-                    <button class="l-config__show-list-btn" @click="switchSidebarVisibility">
+                    <button type="button" class="l-config__show-list-btn" @click="switchSidebarVisibility" aria-label="Ouvrir le menu du panneau de configuration">
                         <svg
                             class="show-list-btn__icon"
                             :class="{ 'show-list-btn__icon--visible': sidebar.visible }"
@@ -75,7 +75,7 @@
                         </svg>
                     </button>
 
-                    <button class="l-config__close-btn" @click="CLOSE_CONFIG">
+                    <button type="button" class="l-config__close-btn" @click="CLOSE_CONFIG" aria-label="Fermer le panneau de configuration">
                         <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24">
                             <path
                                 fill="currentColor"

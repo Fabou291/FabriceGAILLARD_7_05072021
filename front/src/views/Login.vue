@@ -1,18 +1,18 @@
 <template>
     <div class="authentication">
-
-       <DefaultModal>
-            <template #header>
-                <AuthenticationBrand/>
-            </template>
-            <template #main>
-                <FormLogin/>
-            </template>
-            <template #footer>
-                <SuggestionLink to="/register" anchor="INSCRIVEZ-VOUS" suggestion="Pas encore de compte ?" />
-            </template>
-       </DefaultModal>
-
+        <main class="authentication__main">
+            <DefaultModal>
+                <template #header>
+                    <AuthenticationBrand/>
+                </template>
+                <template #main>
+                    <FormLogin/>
+                </template>
+                <template #footer>
+                    <SuggestionLink to="/register" anchor="INSCRIVEZ-VOUS" suggestion="Pas encore de compte ?" />
+                </template>
+            </DefaultModal>            
+        </main>
     </div>
 </template>
 
@@ -58,23 +58,20 @@ export default {
 </script>
 
 <style lang="scss">
-.authentication {
-    width: 100%;
-    height: 100vh;
-    @include setScrollBar($grey-59);
-    @include setMediaScreen(tablette){
+    .authentication {
+        width: 100%;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        @include setScrollBar($grey-59);
         padding : 10px;
+
+        @include setMediaScreen(mobile){
+            padding : 0px;
+        }
+
+        &__main{
+            flex: 1;
+        }
     }
-    @include setMediaScreen(mobile){
-        padding : 0px;
-    }
-}
-
-
-
-
-
-
-
-
 </style>

@@ -1,8 +1,8 @@
 <template>
-    <form class="form-post" action="">
+    <form class="form-post">
         <div class="form-post__container">
             <div v-if="canBrownse">
-                <button type="button" class="form-post__brownse-btn form-post-btn" @click.stop="showBrownser">
+                <button type="button" class="form-post__brownse-btn form-post-btn" @click.stop="showBrownser" aria-label="Ouvrir le panel d'actions">
                     <svg width="24" height="24" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -48,7 +48,7 @@
                 >&nbsp;<span contenteditable="false"><img width="19px" alt=":smile:" src="/img/1f604.626aaed4.svg"/></span
                 >&nbsp;<span contenteditable="false"><img width="19px" alt=":grin:" src="/img/1f601.ab226fe8.svg"/></span>&nbsp;azertyuiop</div>
 
-            <button type="button" class="form-post-btn form-post-btn__gif-btn" v-if="canGIF">
+            <button type="button" class="form-post-btn form-post-btn__gif-btn" v-if="canGIF" aria-label="Ouvrir le panel de gif">
                 <svg width="24" height="24" viewBox="0 0 24 24">
                     <path
                         fill="currentColor"
@@ -56,8 +56,8 @@
                     ></path>
                 </svg>
             </button>
-            <div class="form-post-btn__emoji-btn">
-                <button type="button" class="form-post-btn" ref="emojiFormBtn" v-if="canEmoji" @click="showEmojiDisplay()">
+            <div class="form-post-btn__emoji-btn" >
+                <button type="button" class="form-post-btn" ref="emojiFormBtn" v-if="canEmoji" @click="showEmojiDisplay()" aria-label="Ouvrir le panel d'emoji">
                     <svg width="24" height="24" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -73,7 +73,7 @@
                 >Répondre à <span class="respond-info__user">{{ getNameToReply }}</span> &#8226; Post #{{ idPostToReply }}</span
             >
 
-            <button type="button" class="respond-info__close" @click="SET_ID_POST_TO_REPLY(null)">
+            <button type="button" class="respond-info__close" @click="SET_ID_POST_TO_REPLY(null)" aria-label="Annuler la réponse">
                 <svg aria-hidden="false" width="16" height="16" viewBox="0 0 14 14">
                     <path
                         fill="currentColor"

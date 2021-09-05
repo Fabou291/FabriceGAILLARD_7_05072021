@@ -13,7 +13,7 @@
                     <div class="user__id">#{{ user.id }}</div>
                 </div>
                 
-                <button class="user__btn-setting" @click="openConfigDisplay()" >
+                <button type="button" class="user__btn-setting" @click="openConfigDisplay()" aria-label="Ouvrir la panneau de configuration du channel" >
                     <svg aria-hidden="false" class="user__btn-setting-icon" width="20" height="20" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -110,7 +110,7 @@ export default {
 
     &__btn-setting {
         color: $grey-142;
-        padding: 8px 0 8px 8px;
+        padding: 8px 4px 8px 8px;
     }
 
     &__btn-setting-icon {

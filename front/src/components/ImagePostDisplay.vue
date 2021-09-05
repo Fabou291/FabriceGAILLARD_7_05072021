@@ -66,7 +66,10 @@ export default {
                 if (!imageType.test(file.type)) throw "Ce n'est pas une image";
                 
                 const reader = new FileReader();
-                reader.onload = e => this.$refs['IMG'].src = e.target.result;
+                reader.onload = e => {
+                    this.$refs['IMG'].src = e.target.result;
+                    this.$refs['IMG'].alt = 'Image du fichier ' + file.name;
+                }
                 
                 reader.onloadend = () => this.adjusImagePosition();
                 reader.readAsDataURL(file);

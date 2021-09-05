@@ -1,6 +1,6 @@
 <template>
     <div class="statu-panel">
-        <button class="statu-btn statu-btn--online"></button>
+        <button type="button" class="statu-btn statu-btn--online" aria-label="Changer de statu"></button>
         <div class="statu-panel__list" v-show="visible">
             <div class="statu-panel__list-item">
                 <div class="statu-btn statu-btn--online"></div>

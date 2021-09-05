@@ -6,7 +6,7 @@
                 <slot></slot>
             </span>
             <span></span>
-            <div class="switch-checkbox__switch-btn" @click.prevent="this.$emit('checkSwitch')"></div>
+            <span class="switch-checkbox__switch-btn" @click.prevent="this.$emit('checkSwitch')"></span>
         </label>
     </div>   
 </template>
@@ -50,6 +50,7 @@
         }
 
         &__switch-btn{
+            display : block;
             position: relative;
             width : 38px; 
             height : map-get($switchCheckBox, height);

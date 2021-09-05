@@ -1,6 +1,6 @@
 <template>
     <div class="avatar">
-        <img class="avatar__thumb" :src="user.avatar" :alt="'image de profil de' + user.username " />
+        <img class="avatar__thumb" :src="user.avatar" :alt="'image de profil de' + user.username" />
         <div class="avatar__circle" ></div>
     </div>
 </template>

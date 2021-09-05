@@ -1,5 +1,5 @@
 <template>
-    <button class="close-btn" type='button' @click="close">
+    <button class="close-btn" type='button' @click="close" aria-label="Fermer">
         <svg  width="24" height="24" viewBox="0 0 24 24">
             <path
                 fill="currentColor"

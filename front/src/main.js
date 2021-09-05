@@ -9,8 +9,6 @@ import '@/sass/base/_typography.scss';
 import '@/sass/base/_base.scss';
 import '@/sass/base/_animation.scss';
 import '@/sass/layout/_sidebar.scss';
-import '@/sass/layout/_left-side.scss';
-import '@/sass/layout/_right-side.scss';
 import '@/sass/layout/_container-full.scss';
 import '@/sass/layout/_scroll-y.scss';
 import '@/sass/layout/_container.scss';
@@ -37,6 +35,12 @@ router.beforeEach(async (to, from, next) => {
     return next();
     
 })
+
+router.afterEach((to) => {
+    const title = to.meta.getTitle ? to.meta.getTitle(to) : to.meta.title;
+    document.title = title ;
+    document.description = to.meta.description ;
+});
 
 
 createApp(App).use(store).use(router).mount('#app')

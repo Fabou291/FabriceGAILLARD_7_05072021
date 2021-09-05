@@ -50,7 +50,7 @@ export default class ContentParser {
     parseUrl(){
         const listImage = this.parseUrlImage();
 
-        this.content = this.content.replaceAll(this.urlReg, "<a href='$&'>$&</a>") + listImage.reduce((a,image) => a += image, '');
+        this.content = this.content.replaceAll(this.urlReg, "<a href='$&' title='Accéder au lien externe'>$&</a>") + listImage.reduce((a,image) => a += image, '');
         return this;
     }
 

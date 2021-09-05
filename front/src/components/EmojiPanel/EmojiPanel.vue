@@ -55,7 +55,7 @@
                                             <div
                                                 class="emoji-btn__thumb"
                                                 :class="(emoji.is != undefined) ? 'emoji-btn__thumb--' + skin : ''"
-                                                :alt="emoji.i"
+                                                :alt="`emoji n° ${emoji.i}`"
                                                 :style="'background-position: ' + getPositionBackgroundEmoji(emoji)"
                                             ></div>
                                         </li>
@@ -67,7 +67,7 @@
                                     draggable="false"
                                     class="emoji-panel__caption-emoji"
                                     :src="require('@/assets/twemoji/svg/' + getSvgEmojiNameFile + '.svg')"
-                                    :alt="emojisDataIndexed[activeEmoji].i"
+                                    :alt="`emoji n° ${emojisDataIndexed[activeEmoji].i}`"
                                 />
                                 <span>{{ emojisDataIndexed[activeEmoji].sc }}</span>
                             </div>

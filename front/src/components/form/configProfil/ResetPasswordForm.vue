@@ -1,5 +1,5 @@
 <template>
-    <form class="form-channel"  action="" ref="form" >
+    <form class="form-channel" ref="form" >
         <label class="create-panel__label" for="oldPassword">ANCIEN MOT DE PASSE</label>
         <input type="password" name="oldPassword" required ref="oldPassword" @input="setCustomValidity" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*\W)[a-zA-Z\d\W]{8,}$" class="input-default input-default--colorA" v-model="oldPassword" placeholder="Indiquez votre ancien mot de passe"/>
 

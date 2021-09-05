@@ -1,5 +1,5 @@
 <template>
-    <button class="reaction-btn" :class="{ 'reaction-btn--active' : userIsIncluded }" type="button" @click="switchReaction">
+    <button class="reaction-btn" :class="{ 'reaction-btn--active' : userIsIncluded }" type="button" @click="switchReaction" aria-label="Appliquer la reaction">
         <img class="reaction-btn__emoji" :src="require('@/assets/twemoji/svg/' + getUnicodeByIndex + '.svg')" alt="emoji">
         {{ getLength }}
     </button>

@@ -28,7 +28,7 @@
 
         @include setMediaScreen(tablette){
             padding: 60px 70px;
-            margin: 0px auto;
+
         }
 
         @include setMediaScreen(mobile){

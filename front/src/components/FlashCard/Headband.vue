@@ -2,7 +2,7 @@
     <div class="headband" v-if="error != null" >
         <div class="headband__container">
             <p class="headband__message">Error : {{ getErrorMessage }}</p>
-            <button class="headband__close-btn" type='button' @click.prevent="close">
+            <button class="headband__close-btn" type='button' @click.prevent="close" aria-label="Fermer">
                 <svg  width="16" height="16" viewBox="0 0 24 24">
                     <path
                         fill="currentColor"
@@ -78,7 +78,10 @@ export default {
         padding : 5px;
         width : 100%;
         background-color : $danger;
-
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: 100;
 
         &__container{
             max-width: 1440px;

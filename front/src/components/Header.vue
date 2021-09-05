@@ -2,7 +2,7 @@
     <header class="header">
         <nav class="header__nav">
 
-            <button class="header__nav-item show-list-btn" @click="switchVisibility">
+            <button type="button" class="header__nav-item show-list-btn" @click="switchVisibility" aria-label="Afficher la liste des channels">
                 <svg class="show-list-btn__icon" :class="{ 'show-list-btn__icon--visible' : visible }" height="18" width="18" viewBox="0 0 20 20" >
                     <path 
                         d="m5.41667 4.2625 5.66573 5.7375-5.66573 5.7375 1.74426 1.7625 7.42237-7.5-7.42237-7.5z"
@@ -12,7 +12,7 @@
                 </svg>                
             </button>
 
-            <router-link :to="{ name: 'Home' }" class="header__nav-item">
+            <router-link :to="{ name: 'Home' }" class="header__nav-item" title="Accédez à la page d'accueil">
                 <img class="header__logo" src="@/assets/logos/icon-left-font-monochrome-white.svg" alt="logo groupomania" />
             </router-link>
 

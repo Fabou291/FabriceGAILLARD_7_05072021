@@ -1,6 +1,6 @@
 <template>
     <div class="btn-pop-up"  >
-        <button @mouseenter="fixPositionSidebar">
+        <button type="button" @mouseenter="fixPositionSidebar" :aria-label="label">
             <slot></slot>
         </button>
         <div :style="style">{{ label }}</div>        

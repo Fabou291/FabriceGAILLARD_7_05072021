@@ -1,8 +1,8 @@
 <template>
-    <div class="display-settings-panel" ref="display-settings-panel" v-if="visible"  @mousedown="close">
-        <form  action="" @mousedown.stop>
+    <div type="button" class="display-settings-panel" ref="display-settings-panel" v-if="visible"  @mousedown="close">
+        <form  @mousedown.stop>
             <div class="create-panel">
-                <button class="create-panel__close-btn" type='button' @click="close">
+                <button class="create-panel__close-btn" type='button' @click="close" aria-label="Fermer">
                     <svg  width="24" height="24" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
