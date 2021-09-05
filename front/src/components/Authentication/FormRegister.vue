@@ -35,12 +35,14 @@
                     v-model="password"
                 />
 
-                <InputPasswordConfirmation
+                <InputPassword
+                    ref="passwordConfirmation"
                     class="form-auth__input"
-                    :inputCorrespondanceValue="password"
                     placeholder="Saisissez le même mot de passe."
                     v-model="passwordConfirmation"
+                    @input="areSamePassword"
                 />
+
 
                 <SwitchCheckbox
                     class="form-auth__input"
@@ -51,9 +53,7 @@
                     >Se souvenir de moi</SwitchCheckbox
                 >
             </div>
-            <RoundedBtn class="form-auth__submit-btn rounded-btn--success" type="submit" @click.prevent="post"
-                >Continuer</RoundedBtn
-            >
+            <RoundedBtn class="form-auth__submit-btn rounded-btn--success" type="submit" @click.prevent="post">Continuer</RoundedBtn>
         </template>
     </FormAuthentication>
 </template>
@@ -63,7 +63,6 @@ import FormAuthentication from "@/components/authentication/FormAuthentication.v
 import InputEmail from "@/components/form/InputEmail.vue";
 import InputIcon from "@/components/form/InputIcon.vue";
 import InputPassword from "@/components/form/InputPassword.vue";
-import InputPasswordConfirmation from "@/components/form/InputPasswordConfirmation.vue";
 import SwitchCheckbox from "@/components/form/SwitchCheckbox.vue";
 import RoundedBtn from "@/components/btn/RoundedBtn.vue";
 import { mapActions } from "vuex";
@@ -73,7 +72,6 @@ export default {
         SwitchCheckbox,
         InputIcon,
         InputPassword,
-        InputPasswordConfirmation,
         RoundedBtn,
         InputEmail,
     },
@@ -86,8 +84,19 @@ export default {
             remember: false,
         };
     },
+    watch : {
+        password() {
+            this.areSamePassword();
+        }
+    },
     methods: {
         ...mapActions("userModule", ["register"]),
+        areSamePassword(){
+            let message = 'Les mots de passe doivent être identique.';
+            if( this.password  == this.passwordConfirmation ) message = '';
+
+            this.$refs['passwordConfirmation'].setCustomValidity(message);
+        },
         switchRemember() {
             this.remember = !this.remember;
         },

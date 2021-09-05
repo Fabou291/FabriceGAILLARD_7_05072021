@@ -19,12 +19,6 @@ export default {
                 error = { message : 'Server not responding' }
             }
 
-            console.log(error)
-
-            if(error.message == "jwt expired"){
-                router.push({ name: "Login" })
-            }
-
             context.dispatch('setError', error) 
         },
     },

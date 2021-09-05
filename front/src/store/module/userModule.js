@@ -31,7 +31,7 @@ export default {
     actions: {
         async fetchLogin(context, body) {
             try {
-                const { user, accessToken } = await HTTPRequest.post("auth/login", body);
+                const { user, accessToken } = (await HTTPRequest.post("auth/login", body));
                 context.commit("UPDATE", user);
                 window.localStorage.setItem("accessToken", accessToken);
                 router.push({ name: "Home" });
@@ -42,7 +42,7 @@ export default {
 
         async register({ dispatch }, body) {
             try {
-                if ((await HTTPRequest.post("auth/register", body)).affectdRows) dispatch("fetchLogin", body);
+                if ((await HTTPRequest.post("auth/register", body)).affectedRows) dispatch("fetchLogin", body);
             } catch (error) {
                 dispatch("errorModule/setError", error, { root: true });
             }

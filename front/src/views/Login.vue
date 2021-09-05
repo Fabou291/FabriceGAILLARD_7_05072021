@@ -60,20 +60,16 @@ export default {
 <style lang="scss">
 .authentication {
     width: 100%;
-    height: 100%;
-}
-
-.modal-login {
-    .input-feedback{
-        &:not(:first-child) {
-            margin: 17px 0 0 0;
-        }
-        &:first-child {
-            margin: 0;
-        }
+    height: 100vh;
+    @include setScrollBar($grey-59);
+    @include setMediaScreen(tablette){
+        padding : 10px;
     }
-
+    @include setMediaScreen(mobile){
+        padding : 0px;
+    }
 }
+
 
 
 

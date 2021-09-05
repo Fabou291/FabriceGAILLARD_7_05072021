@@ -23,11 +23,15 @@
         display : flex;
         justify-content: center;
         align-items: center;
+        flex-wrap: wrap;
         gap : 6px;
+
+
 
         &__logo {
             color : $grey-18;
             width: 55px;
+            min-width: 55px;
             height: 55px;
             background-color : white;
             border-radius : 100px
@@ -36,7 +40,10 @@
         &__text {
             @include setCircularStdFont('Medium');
             font-size : 30px;
-            letter-spacing: -0.8px;            
+            letter-spacing: -0.8px;
+            @include setMediaScreen(mobile){
+                width: 100%;
+            }         
         }
     }
 </style>

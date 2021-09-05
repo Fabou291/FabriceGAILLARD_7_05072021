@@ -26,6 +26,15 @@
 
         margin: 40px auto;
 
+        @include setMediaScreen(tablette){
+            padding: 60px 70px;
+            margin: 0px auto;
+        }
+
+        @include setMediaScreen(mobile){
+             padding: 30px 30px;
+        }
+
         a{
             color : white;
         }
@@ -40,7 +49,11 @@
             margin: 30px 0 0 0;
             padding: 40px 0 0 0;
             border-top: 1px solid #404243;  
-            text-align: center;         
+            text-align: center;   
+            @include setMediaScreen(mobile){
+                margin: 20px 0 0 0;
+                padding: 30px 0 0 0;
+            }      
         }
     }
 </style>

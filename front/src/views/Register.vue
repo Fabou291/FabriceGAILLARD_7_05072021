@@ -58,22 +58,9 @@ export default {
 </script>
 
 <style lang="scss">
-.authentication {
-    width: 100%;
-    height: 100%;
-}
 
-.modal-login {
-    .input-feedback{
-        &:not(:first-child) {
-            margin: 17px 0 0 0;
-        }
-        &:first-child {
-            margin: 0;
-        }
-    }
 
-}
+
 
 
 

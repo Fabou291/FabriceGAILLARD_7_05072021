@@ -122,11 +122,11 @@ export default {
         }
     },
     actions: {
-        async getListPost(state, req) {
+        async getListPost(context, req) {
             try {
-                state.commit(req.commit, await HTTPRequest.get(`channel/${req.channelId}/post?limit=${req.limit}&offset=${req.offset}`));
-            } catch (e) {
-                console.log(e);
+                context.commit(req.commit, await HTTPRequest.get(`channel/${req.channelId}/post?limit=${req.limit}&offset=${req.offset}`));
+            } catch (error) {
+                context.dispatch("errorModule/setError", error, { root: true });
             }
         },
         
@@ -148,27 +148,27 @@ export default {
                 });
                 dispatch("setIdPostToReply", null);
                 return response.id;
-            } catch (e) {
-                console.log(e);
+            } catch (error) {
+                dispatch("errorModule/setError", error, { root: true });
             }
         },
 
-        async modifyPost(state, post) {
+        async modifyPost(context, post) {
             try {
                 if ((await HTTPRequest.put(`post/${post.id}`, { content: post.content })).affectedRows) {
-                    state.commit("MODIFY_POST", post);
-                    state.commit("SET_ID_POST_IN_MODIFY_MODE", null);
+                    context.commit("MODIFY_POST", post);
+                    context.commit("SET_ID_POST_IN_MODIFY_MODE", null);
                 }
-            } catch (e) {
-                console.log(e);
+            } catch (error) {
+                context.dispatch("errorModule/setError", error, { root: true });
             }
         },
 
-        async removePost(state, post) {
+        async removePost(context, post) {
             try {
-                if ((await HTTPRequest.delete(`post/${post.id}`)).affectedRows) state.commit("REMOVE_POST", post);
-            } catch (e) {
-                console.log(e);
+                if ((await HTTPRequest.delete(`post/${post.id}`)).affectedRows) context.commit("REMOVE_POST", post);
+            } catch (error) {
+                context.dispatch("errorModule/setError", error, { root: true });
             }
         },
 
@@ -182,8 +182,8 @@ export default {
                     listReaction, 
                     userId : context.rootState.userModule.user.id.toString()
                 });
-            } catch (e) {
-                console.log(e);
+            } catch (error) {
+                context.dispatch("errorModule/setError", error, { root: true });
             }
         },
 
@@ -198,8 +198,8 @@ export default {
                     listReaction
                 });
 
-            } catch (e) {
-                console.log(e);
+            } catch (error) {
+                context.dispatch("errorModule/setError", error, { root: true });
             }
         },
         

@@ -42,21 +42,21 @@ export default {
     },
 
     actions: {
-        async setListGroup(state) {
+        async setListGroup(context) {
             try {
-                state.commit("SET_LIST_GROUP", await HTTPRequest.get("channel/byGroup"));
+                context.commit("SET_LIST_GROUP", await HTTPRequest.get("channel/byGroup"));
             } catch (error) {
-                console.log(error);
+                context.dispatch("errorModule/setError", error, { root: true });
             }
         },
-        async createChannel(state, channel) {
+        async createChannel(context, channel) {
             try {
-                state.commit("ADD_CHANNEL_INTO_GROUP", {
+                context.commit("ADD_CHANNEL_INTO_GROUP", {
                     ...channel,
                     id: (await HTTPRequest.post("channel/", channel)).insertId,                        
                 });
             } catch (error) {
-                console.log(error);
+                context.dispatch("errorModule/setError", error, { root: true });
             }
         },
         switchVisibility({commit, state}){

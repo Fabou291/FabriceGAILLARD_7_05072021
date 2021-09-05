@@ -26,24 +26,24 @@ export default {
         }
     },
     actions : {
-        async remove({state,commit}) {
+        async remove({state,commit, dispatch}) {
             try {
                 if( (await HTTPRequest.delete(`channel/${state.activeChannel.id}`)).affectedRows ){
                     commit("sidebarModule/REMOVE_CHANNEL", state.activeChannel, { root : true });
                     commit("CLOSE_CONFIG")                    
                 }else throw 'Nothing done';
             } catch (error) {
-                console.log(error);
+                dispatch("errorModule/setError", error, { root: true });
             }
         },
-        async modify({state,commit},datas) {
+        async modify({state,commit, dispatch},datas) {
             try {
                 if( (await HTTPRequest.put(`channel/${state.activeChannel.id}`, { ...state.activeChannel, ...datas })).affectedRows ){
                     commit("sidebarModule/MODIFY_CHANNEL", { ...state.activeChannel, ...datas }, { root : true });
                     commit("CLOSE_CONFIG")                    
                 }else throw 'Nothing done';
             } catch (error) {
-                console.log(error);
+                dispatch("errorModule/setError", error, { root: true });
             }
         },
     }

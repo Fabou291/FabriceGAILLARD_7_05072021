@@ -15,6 +15,7 @@ export default class HTTPRequest{
     }
 
     static async fetch(uri, method, headers, body ){
+
         let requesInit = { 
             method, 
             headers : { ...headers, ...this.getAuthorizationHeader() },
@@ -33,12 +34,12 @@ export default class HTTPRequest{
                     return await this.fetch(uri, method, headers, body );
                 } catch(e){
                     router.push({ name: "Login" })
-                    console.log(e)
+                    throw new Error( 'Invalid Token and Refresh Token' )
                 }
+            } else {
+                throw new Error( error.message )
             }
-        } 
-
-        return await response.json();            
+        }else return await response.json(); 
     }
 
     static async refreshToken(){
