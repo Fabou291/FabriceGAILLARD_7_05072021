@@ -37,7 +37,9 @@ class HandlerDivEditable{
     }
 
     parseEmpty() {
-        if (this.handlerDivEditable.getTextContent().replaceAll("\u{FEFF}", "") == "") this.textarea.innerHTML = "";
+        if (this.getTextContent().replaceAll("\u{FEFF}", "") == ""){
+            this.node.innerHTML = "";
+        } 
     }
 
     createZeroText() {

@@ -33,10 +33,14 @@ const modify = (req,res,next) => {
 
 const remove = async (req,res,next) => {
     try{
-        const post = (await mysqlAsyncQuery("SELECT * FROM post WHERE id = ? AND user_id = ?", [req.params.id, req.userId]))[0];
+        let reqAdds = "";
+        const user = (await mysqlAsyncQuery("SELECT * FROM user WHERE id = ?", [req.userId]))[0];
+        if(user.role_id != 1) reqAdds = "AND user_id = ?";
+
+        const post = (await mysqlAsyncQuery("SELECT * FROM post WHERE id = ?" + reqAdds, [req.params.id, req.userId]))[0];
         if(post.image_url != null) await imageHelper.remove(post.image_url);
 
-        const results = await mysqlAsyncQuery("DELETE FROM post WHERE id = ? AND user_id = ?", [req.params.id, req.userId]);
+        const results = await mysqlAsyncQuery("DELETE FROM post WHERE id = ?" + reqAdds, [req.params.id, req.userId]);
         res.status(200).send(results);
        
     } catch(error){ next(error) }
@@ -44,3 +48,12 @@ const remove = async (req,res,next) => {
 
 
 module.exports = { findAll, findOne, create, modify, remove }
+
+/**
+ * 
+    SELECT * FROM post WHERE id = 3 AND user_id = 1
+    UNION
+    SELECT * FROM user WHERE id = 1;
+
+
+*/

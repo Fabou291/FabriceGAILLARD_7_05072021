@@ -30,6 +30,7 @@
                     textarea.normalize();
                     $emit('updateInput', HandlerDivEditable.getTextContent());
                     HandlerDivEditable.CursorHandler.replaceCursor();
+                    HandlerDivEditable.parseEmpty();
                 "
                 @focusout="HandlerDivEditable.setTempDatas"
                 @keydown.left.exact.prevent="HandlerDivEditable.move"

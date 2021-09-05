@@ -10,6 +10,7 @@ class CursorHandler {
         textContentLength: null,
         textLengthFocusNode: null,
         clonedNode: null,
+        isCollapsed : null,
     };
 
     addsZeroText = 0;
@@ -30,6 +31,7 @@ class CursorHandler {
         this.temp.textLengthFocusNode = this.temp.selection.focusNode.textContent.length;
         this.temp.clonedNode = this.node.cloneNode(true);
         this.temp.focusNodeIndex = [...this.node.childNodes].findIndex((e) => e == this.temp.selection.focusNode);
+        this.temp.isCollapsed = window.getSelection().isCollapsed;
     }
 
     setTempSelection() {
@@ -74,76 +76,81 @@ class CursorHandler {
         const diff = nbCharacterAfter - this.temp.textContentLength;
         const selection = this.temp.selection;
 
-        // -- Si l'on touche suppr
-        if (this.onDelete.direction == NEXT && diff < 0) this.temp.cursorPosition++;
+        console.log(this.temp.isCollapsed)
 
-        // -- Considère le curseur position 1, s'il est sur un noeud "\u{FEFF}" position 1 et qu'on écrit (on ne supprime pas)
-        if (
-            this.temp.clonedNode.childNodes.length != 0 &&
-            this.onDelete.direction == 0 &&
-            selection.focusOffset == 0 &&
-            this.temp.clonedNode.childNodes[this.temp.focusNodeIndex].textContent == "\u{FEFF}"
-        ) {
-            if (this.temp.focusNodeIndex == 0) this.temp.cursorPosition = 1;
-            else this.temp.cursorPosition++;
-        }
+        if(this.temp.isCollapsed){
+            // -- Si l'on touche suppr
+            if (this.onDelete.direction == NEXT && diff < 0 ) this.temp.cursorPosition++;
 
-        //-- Détermine la position que devra prendre le curseur et le noeud sur lequel il doit être placé
-        let count = 0;
-        let nodeToReplaceCursor = null;
-        for (const node of [...this.node.childNodes]) {
-            if (count + node.textContent.length >= this.temp.cursorPosition + diff) {
-                nodeToReplaceCursor = node;
-                break;
-            }
-            count += node.textContent.length;
-        }
-
-        if(nodeToReplaceCursor){
-            //-- Reajustement - Gere la suppression backspace
+            // -- Considère le curseur position 1, s'il est sur un noeud "\u{FEFF}" position 1 et qu'on écrit (on ne supprime pas)
             if (
-
-                this.onDelete.direction == PREVIOUS &&
-                selection.focusOffset == 1 &&
-                nodeToReplaceCursor.nextSibling &&
-                diff != 0 &&
-                !this.removedTextZero
-            ) {
-                nodeToReplaceCursor = nodeToReplaceCursor.nextSibling.nextSibling;
-                this.temp.cursorPosition--;
-            }
-
-            //-- Reajustement -  Gere la suppression touche suppr
-            if (
-                this.onDelete.direction == NEXT &&
-                selection.focusOffset == 1 &&
+                this.temp.clonedNode.childNodes.length != 0 &&
+                this.onDelete.direction == 0 &&
+                selection.focusOffset == 0 &&
                 this.temp.clonedNode.childNodes[this.temp.focusNodeIndex].textContent == "\u{FEFF}"
-            ){
-                this.temp.cursorPosition--;
-            }
-                
-            if (
-                nodeToReplaceCursor &&
-                nodeToReplaceCursor.nextSibling &&
-                this.onDelete.direction == NEXT &&
-                selection.focusOffset == 0 
             ) {
-                nodeToReplaceCursor = nodeToReplaceCursor.nextSibling.nextSibling;
-                this.temp.cursorPosition--;
+                if (this.temp.focusNodeIndex == 0) this.temp.cursorPosition = 1;
+                else this.temp.cursorPosition++;
             }
 
-            console.log({
-                temp: { ...this.temp },
-                count,
-                nbCharacterAfter,
-                diff,
-            });
+            //-- Détermine la position que devra prendre le curseur et le noeud sur lequel il doit être placé
+            let count = 0;
+            let nodeToReplaceCursor = null;
+            for (const node of [...this.node.childNodes]) {
+                if (count + node.textContent.length >= this.temp.cursorPosition + diff) {
+                    nodeToReplaceCursor = node;
+                    break;
+                }
+                count += node.textContent.length;
+            }
 
-        
+            if(nodeToReplaceCursor){
+                //-- Reajustement - Gere la suppression backspace
+                if (
 
-            if (nodeToReplaceCursor.nodeType != Node.TEXT_NODE) nodeToReplaceCursor = nodeToReplaceCursor.childNodes[0];
-            window.getSelection().collapse(nodeToReplaceCursor, this.temp.cursorPosition - count + diff);            
+                    this.onDelete.direction == PREVIOUS &&
+                    selection.focusOffset == 1 &&
+                    nodeToReplaceCursor.nextSibling &&
+                    diff != 0 &&
+                    !this.removedTextZero
+                ) {
+                    nodeToReplaceCursor = nodeToReplaceCursor.nextSibling.nextSibling;
+                    this.temp.cursorPosition--;
+                }
+
+                //-- Reajustement -  Gere la suppression touche suppr
+                if (
+                    this.onDelete.direction == NEXT &&
+                    selection.focusOffset == 1 &&
+                    this.temp.clonedNode.childNodes[this.temp.focusNodeIndex].textContent == "\u{FEFF}"
+                ){
+                    this.temp.cursorPosition--;
+                }
+                    
+                if (
+                    nodeToReplaceCursor &&
+                    nodeToReplaceCursor.nextSibling &&
+                    this.onDelete.direction == NEXT &&
+                    selection.focusOffset == 0 
+                ) {
+                    nodeToReplaceCursor = nodeToReplaceCursor.nextSibling.nextSibling;
+                    this.temp.cursorPosition--;
+                }
+
+                console.log({
+                    temp: { ...this.temp },
+                    count,
+                    nbCharacterAfter,
+                    diff,
+                });
+
+            
+
+                if (nodeToReplaceCursor.nodeType != Node.TEXT_NODE) nodeToReplaceCursor = nodeToReplaceCursor.childNodes[0];
+                window.getSelection().collapse(nodeToReplaceCursor, this.temp.cursorPosition - count + diff);            
+            }            
         }
+
 
 
         this.onDelete.direction = 0;
