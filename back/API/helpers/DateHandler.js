@@ -1,7 +1,12 @@
 
 module.exports = class DateHandler {
 
-
+    /**
+     * @name getFormattedDate
+     * @description Récupère/Transforme la date au format FR
+     * @param {String} date 
+     * @returns {String}
+     */
     static getFormattedDate(date){
         return date.toLocaleDateString(
             'fr-FR', 
@@ -9,6 +14,12 @@ module.exports = class DateHandler {
         );
     }
 
+    /**
+     * @name getFormattedHours
+     * @description Récupère l'heur formaté au format FR
+     * @param {String} date 
+     * @returns {String}
+     */
     static getFormattedHours(date){
         return new Intl.DateTimeFormat(
             "fr-FR", 
@@ -16,6 +27,12 @@ module.exports = class DateHandler {
         ).format(date);
     }
 
+    /**
+     * @name wasToday
+     * @description Détermine si la date est d'aujourd'hui
+     * @param {String} date 
+     * @returns {Boolean}
+     */
     static wasToday(date){
         const today = new Date();
         return  date.getDate() == today.getDate() &&
@@ -23,6 +40,12 @@ module.exports = class DateHandler {
                 date.getFullYear() == today.getFullYear()
     }
 
+    /**
+     * @name wasYesterday
+     * @description Détermine si la date est d'hier
+     * @param {String} date 
+     * @returns {Boolean}
+     */
     static wasYesterday(date){
         const today       = new Date();
         const yesterday   = new Date(today);
@@ -33,6 +56,12 @@ module.exports = class DateHandler {
                 date.getFullYear() == yesterday.getFullYear()
     }
 
+    /**
+     * @name getDateFromNow
+     * @description Récupère/Calcul le temps passé entre le timestamp et aujourd'hui
+     * @param {String} timestamp 
+     * @returns {String}
+     */
     static getDateFromNow(timestamp){
         const date = new Date(this.timestamp * 1000);
         if(this.wasToday(timestamp)) return "Aujourd'hui à " + this.getFormattedHours(timestamp);

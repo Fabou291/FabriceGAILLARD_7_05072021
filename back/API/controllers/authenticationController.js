@@ -3,8 +3,20 @@ const tokenHelper = require("../helpers/tokenHelper.js");
 const createError = require("http-errors");
 const bcrypt = require("bcrypt");
 const JWT = require("jsonwebtoken");
+const dotenv = require("dotenv");
+dotenv.config({ path: __dirname + '../../../.env' });
 
-
+/**
+ * @function login
+ * @description Authentifie l'utilisateur si les conditions suivantes sont réunie :
+ *  - Si le mail est présent en bdd
+ *  - Si son nombre de tentative n'excède pas 5 dans le temps limite impartie (protection contre brute force)
+ *  - Si le password est correcte
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @returns
+ */
 const login = async (req, res, next) => {
     const delay = 5, attempt_limit = 5;
 
@@ -45,6 +57,14 @@ const login = async (req, res, next) => {
     }
 };
 
+/**
+ * @function refreshToken
+ * @description Refresh le l'access token si le refresh token est valide.
+ * @param {*} req
+ * @param {*} res
+ * @param {*} next
+ * @returns
+ */
 const refreshToken = async (req, res, next) => {
     try{
         if (!req.headers.authorization) throw createHttpError.Unauthorized("Not authorized");

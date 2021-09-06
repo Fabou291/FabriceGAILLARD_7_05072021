@@ -1,6 +1,11 @@
 const rateLimit = require("express-rate-limit");
-//Protège des attaques ddos
 
+/**
+ * @name initialization
+ * @description Initialisation d'un limiteur de trafic
+ * Pour se protéger des attaques ddos
+ * @param {*} app 
+ */
 const initialization = (app) => {
     app.use(rateLimit({
         windowMs: 10 * 1000,

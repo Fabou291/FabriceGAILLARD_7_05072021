@@ -3,6 +3,13 @@ const createError = require("http-errors");
 const bcrypt = require("bcrypt");
 const imageHelper = require("../helpers/ImageHelper.js");
 
+/**
+ * @name findAll
+ * @description Récupère l'ensemble des utilisateurs.
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const findAll = (req,res,next) => {
     mysqlDataBase.query('SELECT * FROM user', function (error, results, fields) {
         if (error) next(error);
@@ -10,6 +17,13 @@ const findAll = (req,res,next) => {
     });
 }
 
+/**
+ * @name findOne
+ * @description Récupère un utilisateur en fonction de son id.
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const findOne = (req,res,next) => {
     mysqlDataBase.query('SELECT * FROM user WHERE id= ?', [req.params.id] , function (error, results, fields) {
         if (error) next(error);
@@ -17,8 +31,14 @@ const findOne = (req,res,next) => {
     });
 }
 
+/**
+ * @name create
+ * @description Crée un nouvel utilisateur.
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const create = (req,res,next) => {
-
     mysqlDataBase.query(
         `
             INSERT INTO user (username,avatar,email,password, role_id)
@@ -33,9 +53,15 @@ const create = (req,res,next) => {
             else res.status(202).send(results);
         }
     );        
-
 }
 
+/**
+ * @name modify
+ * @description Modifie un utilisateur existant en fonction de son id.
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const modify = async (req,res,next) => {
     try{
         if(req.file){
@@ -56,6 +82,13 @@ const modify = async (req,res,next) => {
     }
 }
 
+/**
+ * @name resetPassword
+ * @description Renouvelle le mot de passe de l'utilisateur.
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const resetPassword = async (req,res,next) => {
     try{
 
@@ -71,7 +104,7 @@ const resetPassword = async (req,res,next) => {
             [ req.body.password, req.userId ],
             function (error, results, fields) {
                 if (error) next(error);
-                else if(!results.affectedRows) throw createError.BadRequest('You are note authorized to delete this user')
+                else if(!results.affectedRows) throw createError.BadRequest('You are note authorized to change the password')
                 else res.status(200).send(results);
             }
         );        
@@ -81,6 +114,13 @@ const resetPassword = async (req,res,next) => {
     }
 }
 
+/**
+ * @name resetMail
+ * @description Renouvelle l'email de l'utilisateur.
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const resetMail = (req,res,next) => {
     try{
         mysqlDataBase.query(
@@ -103,6 +143,13 @@ const resetMail = (req,res,next) => {
     }
 }
 
+/**
+ * @name remove
+ * @description Supprime l'utilisateur.
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const remove = async (req,res,next) => {
 
     try{
@@ -115,6 +162,5 @@ const remove = async (req,res,next) => {
     } catch(error){ next(error) }
     
 }
-
 
 module.exports = { findAll, findOne, create, modify, remove, resetMail, resetPassword }

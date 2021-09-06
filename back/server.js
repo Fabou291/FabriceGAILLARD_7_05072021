@@ -1,8 +1,6 @@
 const http = require("http");
 const app = require("./API/app.js");
 const dotenv = require("dotenv");
-const path = require("path");
-
 dotenv.config({ path: __dirname + '\\.env' })
 
 

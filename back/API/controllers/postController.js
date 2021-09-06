@@ -1,6 +1,13 @@
 const {mysqlDataBase, mysqlAsyncQuery} = require("../../config/mysqlConfig.js");
 const imageHelper = require("../helpers/ImageHelper.js");
 
+/**
+ * @name findAll
+ * @description Récupère l'ensemble des posts.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ */
 const findAll = (req,res,next) => {
     mysqlDataBase.query('SELECT * FROM post',function(error, results, fields){
         if(error) next(error)
@@ -8,7 +15,13 @@ const findAll = (req,res,next) => {
     })
 }
 
-
+/**
+ * @name findOne
+ * @description Récupère un post en fonction de son id.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ */
 const findOne = (req,res,next) => {
     mysqlDataBase.query('SELECT * FROM post WHERE id = ?', [req.params.id], function(error, results, fields){
         if(error) next(error)
@@ -16,6 +29,13 @@ const findOne = (req,res,next) => {
     })
 }
 
+/**
+ * @name create
+ * @description Crée un nouveau post.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ */
 const create = (req,res,next) => {
     const imageUrl = req.file ? req.file.filename : null ;
     mysqlDataBase.query( "INSERT INTO post (content, channel_id, post_id, image_url, user_id) VALUES(?,?,?,?,?)", [req.body.content, parseInt(req.body.channelId), JSON.parse(req.body.postId), imageUrl, req.userId], function(error, results, fields){
@@ -24,6 +44,13 @@ const create = (req,res,next) => {
     })
 }
 
+/**
+ * @name modify
+ * @description Modifie un post existant en fonction de son id.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ */
 const modify = (req,res,next) => {
     mysqlDataBase.query( "UPDATE post SET content = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND user_id = ?", [req.body.content, req.params.id, req.userId], function(error, results, fields){
         if(error) next(error)
@@ -31,6 +58,13 @@ const modify = (req,res,next) => {
     })
 }
 
+/**
+ * @name remove
+ * @description Supprime un post en fonction de son id.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ */
 const remove = async (req,res,next) => {
     try{
         let reqAdds = "";
@@ -48,12 +82,3 @@ const remove = async (req,res,next) => {
 
 
 module.exports = { findAll, findOne, create, modify, remove }
-
-/**
- * 
-    SELECT * FROM post WHERE id = 3 AND user_id = 1
-    UNION
-    SELECT * FROM user WHERE id = 1;
-
-
-*/

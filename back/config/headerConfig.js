@@ -1,5 +1,12 @@
 const helmet = require('helmet'); 
 
+/**
+ * @name initialization
+ * @description Initialise les header 
+ * pour répondre aux probleme de sécurité (helmet)
+ * pour accepter le CORS
+ * @param {*} app 
+ */
 const initialization = (app) => {
     app.use(helmet());
 

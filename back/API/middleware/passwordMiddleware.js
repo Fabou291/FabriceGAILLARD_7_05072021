@@ -3,6 +3,11 @@ const createError = require("http-errors");
 const bcrypt = require("bcrypt");
 const fs = require('fs');
 
+/**
+ * @name getSchema
+ * @description Récupère le Schema déterminant les règle pour la validation du password
+ * @returns {*}
+ */
 const getSchema = () => {
     //const rawdata = fs.readFileSync('commonPass.json');
     //Object.values(JSON.parse(rawdata))
@@ -16,7 +21,13 @@ const getSchema = () => {
         .is().not().oneOf([]); 
 }
 
-
+/**
+ * @name checkValidity
+ * @description Détermine si un password est valide ou non
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const checkValidity = (req,res,next) => {
 
     if(getSchema().validate(req.body.password)) 
@@ -26,6 +37,13 @@ const checkValidity = (req,res,next) => {
 
 }
 
+/**
+ * @name checkToReset
+ * @description Détermine si l'ancien et le nouveau password sont valide
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const checkToReset = (req,res,next) => {
     try{
         if(req.body.password == req.body.oldPassword)
@@ -40,6 +58,13 @@ const checkToReset = (req,res,next) => {
 
 }
 
+/**
+ * @name encrypt
+ * @description Encrypt le password
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const encrypt = (req,res,next) => {
 
     bcrypt

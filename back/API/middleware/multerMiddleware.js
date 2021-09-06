@@ -11,7 +11,8 @@ const mimeTypes = {
 };
 
 /**
- * Défini la configuration de multer (qui gère l'upload de fichier )
+ * @name storage
+ * @description Défini la configuration de multer (qui gère l'upload de fichier )
  */
 const storage = multer.diskStorage({
 

@@ -1,31 +1,32 @@
 const validator = require("email-validator");
-const crypto = require("crypto");
+
 const createError = require("http-errors");
+const encryptHelper = require('../helpers/encryptHelper');
 
-const handleMailEncryption = (email) => {
-    return crypto
-        .createCipheriv(
-            "aes-256-gcm",
-            crypto
-                .createHash("sha256")
-                .update(process.env.SECRET_EMAIL_KEY)
-                .digest("base64")
-                .substr(0, 32),
-                process.env.SECRET_EMAIL_IV
-        )
-        .update(email, "utf8", "hex");
-}
-
+/**
+ * @name checkValidity
+ * @description 
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ */
 const checkValidity = (req,res,next) => {
     if(validator.validate(req.body.email)) next();
     else next(createError.BadRequest('Invalid email'));
 }
 
+/**
+ * @name checkToReset
+ * @description 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const checkToReset = (req,res,next) => {
     try{
         if(req.body.email == req.body.userId)
             throw createError.BadRequest('New and old e-mail can\'t be the same.');
-            req.body.oldMail = handleMailEncryption(req.body.oldMail);
+            req.body.oldMail = encryptHelper.handleMailEncryption(req.body.oldMail);
         next();
     } catch(e) {
         next(e)
@@ -33,8 +34,15 @@ const checkToReset = (req,res,next) => {
 
 }
 
+/**
+ * @name encrypt
+ * @description 
+ * @param {*} req 
+ * @param {*} res 
+ * @param {*} next 
+ */
 const encrypt = (req, res, next) => {
-    req.body.email = handleMailEncryption(req.body.email);
+    req.body.email = encryptHelper.handleMailEncryption(req.body.email);
     next();
 };
 

@@ -1,6 +1,7 @@
 const JWT = require("jsonwebtoken");
 const createHttpError = require("http-errors");
-const { mysqlAsyncQuery } = require("../../config/mysqlConfig.js");
+const dotenv = require("dotenv");
+dotenv.config({ path: __dirname + '../../../.env' })
 
 
 

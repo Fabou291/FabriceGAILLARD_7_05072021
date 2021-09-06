@@ -11,4 +11,3 @@ const remove = async (fileName) => {
 };
 
 module.exports = {remove};
-

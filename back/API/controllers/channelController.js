@@ -1,6 +1,13 @@
 const DateHandler = require("../helpers/DateHandler.js");
 const { mysqlDataBase, mysqlAsyncQuery } = require("../../config/mysqlConfig.js");
 
+/**
+ * @name findAll
+ * @description Récupère l'ensemble des channels.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ */
 const findAll = (req, res, next) => {
     mysqlDataBase.query("SELECT * FROM channel", function(error, results, fields) {
         if (error) next(error);
@@ -8,6 +15,13 @@ const findAll = (req, res, next) => {
     });
 };
 
+/**
+ * @name findAllByGroup
+ * @description Récupère l'ensemble des channels par groupe.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ */
 const findAllByGroup = (req, res, next) => {
     mysqlDataBase.query(
         `SELECT cg.name as channel_group_name, cg.id as channel_group_id, 
@@ -44,8 +58,13 @@ const findAllByGroup = (req, res, next) => {
     );
 };
 
-
-
+/**
+ * @name findAllPostOfChannel
+ * @description Récupère l'ensemble des posts pour un channel.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ */
 const findAllPostOfChannel = (req,res,next) => {
     const limit = req.query.limit || 18446744073709551615; //La plus grande limit possible
     const offset = req.query.offset || 0;
@@ -109,6 +128,13 @@ const findAllPostOfChannel = (req,res,next) => {
 
 }
 
+/**
+ * @name findOne
+ * @description Récupère un Channel en fonction de son id.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ */
 const findOne = (req, res, next) => {
     mysqlDataBase.query("SELECT * FROM channel WHERE id = ?", [req.params.id], function(error, results, fields) {
         if (error) next(error);
@@ -116,6 +142,13 @@ const findOne = (req, res, next) => {
     });
 };
 
+/**
+ * @name create
+ * @description Crée un nouveau channel.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ */
 const create = (req, res, next) => {
 
     mysqlDataBase.query(
@@ -128,6 +161,13 @@ const create = (req, res, next) => {
     );
 };
 
+/**
+ * @name modify
+ * @description Modifie un channel existant en fonction de son id.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ */
 const modify = (req, res, next) => {
 
     mysqlDataBase.query(
@@ -140,6 +180,13 @@ const modify = (req, res, next) => {
     );
 };
 
+/**
+ * @name remove
+ * @description Supprime un channel en fonction de son id.
+ * @param {Object} req 
+ * @param {Object} res 
+ * @param {Object} next 
+ */
 const remove = (req, res, next) => {
     mysqlDataBase.query("DELETE FROM channel WHERE id = ?", [req.params.id], function(error, results, fields) {
         if (error) next(error);

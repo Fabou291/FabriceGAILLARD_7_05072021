@@ -4,6 +4,7 @@ USE groupomania_social_network;
 
 SET NAMES 'utf8';
 
+/* -- Création des table -- */
 CREATE TABLE role(
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE
@@ -93,8 +94,7 @@ CREATE TABLE reaction(
     UNIQUE KEY reaction_post_unique (emoji_unicode,user_id,post_id)
 );
 
-
-/* TABLE "TEMPORAIRE" */
+/* *table temporaire */
 DROP TABLE IF EXISTS avatar_set;
 CREATE TABLE avatar_set (
     id INTEGER NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -102,7 +102,7 @@ CREATE TABLE avatar_set (
 );
 
 
-/*INSERTIONS*/
+/* -- Insertions dans les tables créé précédemment -- */
 SET @pathAvatar = "avatarDefaultSet/";
 INSERT INTO avatar_set (name) VALUES ("A"), ("B"), ("C"), ("D"), ("E"), ("F"), ("G"), ("H");
 
@@ -187,10 +187,14 @@ INSERT INTO post (content, post_id, user_id)
     ("com", 19, 1);
 
 
-
-
 DROP TABLE avatar_set;
 
+/* Création de procédures stockées */
+
+/**
+* @procedure login_fail
+* @description Détermine dans quel situations se trouve le compte de l'utilisateur lorsque le login à fail
+*/
 DROP PROCEDURE IF EXISTS login_fail;
 DELIMITER |
 CREATE PROCEDURE login_fail(IN _user_id INT, IN ip_adress VARCHAR(150), IN delay INT, IN attempt_limit INT)
@@ -213,6 +217,8 @@ BEGIN
 END|
 DELIMITER ;
 
+
+/* Affichage des différentes tables */
 SELECT * FROM role;
 SELECT * FROM user;
 SELECT * FROM channel_group;

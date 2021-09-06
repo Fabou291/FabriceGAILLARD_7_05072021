@@ -1,9 +1,17 @@
 const session = require("express-session");
+const dotenv = require("dotenv");
+dotenv.config({ path: __dirname + '../../.env' })
 
 const ONE_HOUR = 1000 * 60 * 60;
 const NODE_ENV = "devlopment";
-const SESSION_SECRET = "AN_OTHER_SECRET_SESSION";
+const SESSION_SECRET = process.env.SESSION_SECRET;
 
+
+/**
+ * @name initialization
+ * @description initialization de la session
+ * @param {Object} app 
+ */
 const initialization = (app) => {
     app.use(
         session({
