@@ -193,7 +193,7 @@ export default {
 
     textarea {
         resize: none;
-        @include setScrollBar($success);
+        @include setScrollBar($primary);
     }
 
     &__main {

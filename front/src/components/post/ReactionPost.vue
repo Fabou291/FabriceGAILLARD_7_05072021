@@ -51,12 +51,12 @@ export default {
 
 
         &--active{
-            background-color : rgba(darken($success, 25),0.4) !important;
-            border : 1px solid rgba($success, 0.6) !important;
+            background-color : rgba(darken($primary, 25),0.4) !important;
+            border : 1px solid rgba($primary, 0.6) !important;
 
             &:hover{
-                background-color : rgba(darken($success, 20),0.4) !important;
-                border : 1px solid rgba($success, 0.8) !important;
+                background-color : rgba(darken($primary, 20),0.4) !important;
+                border : 1px solid rgba($primary, 0.8) !important;
             }
         }
 

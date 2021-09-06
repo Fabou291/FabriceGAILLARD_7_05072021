@@ -68,7 +68,7 @@
         padding : 8px;
         border-radius: 4px;
         &:hover{
-            background-color : darken($success,10%);
+            background-color : darken($primary,10%);
             color : white;
             .action__tip, .action__explanation{
                 color : white;

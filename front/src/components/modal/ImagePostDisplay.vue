@@ -124,8 +124,8 @@ export default {
         }
 
         &:focus {
-            border: 1px solid $green;
-            box-shadow: 0 0 1px lighten($green,15%), inset 0 0 1px darken($green,15%) ;
+            border: 1px solid $primary;
+            box-shadow: 0 0 1px lighten($primary,15%), inset 0 0 1px darken($primary,15%) ;
         }       
     }
 

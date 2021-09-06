@@ -12,7 +12,7 @@
         border-radius: 100px;
         text-align : center; 
         &.rounded-btn--success {
-            background-color : $success;
+            background-color : $primary;
             color : white;          
         }
     }

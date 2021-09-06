@@ -44,7 +44,7 @@
             width: 100%;
             height: 100%;
             border-radius: 60px;
-            background-color: $green;
+            background-color: $primary;
             transform: scale(0.7);
             transition: transform 0.1s;
         }

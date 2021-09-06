@@ -84,8 +84,8 @@
             visibility: hidden;
             position : absolute;
             &:checked + label .switch-checkbox__switch-btn{
-                background-color : $success;
-                border-color : $success;
+                background-color : $primary;
+                border-color : $primary;
                 
                 &::after{
                     

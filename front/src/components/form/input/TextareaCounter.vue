@@ -32,7 +32,7 @@ export default {
             position : absolute;
             right : 10px;
             bottom : 10px;
-            color : $success;
+            color : $primary;
         }
     }
 </style>
