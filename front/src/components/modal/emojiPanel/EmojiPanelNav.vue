@@ -15,7 +15,7 @@ export default {
     data: () => {
         return {
             actived : "Emoji",
-            listButton: ["GIF", "Emoji"],            
+            listButton: [ "Emoji"],            
         }
     },
     methods: {

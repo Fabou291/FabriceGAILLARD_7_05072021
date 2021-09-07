@@ -14,23 +14,18 @@
                 <ActionList ref="brownser" v-show="ActionListVisible" />
             </div>
             <div
-                @drop.prevent=""
-                @dragenter.prevent=""
-                @dragstart.prevent=""
-                @drag.prevent=""
-                @paste.prevent="paste"
+                @drop.prevent="" @dragenter.prevent="" @dragstart.prevent="" @drag.prevent="" @paste.prevent="paste"
                 @keypress.enter.exact.prevent="submit"
                 @keydown.shift.enter.exact="addLine"
                 @keydown.esc.exact="escape"
                 @input="
-                    parseEmoji();
                     parseUrl();
                     parseImgHasTextAround();
                     parseTextZero();
                     textarea.normalize();
-                    $emit('updateInput', HandlerDivEditable.getTextContent());
-                    HandlerDivEditable.CursorHandler.replaceCursor();
                     HandlerDivEditable.parseEmpty();
+                    HandlerDivEditable.CursorHandler.replaceCursor();
+                    $emit('updateInput', this.HandlerDivEditable.getTextContent());
                 "
                 @focusout="HandlerDivEditable.CursorHandler.setTempDatas"
                 @keydown.left.exact.prevent="HandlerDivEditable.CursorHandler.move"
@@ -42,13 +37,9 @@
                 ref="textarea"
                 spellcheck="false"
                 tabindex="0"
-            >&#xFEFF;<span contenteditable="false"><img width="19px" alt=":grinning:" src="/img/1f600.7c010dc6.svg"/></span>&nbsp;<span
-                    contenteditable="false"
-                    ><img width="19px" alt=":smiley:" src="/img/1f603.66f6c781.svg"/></span
-                >&nbsp;<span contenteditable="false"><img width="19px" alt=":smile:" src="/img/1f604.626aaed4.svg"/></span
-                >&nbsp;<span contenteditable="false"><img width="19px" alt=":grin:" src="/img/1f601.ab226fe8.svg"/></span>&nbsp;azertyuiop</div>
+            ></div>
 
-            <button type="button" class="form-post-btn form-post-btn__gif-btn" v-if="canGIF" aria-label="Ouvrir le panel de gif">
+            <button type="button" class="form-post-btn" v-if="false" aria-label="Ouvrir le panel de gif">
                 <svg width="24" height="24" viewBox="0 0 24 24">
                     <path
                         fill="currentColor"
@@ -56,16 +47,10 @@
                     ></path>
                 </svg>
             </button>
-            <div class="form-post-btn__emoji-btn" >
-                <button type="button" class="form-post-btn" ref="emojiFormBtn" v-if="canEmoji" @click="showEmojiDisplay()" aria-label="Ouvrir le panel d'emoji">
-                    <svg width="24" height="24" viewBox="0 0 24 24">
-                        <path
-                            fill="currentColor"
-                            d="M12 2.00098C6.486 2.00098 2 6.48698 2 12.001C2 17.515 6.486 22.001 12 22.001C17.514 22.001 22 17.515 22 12.001C22 6.48698 17.514 2.00098 12 2.00098ZM17 13.001H13V17.001H11V13.001H7V11.001H11V7.00098H13V11.001H17V13.001Z"
-                        ></path>
-                    </svg>
-                </button>
-            </div>
+
+            <button type="button" class="form-post-btn form-emoji-btn" ref="emojiFormBtn" v-if="canEmoji" @click="showEmojiDisplay()" aria-label="Ouvrir le panel d'emoji">
+                <img :src="require('@/assets/twemoji/svg/1f642.svg')" alt="🙂">
+            </button>
         </div>
 
         <div class="respond-info" v-if="idPostToReply && canRespond">
@@ -134,7 +119,6 @@ export default {
     methods: {
         ...mapMutations("emojiModule", ["SET_POSITION", "OPEN", "SET_HANDLER_DIV_EDITABLE"]),
         ...mapMutations("postModule", ["SET_ID_POST_TO_REPLY"]),
-
         showEmojiDisplay() {
             this.SET_HANDLER_DIV_EDITABLE(this.HandlerDivEditable);
             handlerPositionDisplayEmoji.setPositionOfDisplay(this.$refs["emojiFormBtn"], this.sticky);
@@ -158,12 +142,13 @@ export default {
         },
 
         paste(event) {
-            let paste = (event.clipboardData || window.clipboardData).getData("text");
+            let paste = (event.clipboardData || window.clipboardData).getData("text").trim();
             const selection = window.getSelection();
             if (!selection.rangeCount) return false;
             selection.deleteFromDocument();
             selection.getRangeAt(0).insertNode(document.createTextNode(paste));
-            this.parseEmoji();
+            //this.parseEmoji();
+            //this.parseImgHasTextAround();
         },
 
         drop(event) {
@@ -199,8 +184,6 @@ export default {
 
                     if (!previous || (previous.nodeType != Node.TEXT_NODE && previous.contentEditable == "false"))
                         this.textarea.insertBefore(this.HandlerDivEditable.createZeroText(), node);
-
-                        
                 }
             });
         },
@@ -217,10 +200,9 @@ export default {
 
         keydownHandler(e) {
             this.HandlerDivEditable.CursorHandler.setTempDatas();
-
             if (e.keyCode == 8) this.backSpaceHandler();
             if (e.keyCode == 46) this.deleteHandler();
-            
+            this.parseImgHasTextAround();
         },
 
         deleteHandler() {
@@ -238,10 +220,8 @@ export default {
             const reg = new RegExp("\u{FEFF}");
             if (reg.test(focusNode.textContent) && focusNode.textContent.length == 1 && this.textarea.textContent.length > 1){
                 focusNode.parentNode.removeChild(focusNode);
-                console.log('removeTextZero')
                 this.HandlerDivEditable.CursorHandler.removedTextZero = true;
             }
-                
         },
 
         addLine() {
@@ -250,9 +230,12 @@ export default {
     },
     mounted() {
         this.textarea = this.$refs["textarea"];
-        if (this.focus) this.textarea.focus();
-        this.EmojiParser = new EmojiParser(this.textarea, this.emojisShortCodeIndex);
         this.HandlerDivEditable = new HandlerDivEditable(this.textarea);
+
+
+        
+        this.EmojiParser = new EmojiParser(this.textarea, this.emojisShortCodeIndex);
+        
         this.UrlParser = new UrlParser(this.textarea);
         //this.textarea.addEventListener('focusout',this.HandlerDivEditable.getSelection,true)
     },
@@ -268,6 +251,10 @@ export default {
 .form-post {
     border-radius: 4px;
     background-color: $grey-47;
+
+    img{
+        vertical-align: top;
+    }
 
     &__container {
         color: $grey-142;
@@ -290,7 +277,8 @@ export default {
         background-color: transparent;
         border: none;
         overflow: hidden;
-        padding: 7px;
+        padding: 4.5px 7px;
+        line-height : 1.5;
         word-break: break-all;
         border-radius: 4px;
         @include setCircularStdFont("Book");
@@ -346,5 +334,25 @@ export default {
     &__user {
         color: $primary;
     }
+}
+
+.form-emoji-btn{
+    margin-left : auto;
+    padding : 6px;
+    img{
+        width: 20px;
+        height: 20px;
+        transform : scale(1);
+        opacity : 0.5;
+        filter: grayscale(100%);
+        transition : transform 0.2s;    
+    }
+
+    &:hover img{
+        transform : scale(1.2);
+        opacity : 1;
+        filter: grayscale(0);
+    } 
+
 }
 </style>

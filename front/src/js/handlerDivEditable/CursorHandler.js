@@ -20,13 +20,14 @@ class CursorHandler {
 
     constructor(node) {
         this.node = node;
+        this.initialization()
     }
 
     /**
      * @name setTempDatas
      * @description Sauvegarde les données relative au curseur et plus, avant toute opération faite sur la divEditable
      */
-    setTempDatas() {
+    setTempDatas = () => {
         this.setTempSelection();
         this.setTempCursorPosition(this.temp.selection);
         this.temp.textContentLength = this.node.textContent.length;
@@ -41,12 +42,39 @@ class CursorHandler {
      * @description Sauvegarde les données relative à la selection avant toute opération faite sur la divEditable
      */
     setTempSelection() {
+
         let { anchorOffset, focusOffset, anchorNode, focusNode } = window.getSelection();
         if (focusNode == this.node && this.node.lastChild) {
             focusNode = this.node.lastChild;
             focusOffset = focusNode.textContent.length;
         }
         this.temp.selection = { anchorOffset, focusOffset, anchorNode, focusNode, selection: window.getSelection() };
+    }
+
+    /**
+     * @name initialization
+     * @description Initialize l'ensemble de variable necessaire pour le bon fonctionnement
+     */
+    initialization(){
+        const focusNode = (this.node.lastChild) ? this.node.lastChild : this.node ;
+        const focusOffset = focusNode.textContent.length ;
+
+     
+        this.temp.cursorPosition = this.node.textContent.length;
+        this.temp.textContentLength = this.node.textContent.length;
+        this.temp.textLengthFocusNode = focusNode.textContent.length;
+        this.temp.clonedNode = this.node.cloneNode(true);
+        this.temp.focusNodeIndex = [...this.node.childNodes].findIndex((e) => e == focusNode);
+        this.temp.isCollapsed = true;
+        this.temp.selection = { anchorOffset : null, focusOffset, anchorNode : null, focusNode };
+
+        console.log(
+            this.temp.textContentLength,
+            this.temp.textLengthFocusNode,
+            this.temp.focusNodeIndex,
+            this.temp.isCollapsed,
+            this.temp.selection
+        )
     }
 
     /**
@@ -109,13 +137,12 @@ class CursorHandler {
         const diff = nbCharacterAfter - this.temp.textContentLength;
         const selection = this.temp.selection;
 
-        console.log(this.temp.isCollapsed)
 
         if(this.temp.isCollapsed){
             // -- Si l'on touche suppr
             if (this.onDelete.direction == NEXT && diff < 0 ) this.temp.cursorPosition++;
 
-            // -- Considère le curseur position 1, s'il est sur un noeud "\u{FEFF}" position 1 et qu'on écrit (on ne supprime pas)
+            // -- Considère le curseur position 1, s'il est sur un noeud "\u{FEFF}" position 1 et qu'on écrit (cad qu'on ne supprime pas)
             if (
                 this.temp.clonedNode.childNodes.length != 0 &&
                 this.onDelete.direction == 0 &&
@@ -136,6 +163,8 @@ class CursorHandler {
                 }
                 count += node.textContent.length;
             }
+
+
 
             if(nodeToReplaceCursor){
                 //-- Reajustement - Gere la suppression backspace
@@ -159,12 +188,15 @@ class CursorHandler {
                 ){
                     this.temp.cursorPosition--;
                 }
+
+
                     
                 if (
                     nodeToReplaceCursor &&
                     nodeToReplaceCursor.nextSibling &&
                     this.onDelete.direction == NEXT &&
-                    selection.focusOffset == 0 
+                    selection.focusOffset == 0 &&
+                    this.temp.clonedNode.childNodes[this.temp.focusNodeIndex].previousSibling
                 ) {
                     nodeToReplaceCursor = nodeToReplaceCursor.nextSibling.nextSibling;
                     this.temp.cursorPosition--;
@@ -177,7 +209,6 @@ class CursorHandler {
                     diff,
                 });
 
-            
 
                 if (nodeToReplaceCursor.nodeType != Node.TEXT_NODE) nodeToReplaceCursor = nodeToReplaceCursor.childNodes[0];
                 window.getSelection().collapse(nodeToReplaceCursor, this.temp.cursorPosition - count + diff);            
@@ -197,7 +228,7 @@ class CursorHandler {
      * @param {Object} event 
      * @returns 
      */
-    move(event) {
+    move = (event) => {
         const direction = event.keyCode == 37 ? PREVIOUS : NEXT;
         const selection = window.getSelection();
         if (selection.focusNode == this.node) return;

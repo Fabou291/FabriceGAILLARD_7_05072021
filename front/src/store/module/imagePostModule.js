@@ -18,7 +18,6 @@ export default {
     },
     actions: {
         open({commit},payload){
-            console.log(payload.listFile)
             commit('SET_FILE', payload.listFile);
             commit('SET_CONTENT', payload.content);
         },

@@ -68,7 +68,7 @@ export default {
         },
         redirectToFirstChannel(){
             const listChannel = this.listGroup.reduce( (a, group) => a = [...a, ...group.listChannel], [] );
-            if(listChannel > 0){
+            if(listChannel.length > 0){
                 this.$router.push({
                     name : 'Channel',
                     params: { id: listChannel[0].id }

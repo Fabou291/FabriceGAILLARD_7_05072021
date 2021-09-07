@@ -1,7 +1,9 @@
+const emojiRegex = require('emoji-regex');
 import EditableDivParser from './editableDivParser.js';
+import emojiUnicode from 'emoji-unicode';
 class EmojiParser extends EditableDivParser{
 
-    regexp = /:\w+:/;
+    regexp = emojiRegex();
 
     constructor(node,emojisShortCodeIndex){
         super(node);
@@ -10,14 +12,21 @@ class EmojiParser extends EditableDivParser{
 
     /**
      * @name createNode
-     * @description Crée un l'élement adequat en fonction de la situation
+     * @description Crée un une image si le fichier existe, sinon crée l'emoji en simple texte
      * @param {String} shortCode 
      * @returns 
      */
-    createNode(shortCode){
-        return (this.shortCodeExist(shortCode))
-            ? this.createSpanImgNode(shortCode)
-            : document.createTextNode(shortCode);
+    createNode(emoji) {
+        let node = null
+        try{
+            node = this.createSpanImgNode(
+                `<img class="emoji" alt="${emoji}" src="${require("@/assets/twemoji/svg/" + emojiUnicode(emoji) + ".svg")}">`
+            )
+        }catch(e){
+            console.log(e)
+            node = document.createTextNode(emoji)
+        }
+        return node;
     }
 
     /**
@@ -26,13 +35,10 @@ class EmojiParser extends EditableDivParser{
      * @param {String} shortCode 
      * @returns 
      */
-    createSpanImgNode(shortCode){
+    createSpanImgNode(emoji){
         const span =  document.createElement('span');
         span.setAttribute('contenteditable','false');
-        span.innerHTML = 
-            `<img width="15px" alt="${shortCode}" src="${require("@/assets/twemoji/svg/" +
-                this.emojisShortCodeIndex.get(shortCode).u.join("-").toLowerCase() +
-            ".svg")}">`;
+        span.innerHTML = emoji;
         return span
     }
 
@@ -55,28 +61,8 @@ class EmojiParser extends EditableDivParser{
             .slice(0,-1);
     }
 
-    /**
-     * @name shortCodeExist
-     * @description 
-     * @param {*} shortCode 
-     * @returns 
-     */
-    shortCodeExist(shortCode){
-        return this.emojisShortCodeIndex.get(shortCode);
-    }
 
-    /**
-     * @name hasAValidShortCode
-     * @description 
-     * @param {*} shortCode 
-     * @returns 
-     */
-    hasAValidShortCode(content){
-        for (const shortCode of content.match(new RegExp(this.regexp,"g")))
-            if(this.shortCodeExist(shortCode)) return true;
-        
-        return false;
-    }
+
 
     /**
      * @name parse
@@ -86,22 +72,15 @@ class EmojiParser extends EditableDivParser{
      */
     parse(){
         const listNodes = [];
-        if(this.regexp.test(this.node.textContent)){
-            
-            this.node.childNodes.forEach(node => {
-                if(this.regexp.test(node.textContent)){
+        this.node.childNodes.forEach(node => {
+            if(this.regexp.test(node.textContent)){
+                listNodes.push({
+                    reference : node,
+                    toAppend : this.getListNodeToAppend(node)
+                });
+            }
+        });
 
-                    if(this.hasAValidShortCode(node.textContent)){
-                        listNodes.push({ 
-                            reference : node, 
-                            toAppend : this.getListNodeToAppend(node)
-                        });                         
-                    }
-
-                }
-            });
-
-        }
         return listNodes;
     }
 

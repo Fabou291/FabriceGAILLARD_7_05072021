@@ -13,30 +13,12 @@ export default class PostParser {
 
     parseEmoji(){
         const reg = emojiRegex();
-        /*console.log(reg)
-        const listMatch = [];
-        let match;
-
-        while ((match = reg.exec(this.content)) !== null){
-            listMatch.push(match);
-        } 
-
-        listMatch.reverse().forEach(match => {
-            const start = match.index;
-            const emoji = this.getImgEmoji(match[0]);
-            this.content = this.content.substring(0,start) + emoji + this.content.substring(start+1);
-        });*/
-
         this.content = this.content.replaceAll(reg, this.getImgEmoji);
-
-
-
         return this;
     }
 
     getImgEmoji(emoji) {
         try{
-            console.log(emoji)
             return `<img class="emoji" alt="${emoji}" src="${require("@/assets/twemoji/svg/" + emojiUnicode(emoji) + ".svg")}">`;
         }catch(e){
             return emoji

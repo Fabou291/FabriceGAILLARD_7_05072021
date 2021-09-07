@@ -12,7 +12,7 @@
 
             <div class="upload-img-modal__main">
                 <label class="upload-img-modal__label" for="postContent" >AJOUTER UN COMMENTAIRE <span>(FACULTATIF)</span></label>
-                <FormPost id="postContent" class="input-default-icon" @submit="submit" :focus="true" @updateInput="updateInput" :canEmoji="true" :value="content" />
+                <FormPost ref="formPost" id="postContent" class="input-default-icon" @submit="submit" :focus="true" @updateInput="updateInput" :canEmoji="true" :value="content" />
             </div>
 
             <footer class="upload-img-modal__footer">
@@ -46,13 +46,14 @@ export default {
     methods: {
         ...mapActions('imagePostModule', ['close']),
         ...mapActions('postModule', ['addPost']),
+        ...mapActions('errorModule', ['handleError']),
         handleFocus() {
             this.focusHandler = new FocusHandler(this.$refs["display-settings-panel"]);
             this.focusHandler.setEvent();
         },
         submit() {
             this.addPost({
-                content : this.input,
+                content : this.$refs['formPost'].HandlerDivEditable.getTextContent(),
                 file : this.listFile[0],
                 channelId : this.channelId,
                 postId : null,
@@ -75,7 +76,7 @@ export default {
                 reader.readAsDataURL(file);
             }
             catch(e){
-                console.log(e)
+                this.handlerError(e)
             }
         },
         adjusImagePosition(){
@@ -83,6 +84,7 @@ export default {
             img.setAttribute('style',`margin-top : ${img.width*-50/100}px`)
         },
         updateInput(content){
+            console.log(content)
             this.input = content;
             console.log(this.input)
         },

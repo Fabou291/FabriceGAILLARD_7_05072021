@@ -246,6 +246,7 @@ export default {
         margin: 0px;
         letter-spacing: -0.1px;
         font-size: 16px;
+        line-height: 1.3;
         color: $grey-193;
         word-wrap: break-word;
     }

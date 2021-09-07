@@ -251,7 +251,6 @@ export default {
             if (this.listFile) this.modifyAvatar();
         },
         activeZone() {
-            console.log('coucou')
             //this.focusHandler.setAllTabbableElements()
         }
     },
@@ -302,7 +301,6 @@ export default {
 
     },
     unmounted() {
-        console.log('e')
         this.focusHandler.removeEvent();
     },
     components: {  ModifyUserForm, ResetMailForm, ResetPasswordForm },

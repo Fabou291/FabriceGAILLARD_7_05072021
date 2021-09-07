@@ -75,19 +75,15 @@ export default {
 
         REMOVE_REACTION(state, data){
             state;
-            console.log(data);
             const reaction = data.listReaction.find(e => e.emoji_unicode == data.emojiUnicode);
             const list_user_id = reaction.list_user_id;
 
-            console.log(data);
             
-            if(list_user_id.length == 1){
-                console.log(data.listReaction.indexOf(reaction));
+            if(list_user_id.length == 1)
                 data.listReaction.splice(data.listReaction.indexOf(reaction),1);
-            }
+            
             else{
                 const index = reaction.list_reaction_id.indexOf(data.id);
-                console.log(index);
                 list_user_id.splice( index, 1 );
             }
 
@@ -190,7 +186,6 @@ export default {
 
         async removeReaction(context, payload) {
             try {
-                console.log(payload)
                 await HTTPRequest.delete(`reaction/${payload.id}`);
 
                 const listReaction = context.getters.getPostById(payload.postId, context.state.listPost).listReaction;

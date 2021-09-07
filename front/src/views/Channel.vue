@@ -9,7 +9,7 @@
             </div>
 
             <div class="channel__formPost">
-                <FormPost @submit="add" ref="formPost"  :canBrownse="true" :canGIF="true" :canEmoji="true" :canRespond="true" :sticky="true" />            
+                <FormPost @submit="add" ref="formPost"  :canBrownse="true" :focus="true" :canGIF="true" :canEmoji="true" :canRespond="true" :sticky="true" />            
             </div>
 
             <div class="channel__posts">
@@ -84,10 +84,18 @@ export default {
         ...mapState('userModule',['user']),
         ...mapState('sidebarModule',['listGroup']),
         ...mapState('postModule',['listPost']),
+        ...mapState('configChannelModule', ['activeChannel'])
     },
     watch : {
         user(){
             this.UPDATE_USER_OF_POST(this.user)
+        },
+        activeChannel(){
+            if(this.$route.params.id == this.activeChannel.id){
+                this.channel.id = this.activeChannel.id;
+                this.channel.name  = this.activeChannel.name;
+                this.channel.description  = this.activeChannel.description;
+            }
         }
     },
     methods: {

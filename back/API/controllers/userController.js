@@ -65,6 +65,7 @@ const create = (req,res,next) => {
  */
 const modify = async (req,res,next) => {
     try{
+        req.body.description = (req.body.description == 'null') ? null : req.body.description ;
         if(req.file){
             req.body.avatar = req.file.filename;
             const user = (await mysqlAsyncQuery("SELECT * FROM user WHERE id = ? AND (id = ? OR ?)", [req.params.id, req.userId, req.isAdmin]))[0];

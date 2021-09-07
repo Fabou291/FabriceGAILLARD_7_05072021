@@ -1,15 +1,17 @@
+//import EventHandler from "./eventHandler"
 import CursorHandler from "./CursorHandler"
 import emojiUnicode from "emoji-unicode"
 class HandlerDivEditable{
 
     node;
     CursorHandler;
+    eventHandler;
 
     constructor(node){
         this.node = node;
-        this.CursorHandler = new CursorHandler(node)
+        this.CursorHandler = new CursorHandler(node);
+        //this.eventHandler = new EventHandler(this);
     }
-
 
     /**
      * @name append
