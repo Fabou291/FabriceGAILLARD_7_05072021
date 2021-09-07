@@ -57,7 +57,7 @@ export default {
             let j = 0;           
             const color = state.skinColors[index];
             for (const i of state.indexesColor)
-                state.emojisDataIndexed[i].u = state.unicodeSkin[color][j++];
+                state.emojisDataIndexed[i].emoji = state.unicodeSkin[color][j++];
         },
         SET_POSITION(state, payload){
             state.display.x = payload.x;

@@ -3,6 +3,7 @@ const createError = require("http-errors");
 const bcrypt = require("bcrypt");
 const imageHelper = require("../helpers/ImageHelper.js");
 
+
 /**
  * @name findAll
  * @description Récupère l'ensemble des utilisateurs.
@@ -66,13 +67,13 @@ const modify = async (req,res,next) => {
     try{
         if(req.file){
             req.body.avatar = req.file.filename;
-            const user = (await mysqlAsyncQuery("SELECT * FROM user WHERE id = ? AND id = ?", [req.params.id, req.userId]))[0];
+            const user = (await mysqlAsyncQuery("SELECT * FROM user WHERE id = ? AND (id = ? OR ?)", [req.params.id, req.userId, req.isAdmin]))[0];
             if(user.avatar != null && !/avatarDefaultSet/.test(user.avatar)) await imageHelper.remove(user.avatar);
         } 
 
         await mysqlAsyncQuery(
-            "UPDATE user SET username = ?, avatar = ?, description = ? WHERE id = ? AND id = ?", 
-            [ req.body.username, req.body.avatar, req.body.description, req.params.id, req.userId ]
+            "UPDATE user SET username = ?, avatar = ?, description = ? WHERE id = ? AND (id = ? OR ?)", 
+            [ req.body.username, req.body.avatar, req.body.description, req.params.id, req.userId, req.isAdmin ]
         );
 
         res.status(200).send({ avatar : req.body.avatar});
@@ -92,16 +93,19 @@ const modify = async (req,res,next) => {
 const resetPassword = async (req,res,next) => {
     try{
 
-        const user = (await mysqlAsyncQuery("SELECT * FROM user WHERE id= ?;", [req.userId]))[0];
-        if (!(await bcrypt.compare(req.body.oldPassword, user.password))) throw createError.BadRequest('Incorrect password')
+        if(!req.isAdmin){
+            const user = (await mysqlAsyncQuery("SELECT * FROM user WHERE id= ? AND id = ?;", [req.params.id, req.userId]))[0];
+            if (!(await bcrypt.compare(req.body.oldPassword, user.password))) throw createError.BadRequest('Incorrect password')            
+        }
+
 
         mysqlDataBase.query(
             `
                 UPDATE user
                 SET password = ?
-                WHERE id = ?
+                WHERE id = ? AND id = ? ;
             `,
-            [ req.body.password, req.userId ],
+            [ req.body.password, req.params.id, req.userId ],
             function (error, results, fields) {
                 if (error) next(error);
                 else if(!results.affectedRows) throw createError.BadRequest('You are note authorized to change the password')
@@ -121,17 +125,18 @@ const resetPassword = async (req,res,next) => {
  * @param {*} res 
  * @param {*} next 
  */
-const resetMail = (req,res,next) => {
+const resetMail = async (req,res,next) => {
     try{
+        
         mysqlDataBase.query(
             `
                 UPDATE user
                 SET email = ?
-                WHERE id = ? AND email = ?
+                WHERE id = ? AND (email = ? AND id = ?) 
             `,
-            [ req.body.email, req.userId, req.body.oldMail ],
+            [ req.body.email, req.params.id, req.body.oldMail, req.userId ],
             function (error, results, fields) {
-                console.log(results)
+
                 if (error) next(error);
                 else if(!results.affectedRows) next(createError.BadRequest("L'email ne correspond à celle que vous detenez actuellement"))
                 else res.status(200).send(results);
@@ -153,10 +158,10 @@ const resetMail = (req,res,next) => {
 const remove = async (req,res,next) => {
 
     try{
-        const user = (await mysqlAsyncQuery("SELECT * FROM user WHERE id = ? AND _id = ?", [req.params.id, req.userId]))[0];
+        const user = (await mysqlAsyncQuery("SELECT * FROM user WHERE id = ? AND (id = ? OR ?)", [req.params.id, req.userId, req.isAdmin]))[0];
         if(user.image_url != null) await imageHelper.remove(user.image_url);
 
-        const results = await mysqlAsyncQuery("DELETE FROM user WHERE id = ? AND _id = ?", [req.params.id, req.userId]);
+        const results = await mysqlAsyncQuery("DELETE FROM user WHERE id = ? AND (id = ? OR ?)", [req.params.id, req.userId, req.isAdmin]);
         res.status(200).send(results);
        
     } catch(error){ next(error) }

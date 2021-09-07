@@ -87,7 +87,7 @@ import EmojiPanelSearch from "@/components/modal/emojiPanel/EmojiPanelSearch.vue
 import EmojiPanelNav from "@/components/modal/emojiPanel/EmojiPanelNav.vue";
 import EmojiPanelCategorie from "@/components/modal/emojiPanel/EmojiPanelCategorie.vue";
 import { mapActions, mapMutations, mapState } from 'vuex';
-
+import emojiUnicode from "emoji-unicode";
 
 export default {
     name: "EmojiPanel",
@@ -126,9 +126,9 @@ export default {
             return Object.entries(this.emojisData).map((group) => group[1].svgPathIcon);
         },
         getSvgEmojiNameFile() {
-            return this.emojisDataIndexed[this.activeEmoji].u
+            return emojiUnicode(this.emojisDataIndexed[this.activeEmoji].emoji)
+                .split(' ')
                 .join("-")
-                .toLowerCase()
                 .replace(/^0+/g, "");
         },
     },
@@ -178,6 +178,7 @@ export default {
         },
         addEmojiToForm(emoji){
             const handler = this.display.handlerDivEditable;
+
             const tempSelection = handler.CursorHandler.temp.selection
 
             const textContentArray = [...tempSelection.focusNode.textContent];
@@ -187,13 +188,15 @@ export default {
             if(handler.node.innerHTML == ''){
                 reference = document.createTextNode('');
                 handler.node.appendChild(reference);
+                handler.node.focus();
+                handler.CursorHandler.setTempDatas();
             }
 
             this.display.handlerDivEditable.append([{
                 reference,
                 toAppend : [
                     handler.createTextNode(textContentArray.splice(0,tempSelection.focusOffset).join('')),
-                    handler.createImgEmoji(this.emojisShortCodeIndex.get(emoji.sc)),
+                    handler.createImgEmoji(emoji),
                     handler.createTextNode('\u00a0' + textContentArray.join(''))
                 ]
             }]);
@@ -201,9 +204,10 @@ export default {
 
         },
         addEmojiReaction(emoji){
+            
             this.addReaction({
                 postId : this.display.postId,
-                emojiUnicode : emoji.u.join(',')
+                emojiUnicode :  emojiUnicode(emoji.emoji)
             })
         }
     },

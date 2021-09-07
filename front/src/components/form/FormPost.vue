@@ -263,10 +263,7 @@ export default {
 </script>
 
 <style lang="scss">
-.A_SUPR {
-    width: 30px;
-    height: 30px;
-}
+
 
 .form-post {
     border-radius: 4px;
@@ -347,7 +344,7 @@ export default {
     }
 
     &__user {
-        color: $success;
+        color: $primary;
     }
 }
 </style>

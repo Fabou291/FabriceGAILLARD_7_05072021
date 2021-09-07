@@ -15,7 +15,7 @@
 
 <script>
 import BtnDefault from "@/components/btn/BtnDefault.vue";
-import {  mapState } from 'vuex';
+import {  mapActions, mapState } from 'vuex';
 import HTTPRequest from "@/js/HTTPRequest.js"
 
 
@@ -31,14 +31,21 @@ export default {
         ...mapState('userModule',['user']),
     },
     methods: {
-        checkValidity(){
-            if(!this.$refs['form'].reportValidity()) return;
-            this.fetch();
-        },
-        async fetch(){
-            
-            await HTTPRequest.put(`user/${this.user.id}/reset-password`, { oldPassword : this.oldPassword, password: this.password, confirmationPassword: this.confirmationPassword })
-            console.log('C\'est fait');            
+        ...mapActions('errorModule',['handleError']),
+        ...mapActions('flashCardModule',['setFlashCard']),
+        async checkValidity(){
+            try{
+                if(!this.$refs['form'].reportValidity()) return;
+                await HTTPRequest.put(`user/${this.user.id}/reset-password`, { oldPassword : this.oldPassword, password: this.password, confirmationPassword: this.confirmationPassword })
+                this.setFlashCard({
+                    message : 'Votre mot de passe à bien été modifié',
+                    statu : 'success',
+                    flashCardVisible : true
+                }) 
+            }
+            catch(error){
+                this.handleError(error)
+            }
         },
         setCustomValidity(){
             [ 'oldPassword', 'confirmPassword', 'password' ].forEach(ref => { 

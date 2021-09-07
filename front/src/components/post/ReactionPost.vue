@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import {  mapState } from 'vuex'
+import {  mapState } from 'vuex';
 
 export default {
     props : {
@@ -16,7 +16,7 @@ export default {
         ...mapState('emojiModule',['emojisDataIndexed']),
         ...mapState('userModule',['user']),
         getUnicodeByIndex(){
-            return this.reaction.emoji_unicode.split(',').join('-').toLowerCase();
+            return this.reaction.emoji_unicode.split(' ').join('-').toLowerCase();
         },
         getLength(){
             return this.reaction.list_user_id.length;

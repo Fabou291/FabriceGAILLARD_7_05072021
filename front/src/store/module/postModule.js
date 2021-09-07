@@ -1,4 +1,5 @@
 import HTTPRequest from "../../js/HTTPRequest.js";
+
 export default {
     namespaced: true,
     state: {
@@ -116,7 +117,7 @@ export default {
             state.listPost.forEach(post => {
                 if(post.user_id == user.id) updateUser(post);
                 post.listComment.forEach(comment => { 
-                    if(post.user_id == user.id) updateUser(comment); 
+                    if(comment.user_id == user.id) updateUser(comment); 
                 })
             });
         }

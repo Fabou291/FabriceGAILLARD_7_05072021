@@ -13,7 +13,7 @@
 <script>
 import BtnDefault from "@/components/btn/BtnDefault.vue";
 import HTTPRequest from "@/js/HTTPRequest.js"
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 
 export default {
     data() {
@@ -24,16 +24,30 @@ export default {
     },
     computed: {
         ...mapState('userModule',['user']),
-        
     },
     methods: {
-        checkValidity(){
-            if(!this.$refs['form'].reportValidity()) return;
-            this.fetch();
-        },
-        async fetch(){
-            await HTTPRequest.put(`user/${this.user.id}/reset-email`, { oldMail : this.oldMail, email : this.email })
-       
+        ...mapActions('errorModule',['handleError']),
+        ...mapActions('flashCardModule',['setFlashCard']),
+        ...mapActions('errorModule',['handleError']),
+        async checkValidity(){
+            try{
+                try{
+                    if(!this.$refs['form'].reportValidity()) return;
+                    await HTTPRequest.put(`user/${this.user.id}/reset-email`, { oldMail : this.oldMail, email : this.email })                
+                    this.setFlashCard({
+                        message : 'Votre adresse mail à bien été modifiée',
+                        statu : 'success',
+                        flashCardVisible : true
+                    })                    
+                }
+                catch(error){
+                    this.handleError(error)
+                }
+
+            }
+            catch(error){
+                this.handleError(error)
+            }
         },
         setCustomValidity(){
             ['oldMail','email'].forEach(ref=>{

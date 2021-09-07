@@ -1,4 +1,5 @@
 import CursorHandler from "./CursorHandler"
+import emojiUnicode from "emoji-unicode"
 class HandlerDivEditable{
 
     node;
@@ -83,8 +84,8 @@ class HandlerDivEditable{
         const span =  document.createElement('span');
         span.setAttribute('contenteditable','false');
         span.innerHTML = 
-            `<img width="19px" alt="${emoji.sc}" src="${require("@/assets/twemoji/svg/" +
-                emoji.u.join("-").toLowerCase() +
+            `<img class="emoji" alt="${emoji.emoji}" src="${require("@/assets/twemoji/svg/" +
+                emojiUnicode(emoji.emoji).split(' ').join('-') +
             ".svg")}">`;
         return span;
     }

@@ -88,7 +88,7 @@ export default {
         ...mapMutations("emojiModule", ["SET_POST_ID"]),
         parseContent() {
             let postParser = new PostParser(this.post.content, this.emojisShortCodeIndex);
-            return postParser.parseUrl().content;
+            return postParser.parseEmoji().parseUrl().content;
         },
         modify(content) {
             this.modifyPost({ ...this.post, content });

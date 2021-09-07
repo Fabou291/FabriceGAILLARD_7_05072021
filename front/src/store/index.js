@@ -2,6 +2,7 @@ import { createStore } from 'vuex'
 
 import userModule from "./module/userModule.js";
 import errorModule from "./module/errorModule.js";
+import flashCardModule from "./module/flashCardModule.js";
 import createChannelDisplay from "./module/createChannelDisplay.js";
 import sidebarModule from "./module/sidebarModule.js";
 import postModule from "./module/postModule.js";
@@ -29,6 +30,7 @@ export default createStore({
     configChannelModule,
     imagePostModule,
     inputPostChannelModule,
-    emojiModule
+    emojiModule,
+    flashCardModule
   }
 })

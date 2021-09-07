@@ -37,7 +37,7 @@ export default {
     position: fixed;
     width: 100%;
     height: $header-height;
-    background-color: $secondary;
+    background-color: $grey-11;
     z-index: 6;
 
     &__nav {
@@ -49,13 +49,13 @@ export default {
 
     &__nav-item{
         @include setFlexCenter();
-        background-color:  darken($secondary,4);
-        box-shadow: 0 2px 2px -1px black;
+        background-color:  $grey-11;
+
         border-radius: 0 0 9px 9px;
         padding: 9px 17px;
 
         &:hover{
-            background-color: $secondary;
+            background-color: darken($grey-11,1);
         }
 
     }

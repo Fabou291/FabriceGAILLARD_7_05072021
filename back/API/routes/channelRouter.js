@@ -1,7 +1,7 @@
 const express = require("express");
 const channelController = require("../controllers/channelController.js")
 const authenticationMiddleware = require("../middleware/authenticationMiddleware.js");
-
+const isAdmin = require("../middleware/isAdmin.js");
 
 const router = express.Router();
 
@@ -13,11 +13,11 @@ router.get('/:id/post', authenticationMiddleware, channelController.findAllPostO
 
 router.get('/:id', authenticationMiddleware, channelController.findOne);
 
-router.post('/', authenticationMiddleware, channelController.create);
+router.post('/', authenticationMiddleware, isAdmin, channelController.create);
 
-router.put('/:id', authenticationMiddleware, channelController.modify);
+router.put('/:id', authenticationMiddleware, isAdmin, channelController.modify);
 
-router.delete('/:id', authenticationMiddleware, channelController.remove);
+router.delete('/:id', authenticationMiddleware, isAdmin, channelController.remove);
 
 
 module.exports = router;

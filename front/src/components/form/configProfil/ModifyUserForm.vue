@@ -26,6 +26,7 @@ export default {
     methods: {
         ...mapActions('userModule',['modify']),
         ...mapMutations('userModule',['SET_CONFIG_DISPLAY_VISIBLE']),
+        ...mapActions('flashCardModule',['setFlashCard']),
         checkValidity(){
             if(!this.$refs['form'].reportValidity()) return;
             this.modify({
@@ -33,6 +34,11 @@ export default {
                username : this.username,
                description : this.description,
             })
+            this.setFlashCard({
+                message : 'Les changements ont bien été pris en compte.',
+                statu : 'success',
+                flashCardVisible : true
+            }) 
             this.SET_CONFIG_DISPLAY_VISIBLE(false);
         }
     },

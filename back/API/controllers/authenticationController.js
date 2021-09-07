@@ -44,9 +44,9 @@ const login = async (req, res, next) => {
             );
         }
 
-        await mysqlAsyncQuery("UPDATE user SET refresh_token = ? WHERE id=  ?", [tokenHelper.getRefreshToken(user.id), user.id]);
+        await mysqlAsyncQuery("UPDATE user SET refresh_token = ? WHERE id=  ?", [tokenHelper.getRefreshToken(user.id, user.role_id), user.id]);
 
-        const accessToken = tokenHelper.getAccessToken(user.id)
+        const accessToken = tokenHelper.getAccessToken(user.id , user.role_id)
 
         res.status(200).send({ 
             user,
@@ -69,14 +69,14 @@ const refreshToken = async (req, res, next) => {
     try{
         if (!req.headers.authorization) throw createHttpError.Unauthorized("Not authorized");
 
-        const { userId } = JWT.decode(req.headers.authorization.split(" ")[1]);
+        const { userId, roleId } = JWT.decode(req.headers.authorization.split(" ")[1]);
 
         const user = (await mysqlAsyncQuery("SELECT * FROM user WHERE id= ?;", [userId]))[0];
         if (!user) throw createError.BadRequest("Invalid user");
 
         JWT.verify(user.refresh_token, process.env.SECRET_REFRESH_TOKEN);
         
-        res.status(200).json({ accessToken : tokenHelper.getAccessToken(userId) })
+        res.status(200).json({ accessToken : tokenHelper.getAccessToken(userId, roleId) })
     } catch(error){
         if(error.message == 'jwt expired') error = createError.Unauthorized("Refresh token invalid");
         next(error);

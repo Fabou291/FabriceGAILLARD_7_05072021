@@ -1,18 +1,19 @@
 <template>
     <Headband />
+    <FlashCard v-if="flashCardVisible"/>
   <router-view/>
 </template>
   
 <script>
-  import Headband from "@/components/FlashCard/Headband.vue";
-import { mapMutations } from 'vuex';
+import { mapMutations, mapState } from 'vuex';
+import Headband from '@/components/FlashCard/Headband.vue';
+import FlashCard from '@/components/FlashCard/FlashCardDefault.vue';
+
   export default {
-    data() {
-      return {
-        
-      }
+    components : { Headband, FlashCard },
+    computed: {
+      ...mapState('flashCardModule',['flashCardVisible'])
     },
-    components : { Headband },
     methods: {
       ...mapMutations('emojiModule',['CLOSE']),
       ...mapMutations('postModule',['SET_ACTION_LIST_VISIBLE']),

@@ -1,5 +1,6 @@
 const {mysqlDataBase, mysqlAsyncQuery} = require("../../config/mysqlConfig.js");
 const imageHelper = require("../helpers/ImageHelper.js");
+const createError = require("http-errors");
 
 /**
  * @name findAll
@@ -52,7 +53,7 @@ const create = (req,res,next) => {
  * @param {Object} next 
  */
 const modify = (req,res,next) => {
-    mysqlDataBase.query( "UPDATE post SET content = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND user_id = ?", [req.body.content, req.params.id, req.userId], function(error, results, fields){
+    mysqlDataBase.query( "UPDATE post SET content = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND (user_id = ? OR ?)", [req.body.content, req.params.id, req.userId, req.isAdmin], function(error, results, fields){
         if(error) next(error)
         else res.status(200).send(results)
     })
@@ -67,17 +68,17 @@ const modify = (req,res,next) => {
  */
 const remove = async (req,res,next) => {
     try{
-        let reqAdds = "";
-        const user = (await mysqlAsyncQuery("SELECT * FROM user WHERE id = ?", [req.userId]))[0];
-        if(user.role_id != 1) reqAdds = "AND user_id = ?";
 
-        const post = (await mysqlAsyncQuery("SELECT * FROM post WHERE id = ?" + reqAdds, [req.params.id, req.userId]))[0];
+        const post = (await mysqlAsyncQuery("SELECT * FROM post WHERE id = ? AND (user_id = ? OR ?)", [req.params.id, req.userId, req.isAdmin]))[0];
+        if(!post) throw createError.BadRequest("Impossible to remove this account")
         if(post.image_url != null) await imageHelper.remove(post.image_url);
 
-        const results = await mysqlAsyncQuery("DELETE FROM post WHERE id = ?" + reqAdds, [req.params.id, req.userId]);
+        const results = await mysqlAsyncQuery("DELETE FROM post WHERE id = ? AND (user_id = ? OR ?)", [req.params.id, req.userId, req.isAdmin]);
         res.status(200).send(results);
        
-    } catch(error){ next(error) }
+    } catch(error){ 
+        next(error) 
+    }
 }
 
 

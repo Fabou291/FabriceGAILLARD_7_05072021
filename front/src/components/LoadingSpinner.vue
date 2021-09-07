@@ -1,4 +1,4 @@
-!<template>
+<template>
     <div class="loading-spinner" > <!--v-if="pagination.inProgress"-->
         <div class="loading-spinner__dot"></div>
         <div class="loading-spinner__dot"></div>

@@ -1,8 +1,8 @@
 DROP DATABASE groupomania_social_network;
-CREATE DATABASE groupomania_social_network;
+CREATE DATABASE groupomania_social_network DEFAULT CHARSET = utf8mb4 DEFAULT COLLATE = utf8mb4_unicode_ci;
 USE groupomania_social_network;
 
-SET NAMES 'utf8';
+
 
 /* -- Création des table -- */
 CREATE TABLE role(
@@ -20,10 +20,10 @@ CREATE TABLE user(
     password VARCHAR(100) NOT NULL,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    refresh_token VARCHAR(150) DEFAULT NULL,
+    refresh_token VARCHAR(250) DEFAULT NULL,
     role_id INTEGER NOT NULL,
     CONSTRAINT FK_user_role_id FOREIGN KEY (role_id) REFERENCES role(id)
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE channel_group(
 
@@ -32,7 +32,7 @@ CREATE TABLE channel_group(
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
 
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE channel(
 
@@ -44,7 +44,7 @@ CREATE TABLE channel(
     channel_group_id INTEGER NOT NULL,
     CONSTRAINT FK_channel_channel_group_id FOREIGN KEY (channel_group_id) REFERENCES channel_group(id) ON DELETE CASCADE
 
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE post(
 
@@ -62,7 +62,7 @@ CREATE TABLE post(
     CONSTRAINT FK_not_NULL CHECK ((NOT post_id IS NULL) OR (NOT channel_id IS NULL)),
     CONSTRAINT FK_not_NULL_POST_IMG CHECK ((NOT content IS NULL) OR (NOT image_url IS NULL))
 
-);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 CREATE TABLE log_fail(
 

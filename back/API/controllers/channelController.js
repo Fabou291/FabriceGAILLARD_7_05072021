@@ -1,5 +1,6 @@
 const DateHandler = require("../helpers/DateHandler.js");
 const { mysqlDataBase, mysqlAsyncQuery } = require("../../config/mysqlConfig.js");
+const createHttpError = require("http-errors");
 
 /**
  * @name findAll
@@ -150,15 +151,18 @@ const findOne = (req, res, next) => {
  * @param {Object} next 
  */
 const create = (req, res, next) => {
+    if(!req.isAdmin) next(createHttpError('Unhautorized to create a channel'))
+    else{
+        mysqlDataBase.query(
+            "INSERT INTO channel (name,description,channel_group_id) VALUES(?, ? ,?)",
+            [req.body.name, req.body.description, req.body.channelGroupId],
+            function(error, results, fields) {
+                if (error) next(error);
+                else res.status(200).json(results);
+            }
+        );        
+    }
 
-    mysqlDataBase.query(
-        "INSERT INTO channel (name,description,channel_group_id) VALUES(?, ? ,?) ",
-        [req.body.name, req.body.description, req.body.channelGroupId],
-        function(error, results, fields) {
-            if (error) next(error);
-            else res.status(200).json(results);
-        }
-    );
 };
 
 /**
@@ -170,9 +174,11 @@ const create = (req, res, next) => {
  */
 const modify = (req, res, next) => {
 
+    console.log(req.isAdmin)
+
     mysqlDataBase.query(
-        `UPDATE channel SET name = ?, description = ?, channel_group_id = ? WHERE id = ?`,
-        [req.body.name, req.body.description, req.body.channelGroupId, req.params.id],
+        `UPDATE channel SET name = ?, description = ?, channel_group_id = ? WHERE id = ? AND ?`,
+        [req.body.name, req.body.description, req.body.channelGroupId, req.params.id, req.isAdmin],
         function(error, results, fields) {
             if (error) next(error);
             else res.status(200).json(results);
@@ -188,7 +194,7 @@ const modify = (req, res, next) => {
  * @param {Object} next 
  */
 const remove = (req, res, next) => {
-    mysqlDataBase.query("DELETE FROM channel WHERE id = ?", [req.params.id], function(error, results, fields) {
+    mysqlDataBase.query("DELETE FROM channel WHERE id = ? AND ?", [req.params.id,req.isAdmin], function(error, results, fields) {
         if (error) next(error);
         else res.status(200).json(results);
     });

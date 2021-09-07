@@ -4,6 +4,7 @@ const authenticationMiddleware = require("../middleware/authenticationMiddleware
 const emailMiddleware = require("../middleware/emailMiddleware.js");
 const passwordMiddleware = require("../middleware/passwordMiddleware.js");
 const multer = require('../middleware/multerMiddleware.js');
+const isAdmin = require("../middleware/isAdmin.js");
 
 const router = express.Router();
 
@@ -14,7 +15,8 @@ router.put(
     authenticationMiddleware,
     passwordMiddleware.checkToReset,
     passwordMiddleware.checkValidity, 
-    passwordMiddleware.encrypt, 
+    passwordMiddleware.encrypt,
+    isAdmin,
     userController.resetPassword
 );
 
@@ -24,6 +26,7 @@ router.put(
     emailMiddleware.checkToReset,
     emailMiddleware.checkValidity, 
     emailMiddleware.encrypt,
+    isAdmin,
     userController.resetMail
 );
 
@@ -31,8 +34,8 @@ router.get('/:id', authenticationMiddleware, userController.findOne);
 
 router.post('/', authenticationMiddleware, userController.create);
 
-router.put('/:id', authenticationMiddleware, multer, userController.modify);
+router.put('/:id', authenticationMiddleware, isAdmin, multer, userController.modify);
 
-router.delete('/:id', authenticationMiddleware, userController.remove);
+router.delete('/:id', authenticationMiddleware, isAdmin, userController.remove);
 
 module.exports = router;

@@ -1,3 +1,5 @@
+const emojiRegex = require('emoji-regex');
+import emojiUnicode from 'emoji-unicode';
 export default class PostParser {
 
     content;
@@ -9,36 +11,38 @@ export default class PostParser {
         this.emojisShortCodeIndex = emojisShortCodeIndex;
     }
 
-    /*parseEmoji(){
-        const reg = /:\w+:/g;
+    parseEmoji(){
+        const reg = emojiRegex();
+        /*console.log(reg)
         const listMatch = [];
         let match;
+
         while ((match = reg.exec(this.content)) !== null){
             listMatch.push(match);
         } 
-        
-        //Ca va bug, si l'expression réguliere trouve dans un lien ou un attribut html
 
         listMatch.reverse().forEach(match => {
-            const shortCode = match[0];
-            if(this.emojisShortCodeIndex[shortCode]){
-                const start = match.index;
-                this.content = 
-                    this.content.substring(0,start) 
-                    + this.createImgEmojiTemplate(shortCode) 
-                    + this.content.substring(match[0].length + start);
-            }
-        });
+            const start = match.index;
+            const emoji = this.getImgEmoji(match[0]);
+            this.content = this.content.substring(0,start) + emoji + this.content.substring(start+1);
+        });*/
+
+        this.content = this.content.replaceAll(reg, this.getImgEmoji);
+
+
 
         return this;
     }
-    createImgEmojiTemplate(shortCode){
-        return `
-            <img width="15px" alt="${shortCode}" src="${require("@/assets/twemoji/svg/" +
-                    this.emojisShortCodeIndex[shortCode].u.join("-").toLowerCase() +
-            ".svg")}">
-        `;
-    }*/
+
+    getImgEmoji(emoji) {
+        try{
+            console.log(emoji)
+            return `<img class="emoji" alt="${emoji}" src="${require("@/assets/twemoji/svg/" + emojiUnicode(emoji) + ".svg")}">`;
+        }catch(e){
+            return emoji
+        }
+    }
+
 
     /**
      * @name parseUrlImage

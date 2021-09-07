@@ -196,11 +196,15 @@ export default {
         @include setScrollBar($primary);
     }
 
+    .scroll-y{
+        height : 100vh;
+    }
+
     &__main {
         position: relative;
         padding: 100px 30px 30px 30px;
         display: block !important;
-        min-height: 100vh;
+        min-height: 100vh !important;
         background-color: $grey-32 !important;
 
         @include setMediaScreen(tablette) {

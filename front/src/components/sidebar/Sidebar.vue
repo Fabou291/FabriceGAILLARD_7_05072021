@@ -65,18 +65,22 @@ export default {
             /*
             this.activeChannel = channelIndex;
             this.activeGroup = groupIndex;*/
+        },
+        redirectToFirstChannel(){
+            const listChannel = this.listGroup.reduce( (a, group) => a = [...a, ...group.listChannel], [] );
+            if(listChannel > 0){
+                this.$router.push({
+                    name : 'Channel',
+                    params: { id: listChannel[0].id }
+                })                   
+            }
         }
     },
     async created() {
         await this.setListGroup();
-        if(this.$route.name == "Home"){
-            this.$router.push({
-                name : 'Channel',
-                params: { id: this.listGroup.reduce( (a, group) => a = [...a, ...group.listChannel], [] )[0].id }
-            })
-        } 
-            
-    }
+        if(this.$route.name == "Home") this.redirectToFirstChannel();
+    },
+
 };
 </script>
 

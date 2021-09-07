@@ -1,4 +1,4 @@
-!<template >
+<template >
     <div class="textarea-counter">
         <textarea class="textarea-counter__textarea"  :rows="rows" :id="id" :name="name" :placeholder="placeholder"  :class="className" :maxlength="maxLength" :value="modelValue" @input="this.$emit('update:modelValue', $event.target.value)" >
         </textarea> 

@@ -4,8 +4,10 @@ const mysqlDataBase = mysql.createConnection({
     host     : 'localhost',
     user     : 'root',
     password : 'GSG291gsg+',
-    database : 'groupomania_social_network'
+    database : 'groupomania_social_network',
+    charset : 'utf8mb4'
 });
+
 
 /**
  * @name mysqlAsyncQuery

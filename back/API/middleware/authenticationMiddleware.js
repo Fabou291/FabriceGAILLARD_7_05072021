@@ -17,17 +17,19 @@ const verifAuthentication = (req, res, next) => {
     try {
         if (!req.headers.authorization) throw createHttpError.Unauthorized("Not Authenticated");
 
-        const { userId } = JWT.verify(
+        const { userId, roleId } = JWT.verify(
             req.headers.authorization.split(" ")[1],
             process.env.SECRET_ACCESS_TOKEN
         );
         
         req.userId = userId;
+        req.roleId = roleId;
         return next();  
 
     } catch (error) {
         return next(error);
     }
 };
+
 
 module.exports = verifAuthentication;
