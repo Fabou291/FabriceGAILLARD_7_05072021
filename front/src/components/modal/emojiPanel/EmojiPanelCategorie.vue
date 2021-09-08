@@ -35,9 +35,20 @@ export default {
     computed: {
     },
     methods: {
+
+        /**
+         * @name scrollToGroup
+         * @description emet l'evement scrollToGroup
+         */
         scrollToGroup(index){
             this.$emit('scrollToGroup', index);
         },
+        
+        /**
+         * @name isSelectedGroup
+         * @description Défini si le groupe est selectionné
+         * @param {Number} index
+         */
         isSelectedGroup(index){
             return this.activeGroup == index
         },

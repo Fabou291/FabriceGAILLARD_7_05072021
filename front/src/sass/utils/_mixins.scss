@@ -1,40 +1,39 @@
-/* 
-    setCircularStdFont
-    Permet de set la font-family CircularStdFont à partir du style désiré
-    @param {string} $style
-*/
+/// @name setCircularStdFont
+/// Permet de set la font-family CircularStdFont à partir du style désiré
+/// @param {string} $style
 @mixin setCircularStdFont($style) {
     font-family: 'CircularStd-' + $style;
 }
 
-/* 
-    setSize
-    Permet de set la size d'un element facilement
-    @param $width
-    @param $height
-*/
+/// @name setSize
+/// Permet de set la size d'un element facilement
+/// @param {*} $width
+/// @param {*} $height
 @mixin setSize($width, $height : $width){
     width : $width;
     height : $height;
 }
 
+/// @name setCircle
+/// Crée un cercle
+/// @param {*} $median
 @mixin setCircle($median){
     width : $median;
     height : $median;
     border-radius : 50%;
 }
 
-@mixin setSizeFullContainer(){
-    width : 100%;
-    height : 100%;
-}
-
+/// @name setFlexCenter
+/// Déclare le display à flex, et center sur les deux axes
 @mixin setFlexCenter(){
     display : flex;
     align-items: center;
     justify-content: center;
 }
 
+/// @name setScrollBar
+/// Déclare une scroll bar
+/// @param {Color} $color
 @mixin setScrollBar($color){
     overflow: hidden;
     overflow-y: auto;
@@ -52,17 +51,18 @@
     }
 }
 
-$max-breakpoints : (
-    tablette    : 768px,
-    mobile : 425px
-);
-
+/// @name setMediaScreen
+/// Permet de céclarer les @media screen plus simplement
+/// @param {String} $screen
 @mixin setMediaScreen($screen){
     @media screen and (max-width: map-get($max-breakpoints, $screen )) { 
         @content;
     }
 }
 
+/// @name textEllipsis
+/// Permet de déclare un text ellipsis plus simplement
+/// @param {Color} $color
 @mixin textEllipsis(){
     min-width: 0;
     white-space: nowrap;

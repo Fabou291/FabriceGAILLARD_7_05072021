@@ -2,10 +2,6 @@
     <button class="btn-default"><slot></slot></button>
 </template>
 
-<script>
-export default {};
-</script>
-
 <style lang="scss">
     .btn-default {
         font-size: 13px;

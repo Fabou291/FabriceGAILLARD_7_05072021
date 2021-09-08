@@ -1,4 +1,4 @@
-//import EventHandler from "./eventHandler"
+import EventHandler from "./eventHandler"
 import CursorHandler from "./CursorHandler"
 import emojiUnicode from "emoji-unicode"
 class HandlerDivEditable{
@@ -10,7 +10,7 @@ class HandlerDivEditable{
     constructor(node){
         this.node = node;
         this.CursorHandler = new CursorHandler(node);
-        //this.eventHandler = new EventHandler(this);
+        this.eventHandler = new EventHandler(this);
     }
 
     /**
@@ -27,12 +27,13 @@ class HandlerDivEditable{
             })
 
             this.CursorHandler.replaceCursor();
+            this.CursorHandler.setTempDatas();
         }
     }
 
     /**
      * @name getTextContent
-     * @description Récupère le contenu du de la divEditable
+     * @description Récupère le contenu de la divEditable
      * @returns {String}
      */
     getTextContent() {
@@ -66,7 +67,7 @@ class HandlerDivEditable{
 
     /**
      * @name createTextNode
-     * @description Crée un noeud textuel en fonction du parametre
+     * @description Crée un noeud textuel en fonction du paramètre
      * Si le paramètre est une chaine de caractère vide, le contenu sera celui d'un textZero
      * @param {String} innerContent 
      * @returns 

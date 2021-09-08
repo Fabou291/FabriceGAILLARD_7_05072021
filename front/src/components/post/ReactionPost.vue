@@ -26,14 +26,29 @@ export default {
         }
     },
     methods : {
+
+        /**
+         * @name switchReaction
+         * @description Switch la réaction (ajoute ou enleve) à un post
+         */
         switchReaction(){ 
             if(this.userIsIncluded) this.remove()
             else this.add()
         },
+
+        /**
+         * @name remove
+         * @description Supprime une réaction (emet l'evement pour)
+         */
         remove(){ 
             const index = this.reaction.list_user_id.indexOf(this.user.id.toString());
             this.$emit('removeReaction', this.reaction.list_reaction_id[index], this.reaction.emoji_unicode)
         },
+
+        /**
+         * @name add
+         * @description Emet l'evement pour ajouter une reaction
+         */
         add(){ this.$emit('addReaction', this.reaction.emoji_unicode) }
     }
 

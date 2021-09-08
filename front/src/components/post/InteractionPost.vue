@@ -2,7 +2,7 @@
     <div class="interaction-post">
         <ul class="interaction-post__list">
             <li class="interaction-post__list-item">
-                <button type="button" class="interaction-post__btn" ref="interactionPostBtn" @click="raction" aria-label="Ajouter une réaction">
+                <button type="button" class="interaction-post__btn" ref="interactionPostBtn" @click="reacte" aria-label="Ajouter une réaction">
                     <svg width="20" height="20" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -80,7 +80,7 @@ export default {
         },
         reply() { this.$emit("replyPost") },
         remove(){ this.$emit("removePost"); },
-        raction(){ 
+        reacte(){ 
             this.showEmojiDisplay();
             this.$emit("addReactionToPost");
         },

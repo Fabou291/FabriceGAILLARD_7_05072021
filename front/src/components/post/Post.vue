@@ -31,6 +31,7 @@
                         :canEmoji="true"
                         @escape="SET_ID_POST_IN_MODIFY_MODE(null)"
                         @submit="modify"
+                        ref="formPost"
                     />
                     <span class="post__modify-infos"
                         >échap pour <a href="#" @click.prevent="SET_ID_POST_IN_MODIFY_MODE(null)">annuler</a> • entrée pour
@@ -65,15 +66,23 @@ export default {
         ReactionPost,
         FormPost,
     },
-    data() {
-        return {};
-    },
+
     computed: {
         ...mapState("postModule", ["idPostInModifyMode"]),
         ...mapState("emojiModule", ["emojisShortCodeIndex"]),
+
+        /**
+         * @name isInModifyMode
+         * @description Détermine si le post en question est en cours de modification
+         */
         isInModifyMode() {
             return this.idPostInModifyMode == this.post.id;
         },
+
+        /**
+         * @name getContent
+         * @description Récupère le contenu du post
+         */
         getContent() {
             return this.parseContent();
         },
@@ -86,19 +95,44 @@ export default {
         ...mapActions("postModule", ["modifyPost", "removePost", "setIdPostToReply", "removeReaction","addReaction"]),
         ...mapMutations("postModule", ["SET_ID_POST_IN_MODIFY_MODE"]),
         ...mapMutations("emojiModule", ["SET_POST_ID"]),
+
+        /**
+         * @name parseContent
+         * @description Analyse le contenu et l'adapte (emoji et url)
+         */
         parseContent() {
-            let postParser = new PostParser(this.post.content, this.emojisShortCodeIndex);
+            let postParser = new PostParser(this.post.content);
             return postParser.parseEmoji().parseUrl().content;
         },
+
+        /**
+         * @name modify
+         * @description Modifie le contenu du post
+         */
         modify(content) {
             this.modifyPost({ ...this.post, content });
         },
+
+        /**
+         * @name remove
+         * @description Supprime une post
+         */
         remove() {
             this.removePost({ ...this.post });
         },
+
+        /**
+         * @name addReactionToPost
+         * @description Ajoute une réaction au post
+         */
         addReactionToPost(emoji_unicode) {
             this.addReaction({ postId: this.post.id, emojiUnicode: emoji_unicode });
         },
+
+        /**
+         * @name removeReactionToPost
+         * @description Supprime une réaction du post
+         */
         removeReactionToPost(reaction_id, emojiUnicode) {
             this.removeReaction({ postId: this.post.id, id: reaction_id, emojiUnicode });
         },

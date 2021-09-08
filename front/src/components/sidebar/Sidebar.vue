@@ -25,7 +25,7 @@
             <div id="sidebarContent"  class="sidebar__content">
                 <nav class="principal-nav">
                     <ul class="sidebar__list">
-                        <ChannelGroup class="sidebar__list-item" v-for="(group,i) in listGroup" :key="group" :group="{...group, index : i}" @updateActiveChannel="updateActiveChannel(indexChannel, i)" />
+                        <ChannelGroup class="sidebar__list-item" v-for="(group,i) in listGroup" :key="group" :group="{...group, index : i}" />
                     </ul>
                 </nav>
             </div>            
@@ -59,13 +59,11 @@ export default {
     methods : {
         ...mapActions('sidebarModule',['setListGroup','switchVisibility']),
         ...mapActions('userModule',['openConfigDisplay']),
-        updateActiveChannel(channelIndex,groupIndex){
-            channelIndex
-            groupIndex
-            /*
-            this.activeChannel = channelIndex;
-            this.activeGroup = groupIndex;*/
-        },
+        
+        /**
+         * @name redirectToFirstChannel
+         * @description Redirige vers le premier channel de la liste
+         */
         redirectToFirstChannel(){
             const listChannel = this.listGroup.reduce( (a, group) => a = [...a, ...group.listChannel], [] );
             if(listChannel.length > 0){

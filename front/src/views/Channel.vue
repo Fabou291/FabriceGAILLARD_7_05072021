@@ -103,23 +103,22 @@ export default {
         ...mapMutations('postModule',['UPDATE_USER_OF_POST', 'SET_LIST_POST']),
         ...mapMutations('inputPostChannelModule',['SET_TEXTAREA']),
         ...mapMutations('imagePostModule',['SET_CHANNEL_ID']),
+
+        /**
+         * @name add
+         * @description Ajoute un post au channel
+         * @param {String} content
+         */
         async add(content){ 
             const id = await this.addPost({ content, channelId : this.channel.id });
             document.querySelector(`#post-id-${id}`).focus();
         },
-        /*getlistPostOfChannel(commitName){
-            this.getListPost({
-                channelId : this.channel.id,
-                limit : this.pagination.limit,
-                offset : this.pagination.limit * (++this.pagination.currentPage-1),
-                commit : commitName
-            })
-            .then(() => {
-                if(this.listPost.length - this.pagination.lengthListPost < this.pagination.limit) this.pagination.limitReached = true;
-                this.pagination.lengthListPost = this.listPost.length;
-                this.pagination.inProgress = false;
-            })
-        },*/
+
+        /**
+         * @name getlistPostOfChannel
+         * @description Récupère l'ensemble des posts du channel
+         * @param {String} commitName
+         */
         async getlistPostOfChannel(commitName){
             this.pagination.inProgress = true;
             await this.getListPost({
@@ -134,6 +133,11 @@ export default {
             this.pagination.inProgress = false;
 
         },
+
+        /**
+         * @name resetPagination
+         * @description Réinitialise les données relatives à la pagination
+         */
         resetPagination(){
             this.pagination.inProgress = true;
             this.scrollY.removeEventListener('scroll', this.handleScroll,false);
@@ -142,17 +146,35 @@ export default {
             this.pagination.lengthListPost = 0;
             this.pagination.currentPage = 0;
         },
+
+        /**
+         * @name handleScroll
+         * @description Gère le scroll
+         * S'il est en bas de page, charge les 10 posts suivant
+         */
         async handleScroll(){
             const isBottomOfChannel = this.scrollY.scrollTop + this.scrollY.getBoundingClientRect().height >= this.scrollY.scrollHeight;
             if(isBottomOfChannel && !this.pagination.limitReached && !this.pagination.inProgress) await this.getlistPostOfChannel("PUSH_LIST_POST");
                          
         },
+
+        /**
+         * @name getChannelById
+         * @description Récupère le channel par son id
+         * @param {Number} channel_id
+         */
         async getChannelById(channel_id){
             const response = await HTTPRequest.get(`channel/${channel_id}`);
             if(response.length == 0) return { id : null, name : null, description : null }
             const { id, name, description } = response[0];
             return { id, name, description };
         },
+
+        /**
+         * @name init
+         * @description Initialise 
+         * Récupère l'ensemble des post, etc
+         */
         async init(){
             await this.getlistPostOfChannel("SET_LIST_POST");
             this.SET_TEXTAREA(this.$refs['formPost'].textarea);
@@ -180,7 +202,6 @@ export default {
             this.channel = channel;
             if(this.channel) this.init();
         })            
-
     },
 };
 </script>

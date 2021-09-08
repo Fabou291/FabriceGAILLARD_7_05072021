@@ -229,7 +229,6 @@
 <script>
 
 import { mapActions, mapState } from "vuex";
-
 import ModifyUserForm from "@/components/form/configProfil/ModifyUserForm.vue";
 import ResetMailForm from "@/components/form/configProfil/ResetMailForm.vue";
 import ResetPasswordForm from "@/components/form/configProfil/ResetPasswordForm.vue";
@@ -249,9 +248,6 @@ export default {
     watch: {
         listFile() {
             if (this.listFile) this.modifyAvatar();
-        },
-        activeZone() {
-            //this.focusHandler.setAllTabbableElements()
         }
     },
     computed: {
@@ -259,12 +255,27 @@ export default {
     },
     methods: {
         ...mapActions("userModule", ["shutDownConfigDisplay", "remove", "modify"]),
+
+        /**
+         * @name changeZone
+         * @description Détermine quel "zone" doit être affiché à l'ecran
+         */
         changeZone(index) {
             this.activeZone = index;
         },
+
+        /**
+         * @name browse
+         * @description Affiche le brownser du systeme d'exploitation
+         */
         browse() {
             this.$refs["inputFile"].click();
         },
+
+        /**
+         * @name modifyAvatar
+         * @description Demande à sauvegarder la modifier
+         */
         modifyAvatar() {
             const file = this.listFile[0];
             this.resetInputFile();
@@ -275,21 +286,46 @@ export default {
                 description: this.user.description,
             });
         },
+
+        /**
+         * @name resetInputFile
+         * @description Vide le champ file
+         */
         resetInputFile() {
             this.$refs["inputFile"].value = "";
             this.$refs["inputFile"].files = null;
         },
+
+        /**
+         * @name setListFile
+         * @description Stock l'ensemble de fichier présent dans l'input file
+         */
         setListFile() {
             this.listFile = this.$refs["inputFile"].files;
         },
+
+        /**
+         * @name switchSidebarVisibility
+         * @description Switch la visibilité de la sidebar
+         */
         switchSidebarVisibility(){
             this.sidebar.visible = !this.sidebar.visible;
         },
+
+        /**
+         * @name logout
+         * @description Déconnexion du compte
+         */
         logout(){
             window.localStorage.removeItem('accessToken');
             this.$router.push({ name : 'Login' })
             this.shutDownConfigDisplay()
         },
+
+        /**
+         * @name handleFocus
+         * @description Initialise la gestion du focus pour ce display
+         */
         handleFocus() {
             this.focusHandler = new FocusHandler(this.$refs["configProfil"]);
             this.focusHandler.setEvent();
@@ -391,7 +427,8 @@ export default {
         position: relative;
         border-radius: 100px;
         overflow: hidden;
-        @include setSizeFullContainer();
+        width : 100%;
+        height : 100%;
 
         &:focus-visible{
             border : 3px solid white;
@@ -406,7 +443,8 @@ export default {
         left: 0;
         top: 0;
         position: absolute;
-        @include setSizeFullContainer();
+        width : 100%;
+        height : 100%;
     }
 
     &__showcase {
@@ -414,7 +452,8 @@ export default {
         display: none;
         left: 0;
         top: 0;
-        @include setSizeFullContainer();
+        width : 100%;
+        height : 100%;
         z-index: 1;
         background-color: rgba(0, 0, 0, 0.7);
     }

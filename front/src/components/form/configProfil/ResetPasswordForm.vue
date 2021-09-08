@@ -33,6 +33,11 @@ export default {
     methods: {
         ...mapActions('errorModule',['handleError']),
         ...mapActions('flashCardModule',['setFlashCard']),
+
+        /**
+         * @name checkValidity
+         * @description Véirifie la validité du formulaire
+         */
         async checkValidity(){
             try{
                 if(!this.$refs['form'].reportValidity()) return;
@@ -47,6 +52,11 @@ export default {
                 this.handleError(error)
             }
         },
+
+        /**
+         * @name setCustomValidity
+         * @description Défini un message pour la validité des champs
+         */
         setCustomValidity(){
             [ 'oldPassword', 'confirmPassword', 'password' ].forEach(ref => { 
                 let message = `Veuillez respecter le format requis : 

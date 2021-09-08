@@ -1,15 +1,15 @@
-import EditableDivParser from './editableDivParser.js';
-class UrlParser extends EditableDivParser{
+class UrlParser{
 
     regexp = /https?:\/\/[www.]?[\w]+\.[\w()]+[-a-zA-Z0-9()@:%_+.~#?&/=]+/g;
-
+    node;
+    
     constructor(node){
-        super(node)
+        this.node = node;
     }
 
     /**
      * @name parse
-     * @description Analayse l'ensemble des noeud, pour adapter leur contenu
+     * @description Analayse l'ensemble des noeuds, pour adapter leur contenu.
      * S'il correspond à une url, une span sera crée pour mettre en valeur le texte
      * @returns {Array} listNodes
      */

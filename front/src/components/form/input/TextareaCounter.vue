@@ -18,6 +18,11 @@ export default {
         placeholder : { type : String, required : true },
     },
     computed: {
+        
+        /**
+         * @name lengthCharacter
+         * @description Calcul le nombre de caractère du textarea
+         */
         lengthCharacter(){
             return this.modelValue ? this.modelValue.length : 0
         }

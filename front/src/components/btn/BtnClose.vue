@@ -9,10 +9,6 @@
     </button>
 </template>
 
-<script>
-export default {}
-</script>
-
 <style lang="scss">
     .close-btn{
         padding : 15px;

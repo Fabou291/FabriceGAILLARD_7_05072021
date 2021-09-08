@@ -23,7 +23,7 @@
                     Se souvenir de moi
                 </CheckboxSwitch>
             </div>
-            <BtnRounded class="form-auth__submit-btn" type="submit" @click.prevent="post">Continuer</BtnRounded>
+            <BtnRounded class="form-auth__submit-btn" type="submit" @click.prevent="submit">Continuer</BtnRounded>
         </template>
     </FormAuthentication>
 </template>
@@ -53,9 +53,19 @@ export default {
     },
     methods: {
         ...mapActions("userModule", ["fetchLogin"]),
+
+        /**
+         * @name switchRemember
+         * @description Switch remember
+         */
         switchRemember() {
             this.remember = !this.remember;
         },
+
+        /**
+         * @name setInSessionStorage
+         * @description Ajoute des elements dans le sessionStorage (evite de retapper chacune des informations)
+         */
         setInSessionStorage(){
             const authentication = window.sessionStorage.getItem('authentication') ? JSON.parse(window.sessionStorage.getItem('authentication')) : {};
             window.sessionStorage.setItem('authentication', 
@@ -66,16 +76,25 @@ export default {
                 } )
             )
         },
+
+        /**
+         * @name hydratefromStorage
+         * @description Rempli les variable à partid des infos récoltées dans le sessionStorage
+         */
         hydratefromStorage(){
             if(!window.sessionStorage.getItem('authentication')) return;
             const authentication = JSON.parse(window.sessionStorage.getItem('authentication'));
             this.email = authentication.email;
             this.remember = authentication.remember;
         },
-        post() {
+
+        /**
+         * @name submit
+         * @description Soumet le formulaire pour vérification, puis envoie si tout est ok
+         */
+        submit() {
             this.setInSessionStorage();
             if (!document.querySelector(".form-auth form").reportValidity()) return;
-
             this.fetchLogin({ email: this.email, password: this.password });
         },
     },

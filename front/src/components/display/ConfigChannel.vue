@@ -137,6 +137,7 @@ import TextareaCounter from "@/components/form/input/TextareaCounter.vue";
 import { mapState, mapMutations, mapActions } from "vuex";
 import FocusHandler from "@/js/FocusHandler.js";
 export default {
+    components: { InputDefaultIcon, BtnDefault, TextareaCounter },
     data() {
         return {
             name: null,
@@ -150,25 +151,37 @@ export default {
     computed: {
         ...mapState("configChannelModule", ["visible", "activeChannel"]),
     },
-    watch: {
-    },
     methods: {
         ...mapMutations("configChannelModule", ["CLOSE_CONFIG"]),
         ...mapActions("configChannelModule", ["modify", "remove"]),
         ...mapState('imagePostModule',['listFile']),
+
+        /**
+         * @name switchSidebarVisibility
+         * @description Switch la visibilité du display configChannel
+         */
         switchSidebarVisibility() {
             this.sidebar.visible = !this.sidebar.visible;
         },
+
+        /**
+         * @name removeChannel
+         * @description Supprime le channel
+         */
         async removeChannel() {
             await this.remove();
             if (this.activeChannel.id == this.$route.params.id) this.$router.push({ name: "Home" });
         },
+
+        /**
+         * @name handleFocus
+         * @description Initialise la gestion du focus
+         */
         handleFocus() {
             this.focusHandler = new FocusHandler(this.$refs["configuration_channel"]);
             this.focusHandler.setEvent();
         },
     },
-    components: { InputDefaultIcon, BtnDefault, TextareaCounter },
     created() {
         this.name = this.activeChannel.name;
         this.description = this.activeChannel.description;

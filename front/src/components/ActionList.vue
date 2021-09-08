@@ -40,15 +40,30 @@
             ...mapActions('imagePostModule',['open']),
             ...mapMutations('imagePostModule',['SET_FILE']),
             ...mapMutations('postModule',['SET_ACTION_LIST_VISIBLE']),
-            show(){
+
+            /**
+             * @name showActionList
+             * @description Fait apparaitre à l'ecran le display permettant de choisir une action parmis une liste
+             */
+            showActionList(){
                 this.$refs['input'].files = null;
                 this.$refs['input'].value = null;
                 this.SET_ACTION_LIST_VISIBLE(true);
             },
+
+            /**
+             * @name showBrownser
+             * @description Affiche le brownser du systeme d'exploitation
+             */
             showBrownser(){
                 this.SET_ACTION_LIST_VISIBLE(false);
                 this.$refs['input'].click();
             },
+
+            /**
+             * @name openImagePostDisplay
+             * @description Affiche le display openImagePostDisplay affichant une preview de l'image et un formulaire
+             */
             openImagePostDisplay(){
                 this.open({ listFile : this.$refs['input'].files, content: this.getContent })
             }

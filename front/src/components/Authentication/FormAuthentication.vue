@@ -9,9 +9,6 @@
     </section>
 </template>
 
-<script>
-
-</script>
 
 <style lang="scss">
     .form-auth {

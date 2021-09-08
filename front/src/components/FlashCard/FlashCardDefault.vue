@@ -24,17 +24,32 @@ export default {
         ...mapState('flashCardModule',['message','statu']),
     },
     methods:{
+
+        /**
+         * @name setTimerToClose
+         * @description Déclare un intertal pour fermer la flash card au temps écoulé.
+         */
         setTimerToClose(){
             this.interval = setInterval(()=>{
                 this.close();
             },3000);
         },
+
+        /**
+         * @name resetIntervalToClose
+         * @description Annule l'interval
+         */
         resetIntervalToClose(){
             if(this.interval != null){
                 clearInterval(this.interval)
             } 
             this.interval = null;
         },
+
+        /**
+         * @name close
+         * @description Ferme la flashCard
+         */
         close(){
             this.resetIntervalToClose();
             this.reset;

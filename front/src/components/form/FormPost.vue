@@ -2,7 +2,7 @@
     <form class="form-post">
         <div class="form-post__container">
             <div v-if="canBrownse">
-                <button type="button" class="form-post__brownse-btn form-post-btn" @click.stop="showBrownser" aria-label="Ouvrir le panel d'actions">
+                <button type="button" class="form-post__brownse-btn form-post-btn" @click.stop="showActionList" aria-label="Ouvrir le panel d'actions">
                     <svg width="24" height="24" viewBox="0 0 24 24">
                         <path
                             fill="currentColor"
@@ -11,32 +11,21 @@
                     </svg>
                 </button>
 
-                <ActionList ref="brownser" v-show="ActionListVisible" />
+                <ActionList ref="ActionList" v-show="ActionListVisible" />
             </div>
             <div
-                @drop.prevent="" @dragenter.prevent="" @dragstart.prevent="" @drag.prevent="" @paste.prevent="paste"
-                @keypress.enter.exact.prevent="submit"
-                @keydown.shift.enter.exact="addLine"
                 @keydown.esc.exact="escape"
-                @input="
-                    parseUrl();
-                    parseImgHasTextAround();
-                    parseTextZero();
-                    textarea.normalize();
-                    HandlerDivEditable.parseEmpty();
-                    HandlerDivEditable.CursorHandler.replaceCursor();
-                    $emit('updateInput', this.HandlerDivEditable.getTextContent());
-                "
-                @focusout="HandlerDivEditable.CursorHandler.setTempDatas"
-                @keydown.left.exact.prevent="HandlerDivEditable.CursorHandler.move"
-                @keydown.right.exact.prevent="HandlerDivEditable.CursorHandler.move"
-                @keydown.exact="keydownHandler"
+                @input="updateInput"
+                @keypress.enter.exact.prevent="submit"
+
                 class="form-post__field"
                 contenteditable="true"
                 :title="placeholder"
                 ref="textarea"
                 spellcheck="false"
                 tabindex="0"
+                v-html="getValue"
+                v-focus
             ></div>
 
             <button type="button" class="form-post-btn" v-if="false" aria-label="Ouvrir le panel de gif">
@@ -73,8 +62,7 @@
 <script>
 import ActionList from "@/components/ActionList.vue";
 import { mapMutations, mapState } from "vuex";
-import EmojiParser from "@/js/editableDivParser/emojiParser.js";
-import UrlParser from "@/js/editableDivParser/urlParser.js";
+import PostParser from "@/js/PostParser.js";
 import HandlerDivEditable from "@/js//handlerDivEditable/handlerDivEditable.js";
 import handlerPositionDisplayEmoji from "@/js/handlerPositionDisplayEmoji.js";
 export default {
@@ -102,13 +90,17 @@ export default {
     watch: {
         idPostToReply() {
             if (this.canRespond && this.idPostToReply) this.textarea.focus();
-        },
+        }
     },
     computed: {
         ...mapState("emojiModule", ["emojisShortCodeIndex", "display"]),
-        ...mapState("postModule", ["idPostToReply", "listPost", "ActionListVisible"]),
+        ...mapState("postModule", ["idPostToReply","listPost", "ActionListVisible"]),
         isEmpty() {
             return this.textarea.innerHTML == "";
+        },
+        getValue() {
+            let postParser = new PostParser(this.value);
+            return postParser.parseEmoji().content;
         },
         getNameToReply() {
             //Vu que ca sera restreint à répondre auniquement au post (et non au post recursif)
@@ -116,131 +108,74 @@ export default {
             return this.listPost.find((e) => e.id == this.idPostToReply).user_username;
         },
     },
+    directives: {
+        focus: {
+            mounted: function (el) {
+                
+                for (const node of [...el.childNodes].reverse()) {
+                    if(node.nodeType == Node.TEXT_NODE){
+                        el = node;
+                        break;
+                    }else if(el.contentEditable != false) {
+                        el = node.firstChild;
+                        break;
+                    }
+                }
+
+                window.getSelection().collapse(el, el.textContent.length)
+            }
+        }
+    },
     methods: {
         ...mapMutations("emojiModule", ["SET_POSITION", "OPEN", "SET_HANDLER_DIV_EDITABLE"]),
         ...mapMutations("postModule", ["SET_ID_POST_TO_REPLY"]),
+
+        /**
+         * @name showEmojiDisplay
+         * @description Affiche le display des emoji
+         */
         showEmojiDisplay() {
             this.SET_HANDLER_DIV_EDITABLE(this.HandlerDivEditable);
             handlerPositionDisplayEmoji.setPositionOfDisplay(this.$refs["emojiFormBtn"], this.sticky);
             this.OPEN();
         },
 
-        escape() {
-            this.$emit("escape");
-        },
+        /**
+         * @name escape
+         * @description Emet l'evement escape
+         */
+        escape() { this.$emit("escape"); },
 
-        showBrownser() {
-            this.$refs["brownser"].show();
-        },
+        /**
+         * @name showActionList
+         * @description Affiche la liste d'action
+         */
+        showActionList() { this.$refs["ActionList"].showActionList(); },
 
-        submit() {
+        /**
+         * @name updateInput
+         * @description Emet l'evenement updateInput
+         */
+        updateInput() { this.$emit('updateInput', this.HandlerDivEditable.getTextContent()) },
+
+        /**
+         * @name submit
+         * @description Soumet le formulaire
+         */
+        submit(){
             const value = this.HandlerDivEditable.getTextContent().trim();
             if (value == "") return;
-
             this.$emit("submit", value);
             this.textarea.innerHTML = "";
-        },
-
-        paste(event) {
-            let paste = (event.clipboardData || window.clipboardData).getData("text").trim();
-            const selection = window.getSelection();
-            if (!selection.rangeCount) return false;
-            selection.deleteFromDocument();
-            selection.getRangeAt(0).insertNode(document.createTextNode(paste));
-            //this.parseEmoji();
-            //this.parseImgHasTextAround();
-        },
-
-        drop(event) {
-            let drop = event.dataTransfer.getData("text");
-
-            const selection = window.getSelection();
-            if (!selection.rangeCount) return false;
-            selection.deleteFromDocument();
-
-            selection.getRangeAt(0).insertNode(document.createTextNode(drop));
-            //this.parseEmoji();
-        },
-
-        ///NEW
-        parseEmoji() {
-            this.HandlerDivEditable.append(this.EmojiParser.parse());
-        },
-
-        parseUrl() {
-            this.HandlerDivEditable.append(this.UrlParser.parse());
-        },
-
-        parseImgHasTextAround() {
-            [...this.textarea.childNodes].forEach((node) => {
-                if (node.contentEditable == "false") {
-                    const previous = node.previousSibling;
-                    const next = node.nextSibling;
-
-                    if (!next || (next.nodeType != Node.TEXT_NODE && next.contentEditable == "false"))
-                        node.after(this.HandlerDivEditable.createZeroText());
-
-                        
-
-                    if (!previous || (previous.nodeType != Node.TEXT_NODE && previous.contentEditable == "false"))
-                        this.textarea.insertBefore(this.HandlerDivEditable.createZeroText(), node);
-                }
-            });
-        },
-
-        parseTextZero() {
-            const reg = new RegExp("\u{FEFF}");
-            [...this.textarea.childNodes].forEach((node) => {
-                if (node.nodeType == Node.TEXT_NODE && node.textContent.length > 1 && reg.test(node.textContent))
-                    node.textContent = node.textContent.replace("\u{FEFF}", "");
-
-                    
-            });
-        },
-
-        keydownHandler(e) {
-            this.HandlerDivEditable.CursorHandler.setTempDatas();
-            if (e.keyCode == 8) this.backSpaceHandler();
-            if (e.keyCode == 46) this.deleteHandler();
-            this.parseImgHasTextAround();
-        },
-
-        deleteHandler() {
-            this.HandlerDivEditable.CursorHandler.onDelete.direction = 1;
-            this.removeTextZero();
-        },
-
-        backSpaceHandler() {
-            this.HandlerDivEditable.CursorHandler.onDelete.direction = -1;
-            this.removeTextZero();
-        },
-
-        removeTextZero() {
-            const focusNode = window.getSelection().focusNode;
-            const reg = new RegExp("\u{FEFF}");
-            if (reg.test(focusNode.textContent) && focusNode.textContent.length == 1 && this.textarea.textContent.length > 1){
-                focusNode.parentNode.removeChild(focusNode);
-                this.HandlerDivEditable.CursorHandler.removedTextZero = true;
-            }
-        },
-
-        addLine() {
-            console.log("retour chariot");
-        },
+        }
     },
     mounted() {
         this.textarea = this.$refs["textarea"];
         this.HandlerDivEditable = new HandlerDivEditable(this.textarea);
-
-
-        
-        this.EmojiParser = new EmojiParser(this.textarea, this.emojisShortCodeIndex);
-        
-        this.UrlParser = new UrlParser(this.textarea);
-        //this.textarea.addEventListener('focusout',this.HandlerDivEditable.getSelection,true)
+        this.HandlerDivEditable.eventHandler.initialization();
     },
     beforeUnmount() {
-        //this.textarea.removeEventListener('focusout',this.HandlerDivEditable.getSelection,true)
+        this.HandlerDivEditable.eventHandler.removeEvent();
     },
 };
 </script>

@@ -29,6 +29,11 @@ export default {
         modelValue : { type : String, required : true }
     },
     methods: {
+        
+        /**
+         * @name checkValidity
+         * @description Vérifie la validité et défini un message pour la validation
+         */
         checkValidity($event) {
             const el = $event.target;
             let message = "";

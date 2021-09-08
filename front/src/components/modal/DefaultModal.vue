@@ -12,11 +12,6 @@
     </div>
 </template>
 
-<script>
-    export default {
-    }
-</script>
-
 <style lang="scss">
     .modal-default {
         background-color: $grey-18;

@@ -54,8 +54,8 @@ export default class handlerPositionDisplayEmoji{
     /**
      * @name setPositionOfDisplay
      * @description Détermine la position du display sur la page
-     * @param {*} element 
-     * @param {*} sticky 
+     * @param {Object} element 
+     * @param {Boolean} sticky 
      */
     static setPositionOfDisplay(element, sticky){
         const bound = element.getBoundingClientRect();

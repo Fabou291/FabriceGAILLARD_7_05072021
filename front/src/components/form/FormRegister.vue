@@ -53,7 +53,7 @@
                     >Se souvenir de moi</CheckboxSwitch
                 >
             </div>
-            <BtnRounded class="form-auth__submit-btn rounded-btn--success" type="submit" @click.prevent="post">Continuer</BtnRounded>
+            <BtnRounded class="form-auth__submit-btn rounded-btn--success" type="submit" @click.prevent="submit">Continuer</BtnRounded>
         </template>
     </FormAuthentication>
 </template>
@@ -86,20 +86,46 @@ export default {
     },
     watch : {
         password() {
-            this.areSamePassword();
+            this.setCustomValidity();
         }
     },
     methods: {
         ...mapActions("userModule", ["register"]),
-        areSamePassword(){
-            let message = 'Les mots de passe doivent être identique.';
-            if( this.password  == this.passwordConfirmation ) message = '';
 
+        /**
+         * @name areSamePassword
+         * @description Détermine les password sont identique
+         */
+        areSamePassword(){
+            return this.password  == this.passwordConfirmation
+        },
+
+        /**
+         * @name setCustomValidity
+         * @description Met en place un nouveau message pour la validité du formulaire
+         */
+        setCustomValidity(){
+            const message = this.areSamePassword()
+            ? ''
+            : 'Les mots de passe doivent être identique.'
             this.$refs['passwordConfirmation'].setCustomValidity(message);
         },
+
+        /**
+         * @name switchRemember
+         * @description Switch de la valeur de remember 
+         * (La fonctionnalité permettant de retenir l'utilisateur ou non pour ses prochaine connexion n'est pas encore
+         * implémentée)
+         */
         switchRemember() {
             this.remember = !this.remember;
         },
+
+        /**
+         * @name setInSessionStorage
+         * @description Ajoute les informations du formulaire dans le sessionStorage 
+         * pour éviter de retapper systématiquement ses informations
+         */
         setInSessionStorage() {
             const authentication = window.sessionStorage.getItem("authentication")
                 ? JSON.parse(window.sessionStorage.getItem("authentication"))
@@ -114,6 +140,11 @@ export default {
                 })
             );
         },
+
+        /**
+         * @name hydratefromStorage
+         * @description Rempli les variable à partir des infos récoltées dans le sessionStorage
+         */
         hydratefromStorage() {
             if (!window.sessionStorage.getItem("authentication")) return;
             const authentication = JSON.parse(window.sessionStorage.getItem("authentication"));
@@ -121,7 +152,12 @@ export default {
             this.username = authentication.username;
             this.remember = authentication.remember;
         },
-        post() {
+        
+        /**
+         * @name submit
+         * @description Envoie du formulaire, après vérifications
+         */
+        submit() {
             this.setInSessionStorage();
             if (!document.querySelector(".form-auth form").reportValidity()) return;
             const avatarDefaultSet = ['A','B','C','D','E','F','G','H'];

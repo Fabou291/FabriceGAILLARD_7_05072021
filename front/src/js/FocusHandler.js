@@ -44,7 +44,7 @@ export default class FocusHandler {
      * @name keyListener
      * @description Représente l'evenement à la touche TAB, 
      * permettant de focus le prochain noeud pouvant l'être
-     * @param {*} event 
+     * @param {Object} event 
      */
     keyListener = (event) => {
         this.setAllTabbableElements();
@@ -53,6 +53,7 @@ export default class FocusHandler {
             this.allTabbableElements.length - 1,
             -1
         );
+        
         const firstTabbableElement = this.getNextFocusableElements(this.allTabbableElements, 0, 1);
 
         if (event.keyCode === 9) {
@@ -72,6 +73,7 @@ export default class FocusHandler {
      * @returns {undefined}
      */
     setEvent = () => this.context.addEventListener("keydown", this.keyListener, false);
+     
 
     /**
      * @name removeEvent

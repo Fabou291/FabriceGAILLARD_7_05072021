@@ -18,6 +18,11 @@ export default {
         label : { type : String, required : true },
     },
     methods : {
+
+        /**
+         * @name fixPositionSidebar
+         * @description Ajuste la position du BtnPopUp, en fonction du scroll de la sidebar
+         */
         fixPositionSidebar(){
             this.style.marginTop = document.getElementById('sidebarContent').scrollTop*-1 + "px";
         }

@@ -6,9 +6,8 @@ export default class PostParser {
     emojisShortCodeIndex;
     urlReg = /https?:\/\/[www.]?[\w]+\.[\w()]+[-a-zA-Z0-9()@:%_+.~#?&/=]+/g;
 
-    constructor(content, emojisShortCodeIndex){
+    constructor(content){
         this.content = content;
-        this.emojisShortCodeIndex = emojisShortCodeIndex;
     }
 
     parseEmoji(){
@@ -19,7 +18,7 @@ export default class PostParser {
 
     getImgEmoji(emoji) {
         try{
-            return `<img class="emoji" alt="${emoji}" src="${require("@/assets/twemoji/svg/" + emojiUnicode(emoji) + ".svg")}">`;
+            return `<span contentEditable="false"><img class="emoji" alt="${emoji}" src="${require("@/assets/twemoji/svg/" + emojiUnicode(emoji) + ".svg")}"></span>`;
         }catch(e){
             return emoji
         }
@@ -49,11 +48,22 @@ export default class PostParser {
      * @description Recherche les url, pour les convertir en lien cliquable
      * @returns {String}
      */
-
     parseUrl(){
         const listImage = this.parseUrlImage();
 
         this.content = this.content.replaceAll(this.urlReg, "<a href='$&' title='Accéder au lien externe'>$&</a>") + listImage.reduce((a,image) => a += image, '');
+        return this;
+    }
+
+    /**
+     * @name parseFakeUrlImage
+     * @description Recherche les url, pour les convertir en une span ayant le stype d'un lien 
+     * @returns {String}
+     */
+    parseFakeUrl(){
+        const listImage = this.parseUrlImage();
+
+        this.content = this.content.replaceAll(this.urlReg, "<span class='form-post__url'>$&</span>") + listImage.reduce((a,image) => a += image, '');
         return this;
     }
 

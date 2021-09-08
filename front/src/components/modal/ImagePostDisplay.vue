@@ -47,10 +47,20 @@ export default {
         ...mapActions('imagePostModule', ['close']),
         ...mapActions('postModule', ['addPost']),
         ...mapActions('errorModule', ['handleError']),
+
+        /**
+         * @name handleFocus
+         * @description Initialise le gestionnaire du focus pour l'element cible
+         */
         handleFocus() {
             this.focusHandler = new FocusHandler(this.$refs["display-settings-panel"]);
             this.focusHandler.setEvent();
         },
+
+        /**
+         * @name submit
+         * @description Ajoute un post avec image
+         */
         submit() {
             this.addPost({
                 content : this.$refs['formPost'].HandlerDivEditable.getTextContent(),
@@ -61,6 +71,12 @@ export default {
             this.textarea.innerHTML="";
             this.close();
         },
+
+        /**
+         * @name handleImage
+         * @description Fait un apercu de l'image  
+         * @params {Object} file
+         */
         handleImage(file){
             try{
                 const imageType = /^image\//;
@@ -79,15 +95,21 @@ export default {
                 this.handlerError(e)
             }
         },
+
+        /**
+         * @name adjusImagePosition
+         * @description Ajuste la position de l'image
+         */
         adjusImagePosition(){
             const img = this.$refs['IMG'];
             img.setAttribute('style',`margin-top : ${img.width*-50/100}px`)
         },
-        updateInput(content){
-            console.log(content)
-            this.input = content;
-            console.log(this.input)
-        },
+
+        /**
+         * @name updateInput
+         * @description Met a jour la valeur de input
+         */
+        updateInput(content){ this.input = content; },
     },
     mounted() {
         this.handleFocus();
@@ -95,7 +117,6 @@ export default {
         this.updateInput(this.content);
     },
     unmounted() {
-                console.log("unmounted")
         this.focusHandler.removeEvent();
     },
 

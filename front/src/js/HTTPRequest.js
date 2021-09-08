@@ -36,7 +36,7 @@ export default class HTTPRequest {
      * @param {String} method
      * @param {Object} headers
      * @param {Object} body
-     * @returns {Object}
+     * @returns {*}
      */
     static async fetch(uri, method, headers, body) {
         const response = await fetch(this.baseUrl + uri, {

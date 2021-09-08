@@ -65,17 +65,30 @@ export default {
     },
     props: {
         placeholder: { type: String, required: true },
-
     },
     methods: {
+        /**
+         * @name deleteValue
+         * @description Supprime la valeur dans l'input pour search
+         */
         deleteValue() {
             this.filterValue = '';
         },
+
+        /**
+         * @name updateSelectedSkin
+         * @description Met à jour la skin selectionnée
+         */
         updateSelectedSkin(skin) {
             this.switchPanelSkin();
             this.selectedSkin = skin;
             this.$emit('updateSkinColor',skin)
         },
+
+        /**
+         * @name switchPanelSkin
+         * @description switch panelSkin, affichant ou non le panel pour choisir la skin
+         */
         switchPanelSkin() {
             this.panelSkinShow = !this.panelSkinShow;
         }

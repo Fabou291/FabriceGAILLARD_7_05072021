@@ -45,9 +45,19 @@ import InputIcon from "@/components/form/input/InputIcon.vue";
             this.value = this.modelValue;
         },
         methods: {
+
+            /**
+             * @name switchVisibility
+             * @description Switch la visibilité du contenu du champs
+             */
             switchVisibility() {
                 this.visible = !this.visible;
             },
+
+            /**
+             * @name checkValidityPattern
+             * @description Vérifie la validité et défini un message particulier en cas d'echec
+             */
             checkValidityPattern($event) {
                 const el = $event.target;
                 let message = '';
@@ -61,6 +71,11 @@ import InputIcon from "@/components/form/input/InputIcon.vue";
                             
                 this.setCustomValidity(message);
             },
+
+            /**
+             * @name setCustomValidity
+             * @description  Défini un message pour la validation du formulaire
+             */
             setCustomValidity(message){
                 this.$refs['input'].setCustomValidity(message)
             }

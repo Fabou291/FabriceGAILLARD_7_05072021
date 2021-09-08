@@ -45,14 +45,6 @@ export default {
     },
     methods: {
         ...mapActions('userModule',['fetchLogin']),
-        
-        
-
-        updateSwitchPanel() {
-            this.switchPanel = !this.switchPanel;
-        },
-
-
     },
 };
 </script>

@@ -3,8 +3,8 @@
         <div class="display-emoji__sticky-top" id="displayEmojiStickyTop" >
 
             <div class="emoji-panel" data-modal="" ref="emojiPanel" v-show="display.visible" >
-                <EmojiPanelNav v-on:change="aze" />
-                <div v-show="actived == 'Emoji'">
+                <EmojiPanelNav />
+                <div>
                     <EmojiPanelSearch
                         :filterValue="filterValue"
                         placeholder="Trouve l'émoji parfait"
@@ -31,9 +31,7 @@
                                         <svg
                                             class="emoji-group__dropdown-icon"
                                             :class="{ 'emoji-group__dropdown-icon--active': !groupeHide[indexGroup] }"
-                                            width="16"
-                                            height="16"
-                                            viewBox="0 0 24 24"
+                                            width="16" height="16" viewBox="0 0 24 24"
                                         >
                                             <path
                                                 fill="currentColor"
@@ -98,7 +96,6 @@ export default {
     },
     data: function() {
         return {
-            actived: "Emoji",
             activeGroup: 0,
             activeEmoji: 0,
             groupeHide : [ false, false, false, false, false, false, false, false ],
@@ -136,16 +133,31 @@ export default {
         ...mapMutations('emojiModule', ['SET_SIZE','CLOSE','SET_POST_ID']),
         ...mapActions('emojiModule',['changeSkin']),
         ...mapActions('postModule',['addReaction']),
-        aze: function(actived) {
-            this.actived = actived;
-        },
-        hide: function(index) {
+        ...mapActions('errorModule',['handleError']),
+
+        /**
+         * @name hide
+         * @description Chache un groupe
+         * @param {Number} index
+         */
+        hide(index) {
             this.groupeHide[index] = !this.groupeHide[index];
         },
-        scrollToGroup: function(index) {
+
+        /**
+         * @name scrollToGroup
+         * @description Détermine la position du scroll de la side bar du panel emoji en fonction du groupe choisi
+         */
+        scrollToGroup(index) {
             document.querySelector(".emoji-panel__emojis").scrollTop = document.querySelectorAll(".emoji-group")[index].offsetTop;
         },
-        checkGroupActive: function() {
+
+        /**
+         * @name checkGroupActive
+         * @description Détermine le groupe d'emoji actuellement parcouru.
+         * En fonction, la sidebar du display emoji, est mis à jour
+         */
+        checkGroupActive() {
             const scrollTop = document.querySelector(".emoji-panel__emojis").scrollTop;
             const emojiGroup = document.querySelectorAll(".emoji-group");
 
@@ -157,6 +169,11 @@ export default {
                 }
             }
         },
+
+        /**
+         * @name getPositionBackgroundEmoji
+         * @description Détermine la position du background pour les emojis
+         */
         getPositionBackgroundEmoji(emoji) {
             const index = emoji.is != undefined ? emoji.is : emoji.i; //i = index, is = indexSkin
             const nbPerLine = 42;
@@ -164,25 +181,51 @@ export default {
             const y = Math.trunc(index / nbPerLine) * -32;
             return `${x}px ${y}px`;
         },
+
+        /**
+         * @name updateActiveEmoji
+         * @description 
+         * @param {index} index
+         */
         updateActiveEmoji(index) {
             this.activeEmoji = index;
         },
+        
+        /**
+         * @name updateFilterValue
+         * @description Met à jour la valeur du filtre
+         */
         updateFilterValue(value) {
             this.filterValue = value;
         },
+
+        /**
+         * @name applyEmoji
+         * @description Défini ou/comment appliquer l'emoji
+         */
         applyEmoji(emoji) {
             if(this.display.handlerDivEditable) this.addEmojiToForm(emoji);
             else if(this.display.postId) this.addEmojiReaction(emoji);
             else console.log('Error')
             this.CLOSE();
         },
-        addEmojiToForm(emoji){
-            const handler = this.display.handlerDivEditable;
 
+        /**
+         * @name addEmojiToForm
+         * @description Ajoute l'emoji au formulaire
+         * Calcul ou le positionner
+         */
+        addEmojiToForm(emoji){
+
+            const handler = this.display.handlerDivEditable;
             const tempSelection = handler.CursorHandler.temp.selection
 
-            const textContentArray = [...tempSelection.focusNode.textContent];
+            if(tempSelection.focusNode.parentNode != handler.node && tempSelection.focusNode != handler.node){
+                this.handleError({ message : "Il est impossible d'ajouter un emoji dans une url" })
+                return;
+            }
 
+            const textContentArray = [...tempSelection.focusNode.textContent];
             let reference = tempSelection.focusNode;
 
             if(handler.node.innerHTML == ''){
@@ -199,23 +242,21 @@ export default {
                     handler.createImgEmoji(emoji),
                     handler.createTextNode('\u00a0' + textContentArray.join(''))
                 ]
-            }]);
-            
+            }]);                
 
         },
+
+        /**
+         * @name addEmojiToForm
+         * @description Ajoute l'emoji en guise de reaction à un post
+         */
         addEmojiReaction(emoji){
-            
             this.addReaction({
                 postId : this.display.postId,
                 emojiUnicode :  emojiUnicode(emoji.emoji)
             })
         }
-    },
-    mounted(){
-        /*console.log(this.$refs['emojiPanel'].getBoundingClientRect())
-        const bound = this.$refs['emojiPanel'].getBoundingClientRect();
-        this.SET_SIZE({ width: bound.width, height: bound.height})*/
-    },
+    }
 };
 </script>
 

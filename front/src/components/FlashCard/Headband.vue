@@ -45,29 +45,36 @@ export default {
     },
     methods: {
         ...mapActions('errorModule', ['setError']),
-        setTitle(){
-            let listTitle = {
-                error : "Woops!"
-            }
-            this.title = listTitle[this.type];
-        },
+
+        /**
+         * @name setTimerToClose
+         * @description Déclare un interval pour fermer la headband
+         */
         setTimerToClose(){
             this.interval = setInterval(()=>{
                 this.close();
             },3000);
         },
+
+        /**
+         * @name resetIntervalToClose
+         * @description Annule l'interval
+         */
         resetIntervalToClose(){
             if(this.interval != null) clearInterval(this.interval)
             this.interval = null;
         },
+        
+        /**
+         * @name close
+         * @description Ferme la HeadBand
+         */
         close(){
             this.resetIntervalToClose();
             this.setError(null);
         }
     },
-    created() {
-        this.setTitle();
-    },
+
 
 }
 </script>

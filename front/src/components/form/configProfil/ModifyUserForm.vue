@@ -27,6 +27,11 @@ export default {
         ...mapActions('userModule',['modify']),
         ...mapMutations('userModule',['SET_CONFIG_DISPLAY_VISIBLE']),
         ...mapActions('flashCardModule',['setFlashCard']),
+
+        /**
+         * @name checkValidity
+         * @description Vérifie la validité du formulaire
+         */
         checkValidity(){
             if(!this.$refs['form'].reportValidity()) return;
             this.modify({

@@ -29,6 +29,11 @@ export default {
         ...mapActions('errorModule',['handleError']),
         ...mapActions('flashCardModule',['setFlashCard']),
         ...mapActions('errorModule',['handleError']),
+
+        /**
+         * @name checkValidity
+         * @description Vérifie la validité du formulaire
+         */
         async checkValidity(){
             try{
                 try{
@@ -49,6 +54,11 @@ export default {
                 this.handleError(error)
             }
         },
+
+        /**
+         * @name setCustomValidity
+         * @description Défini un message particulier de validation
+         */
         setCustomValidity(){
             ['oldMail','email'].forEach(ref=>{
                 let message = "Veuillez indiquer une adresse email valide : contact@exemple.com";

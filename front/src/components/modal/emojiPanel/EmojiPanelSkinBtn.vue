@@ -16,6 +16,11 @@ export default {
         };
     },
     computed: {
+        
+        /**
+         * @name getUrl
+         * @description Détermine l'url vers le fichier svg de l'emoji
+         */
         getUrl(unicode) {
             return require("@/assets/twemoji/svg/" + unicode + ".svg");
         },

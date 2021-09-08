@@ -25,7 +25,7 @@ class CursorHandler {
 
     /**
      * @name setTempDatas
-     * @description Sauvegarde les données relative au curseur et plus, avant toute opération faite sur la divEditable
+     * @description Sauvegarde les données relative au curseurs et plus, avant toutes opérations faite sur la divEditable
      */
     setTempDatas = () => {
         this.setTempSelection();
@@ -33,13 +33,16 @@ class CursorHandler {
         this.temp.textContentLength = this.node.textContent.length;
         this.temp.textLengthFocusNode = this.temp.selection.focusNode.textContent.length;
         this.temp.clonedNode = this.node.cloneNode(true);
-        this.temp.focusNodeIndex = [...this.node.childNodes].findIndex((e) => e == this.temp.selection.focusNode);
+        this.temp.focusNodeIndex = [...this.node.childNodes].findIndex((e) => {
+            e = (e.nodeType != Node.TEXT_NODE && e.contentEditable != 'false') ? e.firstChild : e ;
+            return e == this.temp.selection.focusNode;
+        });
         this.temp.isCollapsed = window.getSelection().isCollapsed;
     }
 
     /**
      * @name setTempSelection
-     * @description Sauvegarde les données relative à la selection avant toute opération faite sur la divEditable
+     * @description Sauvegarde les données relatives à la selection avant toutes opérations faite sur la divEditable
      */
     setTempSelection() {
 
@@ -53,7 +56,7 @@ class CursorHandler {
 
     /**
      * @name initialization
-     * @description Initialize l'ensemble de variable necessaire pour le bon fonctionnement
+     * @description Initialise l'ensemble des variables necessaires pour le bon fonctionnement
      */
     initialization(){
         const focusNode = (this.node.lastChild) ? this.node.lastChild : this.node ;
@@ -79,7 +82,7 @@ class CursorHandler {
 
     /**
      * @name setTempCursorPosition
-     * @description Détermine la position qu'a le cuseur avant toute opération faire sur la divEditable
+     * @description Détermine la position qu'a le cuseur avant toutes opérations faite sur la divEditable
      * @param {Object} selection 
      */
     setTempCursorPosition(selection) {
@@ -147,6 +150,7 @@ class CursorHandler {
                 this.temp.clonedNode.childNodes.length != 0 &&
                 this.onDelete.direction == 0 &&
                 selection.focusOffset == 0 &&
+                this.temp.clonedNode.childNodes[this.temp.focusNodeIndex] &&
                 this.temp.clonedNode.childNodes[this.temp.focusNodeIndex].textContent == "\u{FEFF}"
             ) {
                 if (this.temp.focusNodeIndex == 0) this.temp.cursorPosition = 1;
@@ -181,6 +185,10 @@ class CursorHandler {
                 }
 
                 //-- Reajustement -  Gere la suppression touche suppr
+
+                console.log(this.temp.clonedNode.childNodes)
+                console.log(this.temp.focusNodeIndex)
+
                 if (
                     this.onDelete.direction == NEXT &&
                     selection.focusOffset == 1 &&
@@ -202,16 +210,19 @@ class CursorHandler {
                     this.temp.cursorPosition--;
                 }
 
-                console.log({
+                /*console.log({
                     temp: { ...this.temp },
                     count,
                     nbCharacterAfter,
                     diff,
-                });
-
-
+                });*/
+                let offset = this.temp.cursorPosition - count + diff;
+                if(!nodeToReplaceCursor){
+                    nodeToReplaceCursor = this.node.lastChild;
+                    offset = 0
+                }
                 if (nodeToReplaceCursor.nodeType != Node.TEXT_NODE) nodeToReplaceCursor = nodeToReplaceCursor.childNodes[0];
-                window.getSelection().collapse(nodeToReplaceCursor, this.temp.cursorPosition - count + diff);            
+                window.getSelection().collapse(nodeToReplaceCursor, offset);            
             }            
         }
 

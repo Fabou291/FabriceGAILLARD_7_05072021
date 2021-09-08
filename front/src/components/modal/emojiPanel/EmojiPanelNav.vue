@@ -1,33 +1,13 @@
 <template>
     <nav class="emoji-panel-nav">
         <ul class="emoji-panel-nav__list">
-            <li class="emoji-panel-nav__list-item" v-for="button in listButton" :key="button" >
-                <button class="btn-nav" :aria-label="`Afficher la section ${ button }`" :class="{ 'btn-nav--active': button == actived }" @click="active(button)" type="button">{{ button }}</button>
+            <li class="emoji-panel-nav__list-item"  >
+                <button class="btn-nav btn-nav--active" :aria-label="`Afficher la section Emoji`" type="button">Emoji</button>
             </li>
         </ul>
     </nav>
 </template>
 
-<script>
-
-export default {
-    name: "EmojiPanelNav",
-    data: () => {
-        return {
-            actived : "Emoji",
-            listButton: [ "Emoji"],            
-        }
-    },
-    methods: {
-        active : function(button){
-            this.actived = button;
-            this.$emit('change',button)
-        }
-    },
-    components: {
-    },
-};
-</script>
 
 <style lang="scss">
     .emoji-panel-nav{

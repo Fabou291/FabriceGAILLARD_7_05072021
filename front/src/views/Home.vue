@@ -1,6 +1,6 @@
 <template>
     <div class="two-side">
-        <PanelCreateChannel/>
+        <PanelCreateChannel v-if="createChannelVisibility"/>
         <ConfigChannel v-if="visible" />
         <ConfigProfil v-if="configDisplay.visible"/>
         <ImagePostDisplay v-if="listFile != null"/>
@@ -9,8 +9,7 @@
         <div class="container-full">
             <div class="scroll-y" id="scrollY">
                 <div class="container">
-                    
-                    
+
                     <PrincipalNav />                                  
                     <main class="main">
                         <router-view></router-view>
@@ -42,6 +41,9 @@ export default {
         ...mapState("configChannelModule", ["visible"]),
         ...mapState("userModule", ["configDisplay"]),
         ...mapState("imagePostModule", ["listFile"]),
+        ...mapState({
+            createChannelVisibility : state => state.createChannelDisplay.visible
+        }),
     },
 
 };

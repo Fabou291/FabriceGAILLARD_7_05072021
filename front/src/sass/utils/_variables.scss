@@ -1,4 +1,4 @@
-// Grey color variables
+/// Grey color variables
 $grey-11: rgb(11, 11, 11);
 $grey-18: rgb(18, 18, 18);
 $grey-21: rgb(21, 21, 21);
@@ -25,20 +25,26 @@ $danger : $red;
 $warning : $orange;
 $info : $blue;
 
+//Colors of society
 $primary : #fd2d01;
 $secondary : #091f43;
 
-// Background color variales
+/// Background color variales
 $background-color-primary: $grey-11;
 $background-color-secondary: $grey-18;
 $background-color-tertiary: $grey-21;
 
-// Typographu variables
+/// Typography variables
 $circularStd-styles: ("Black", "BlackItalic", "Bold", "BoldItalic", "Book", "BookItalic", "Medium", "MediumItalic");
+
 
 $border-radius: 4px;
 
+$max-breakpoints : (
+    tablette    : 768px,
+    mobile : 425px
+);
 
-/////////////
+///
 $sidebar-width : 223px;
 $header-height : 20px;

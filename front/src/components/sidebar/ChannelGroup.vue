@@ -62,9 +62,12 @@ export default {
         ...mapMutations('sidebarModule',['SET_VISIBILITY']),
         ...mapMutations('createChannelDisplay',['OPEN']),
         ...mapMutations('configChannelModule',['OPEN_CONFIG','CLOSE_CONFIG']),
-        switchVisibility() {
-            this.visible = !this.visible;
-        },
+
+        /**
+         * @name switchVisibility
+         * @description switch la visibilité du channel group
+         */
+        switchVisibility() { this.visible = !this.visible; },
     }
 };
 </script>

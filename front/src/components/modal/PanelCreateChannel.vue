@@ -1,5 +1,5 @@
 <template>
-    <div type="button" class="display-settings-panel" ref="display-settings-panel" v-if="visible"  @mousedown="close">
+    <div type="button" class="display-settings-panel" ref="display-settings-create-panel"   @mousedown="close">
         <form  @mousedown.stop>
             <div class="create-panel">
                 <button class="create-panel__close-btn" type='button' @click="close" aria-label="Fermer">
@@ -41,7 +41,7 @@
                 <footer class="create-panel__footer">
                     <BtnDefault type="button" @click.stop="close">Annuler</BtnDefault>
                     <BtnDefault type="submit" class="btn-default--green create-panel__btn" 
-                        @click.prevent="create" :disabled="input == ''">
+                        @click.prevent="create">
                         Créer un channel
                     </BtnDefault>
                 </footer>                    
@@ -54,6 +54,7 @@
 import BtnDefault from "@/components/btn/BtnDefault.vue";
 import InputDefaultIcon from "@/components/form/input/inputDefaultIcon.vue";
 import { mapActions, mapMutations, mapState } from "vuex";
+import FocusHandler from "@/js/FocusHandler.js";
 
 export default {
     components: { BtnDefault, InputDefaultIcon },
@@ -63,28 +64,46 @@ export default {
         };
     },
     computed : {
-        ...mapState('createChannelDisplay',['activeGroupChannel', 'visible']),
+        ...mapState('createChannelDisplay',['activeGroupChannel']),
     },
     methods:{
         ...mapMutations('createChannelDisplay',['CLOSE']),
         ...mapActions('sidebarModule',['createChannel']),
+        /**
+         * @name handleFocus
+         * @description Initialise le gestionnaire du focus pour l'element cible
+         */
+        handleFocus() {
+            this.focusHandler = new FocusHandler(this.$refs["display-settings-create-panel"]);
+            this.focusHandler.setEvent();
+        },
+
+        /**
+         * @name close
+         * @description Ferme le display
+         */
         close(){
             this.input = '';
             this.CLOSE();
         },
+
+        /**
+         * @name create
+         * @description Crée une nouveau channel
+         */
         create(){
             if(this.input != '' && this.input != null){
                 this.createChannel({ name : this.input, description : null, channelGroupId : this.activeGroupChannel.id });
                 this.close();
             }
         },
-        update(){
-
-        },
-        delete(){
-
-        }
-    }
+    },
+    mounted() {
+        this.handleFocus();
+    },
+    unmounted() {
+        this.focusHandler.removeEvent();
+    },
 };
 </script>
 
