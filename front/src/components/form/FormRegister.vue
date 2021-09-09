@@ -168,7 +168,7 @@ export default {
                     email: this.email, 
                     password: this.password,
                     username: this.username,
-                    avatar : `avatarDefaultSet/${ avatarDefaultSet[getRandomInt(avatarDefaultSet.length)] }.svg`
+                    avatar : `http://localhost:3000/images/avatarDefaultSet/${ avatarDefaultSet[getRandomInt(avatarDefaultSet.length)] }.svg`
                 }
             );
         },
