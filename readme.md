@@ -14,7 +14,11 @@ Run the databse.sql source file
 ```
 source [the absolute path of back/database.sql]
 ```
-
+Change root and password constantes in back/.env
+```
+USER_DATABASE     =  "PLACE YOU USER_NAME HERE"
+PASSWORD_DATABASE =  "PLACE YOU PASSWORD HERE"
+```
 ## Run servers 
 ◼️ To start front  
 ```

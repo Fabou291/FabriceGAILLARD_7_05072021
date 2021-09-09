@@ -1,9 +1,9 @@
 const mysql = require("mysql");
 
 const mysqlDataBase = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : 'GSG291gsg+',
+    host     :  process.env.DOMAINE,
+    user     :  process.env.USER_DATABASE,
+    password :  process.env.PASSWORD_DATABASE,
     database : 'groupomania_social_network',
     charset : 'utf8mb4'
 });
