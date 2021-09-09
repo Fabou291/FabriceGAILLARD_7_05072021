@@ -75,9 +75,12 @@ export default {
             }
         },
 
-        async remove({ commit, dispatch }) {
+        async remove({ commit, dispatch, rootState }) {
             try {
-                await HTTPRequest.delete("user/1");
+
+                await HTTPRequest.delete(`user/${ rootState.userModule.user.id }`);
+
+                router.push({ name: "Login" });
 
                 commit("UPDATE", {
                     id: null,
@@ -87,7 +90,7 @@ export default {
                     role_id: null,
                 });
 
-                router.push({ name: "Login" });
+                
             } catch (error) {
                 dispatch("errorModule/setError", error, { root: true });
             }

@@ -22,6 +22,7 @@ export default {
             return this.reaction.list_user_id.length;
         },
         userIsIncluded(){
+            if(!this.user.id) return false;
             return this.reaction.list_user_id.includes(this.user.id.toString())
         }
     },
