@@ -71,9 +71,9 @@ const modify = (req,res,next) => {
 const remove = async (req,res,next) => {
     try{
 
-        const post = (await mysqlAsyncQuery("SELECT * FROM post WHERE id = ? AND (user_id = ? OR ?)", [req.params.id, req.userId, req.isAdmin]))[0];
+        /*const post = (await mysqlAsyncQuery("SELECT * FROM post WHERE id = ? AND (user_id = ? OR ?)", [req.params.id, req.userId, req.isAdmin]))[0];
         if(!post) throw createError.BadRequest("Impossible to remove this account")
-        if(post.image_url != null) await imageHelper.remove(post.image_url);
+        if(post.image_url != null) await imageHelper.remove(post.image_url);*/
 
         const results = await mysqlAsyncQuery("DELETE FROM post WHERE id = ? AND (user_id = ? OR ?)", [req.params.id, req.userId, req.isAdmin]);
         res.status(200).send(results);
