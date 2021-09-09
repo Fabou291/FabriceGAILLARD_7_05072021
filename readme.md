@@ -5,7 +5,7 @@
 ```
 npm install
 ```
-◼️ Install databe  
+◼️ Install database 
 Open a terminal, and run your mysql database
 ```
 mysql -u root -p
