@@ -214,7 +214,7 @@ export default {
         overflow: hidden;
         padding: 4.5px 7px;
         line-height : 1.5;
-        word-break: break-all;
+        //word-break: break-all;
         border-radius: 4px;
         @include setCircularStdFont("Book");
 

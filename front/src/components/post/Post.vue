@@ -14,7 +14,7 @@
         <div class="post__main">
             <Avatar
                 class="post__user-avatar"
-                :user="{ username: post.user_username, avatar: `http://localhost:3000/images/${post.user_avatar}` }"
+                :user="{ username: post.user_username, avatar: `${post.user_avatar}` }"
             />
 
             <div class="post__infos">
@@ -41,7 +41,7 @@
 
                 <p class="post__content" v-html="getContent" v-if="!isInModifyMode"></p>
 
-                <img :src="`http://localhost:3000/images/${post.image_url}`" v-if="post.image_url" class="post__image" :alt="`image du post n°${post.id}`" />
+                <img :src="`${post.image_url}`" v-if="post.image_url" class="post__image" :alt="`image du post n°${post.id}`" />
 
                 <div class="post__reaction">
                     <ReactionPost v-for="reaction in post.listReaction" :key="reaction" :reaction="reaction" @addReaction="addReactionToPost"  @removeReaction="removeReactionToPost"  />
@@ -280,7 +280,7 @@ export default {
         margin: 0px;
         letter-spacing: -0.1px;
         font-size: 16px;
-        line-height: 1.3;
+        line-height: 1.5;
         color: $grey-193;
         word-wrap: break-word;
     }

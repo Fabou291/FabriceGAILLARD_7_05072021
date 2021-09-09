@@ -4,7 +4,7 @@
         <div class="sidebar__container" @click.stop="">
             <div class="user">
                 <div class="user__representation">
-                    <Avatar class="user__avatar" @click="openConfigDisplay()" :user="{ username : user.username, avatar : `http://localhost:3000/images/${user.avatar}` }" />
+                    <Avatar class="user__avatar" @click="openConfigDisplay()" :user="{ username : user.username, avatar : `${user.avatar}` }" />
                     <BtnUserStatu class="user__statu" />
                 </div>
 

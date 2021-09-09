@@ -131,7 +131,7 @@
                                         <span class="btn-change-avatar__showcase">Changer l'avatar</span>
                                         <img
                                             class="btn-change-avatar__thumb"
-                                            :src="`http://localhost:3000/images/${user.avatar}`"
+                                            :src="`${user.avatar}`"
                                             :alt="`image de profil de ${user.avatar}`"
                                         />
                                     </button>

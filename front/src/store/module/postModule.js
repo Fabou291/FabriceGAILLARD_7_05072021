@@ -85,6 +85,7 @@ export default {
             else{
                 const index = reaction.list_reaction_id.indexOf(data.id);
                 list_user_id.splice( index, 1 );
+                reaction.list_reaction_id.splice( index, 1 );
             }
 
         },

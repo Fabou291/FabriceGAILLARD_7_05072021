@@ -2,6 +2,8 @@ const {mysqlDataBase, mysqlAsyncQuery} = require("../../config/mysqlConfig.js");
 const imageHelper = require("../helpers/ImageHelper.js");
 const createError = require("http-errors");
 
+
+
 /**
  * @name findAll
  * @description Récupère l'ensemble des posts.
@@ -38,7 +40,7 @@ const findOne = (req,res,next) => {
  * @param {Object} next 
  */
 const create = (req,res,next) => {
-    const imageUrl = req.file ? req.file.filename : null ;
+    const imageUrl = req.file ? "http://localhost:3000/images/" + req.file.filename : null ;
     mysqlDataBase.query( "INSERT INTO post (content, channel_id, post_id, image_url, user_id) VALUES(?,?,?,?,?)", [req.body.content, parseInt(req.body.channelId), JSON.parse(req.body.postId), imageUrl, req.userId], function(error, results, fields){
         if(error) next(error)
         else res.status(200).send({ id : results.insertId, imageUrl })
