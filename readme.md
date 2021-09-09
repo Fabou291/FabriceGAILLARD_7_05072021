@@ -15,7 +15,7 @@ Run the databse.sql source file
 source [the absolute path of back/database.sql]
 ```
 
-## Run servers
+## Run servers 
 ◼️ To start front  
 ```
 npm run front
