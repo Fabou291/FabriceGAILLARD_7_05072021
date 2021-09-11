@@ -16,6 +16,11 @@ export default class PostParser {
         return this;
     }
 
+    parseContent(){
+        this.content = this.content.replaceAll('<','&lt;').replaceAll('<','&gt;')
+        return this;
+    }
+
     getImgEmoji(emoji) {
         try{
             return `<span contentEditable="false"><img class="emoji" alt="${emoji}" src="${require("@/assets/twemoji/svg/" + emojiUnicode(emoji) + ".svg")}"></span>`;

@@ -1,4 +1,4 @@
-DROP DATABASE groupomania_social_network;
+DROP DATABASE IF EXISTS groupomania_social_network;
 CREATE DATABASE groupomania_social_network DEFAULT CHARSET = utf8mb4 DEFAULT COLLATE = utf8mb4_unicode_ci;
 USE groupomania_social_network;
 

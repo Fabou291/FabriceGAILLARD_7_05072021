@@ -40,7 +40,7 @@
                     class="form-auth__input"
                     placeholder="Saisissez le même mot de passe."
                     v-model="passwordConfirmation"
-                    @input="areSamePassword"
+                    @input="setCustomValidity"
                 />
 
 

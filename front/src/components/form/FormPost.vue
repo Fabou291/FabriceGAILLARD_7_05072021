@@ -100,7 +100,7 @@ export default {
         },
         getValue() {
             let postParser = new PostParser(this.value);
-            return postParser.parseEmoji().content;
+            return postParser.parseContent().parseEmoji().parseFakeUrl().content;
         },
         getNameToReply() {
             //Vu que ca sera restreint à répondre auniquement au post (et non au post recursif)

@@ -2,7 +2,7 @@ const {mysqlDataBase, mysqlAsyncQuery} = require("../../config/mysqlConfig.js");
 const createError = require("http-errors");
 const bcrypt = require("bcrypt");
 const imageHelper = require("../helpers/ImageHelper.js");
-
+const xss = require("xss")
 
 /**
  * @name findAll
@@ -45,7 +45,7 @@ const create = (req,res,next) => {
             INSERT INTO user (username,avatar,email,password, role_id)
             VALUES ( ?, ?, ?, ?, (SELECT id FROM role WHERE name = "user") )
         `,
-        [ req.body.username, req.body.avatar, req.body.email, req.body.password, "user" ],
+        [ xss(req.body.username), req.body.avatar, req.body.email, req.body.password, "user" ],
         function (error, results, fields) {
             if (error){
                 if(error.sqlState == "23000") next(createError.BadRequest('Email already exist'))
@@ -74,7 +74,7 @@ const modify = async (req,res,next) => {
 
         await mysqlAsyncQuery(
             "UPDATE user SET username = ?, avatar = ?, description = ? WHERE id = ? AND (id = ? OR ?)", 
-            [ req.body.username, req.body.avatar, req.body.description, req.params.id, req.userId, req.isAdmin ]
+            [ xss(req.body.username), req.body.avatar, xss(req.body.description), req.params.id, req.userId, req.isAdmin ]
         );
 
         res.status(200).send({ avatar : req.body.avatar});
@@ -96,9 +96,10 @@ const resetPassword = async (req,res,next) => {
 
         if(!req.isAdmin){
             const user = (await mysqlAsyncQuery("SELECT * FROM user WHERE id= ? AND id = ?;", [req.params.id, req.userId]))[0];
-            if (!(await bcrypt.compare(req.body.oldPassword, user.password))) throw createError.BadRequest('Incorrect password')            
+            if (!(await bcrypt.compare(req.body.oldPassword, user.password))) throw createError.BadRequest('Le mot de passe renseigné ne correspond pas à l\'actuel')            
         }
 
+        if(req.body.oldPassword == req.body.password) throw createError.BadRequest('Votre nouveau mot de passe doit être différent de l\'actuel')
 
         mysqlDataBase.query(
             `
@@ -129,22 +130,21 @@ const resetPassword = async (req,res,next) => {
 const resetMail = async (req,res,next) => {
     try{
         
-        mysqlDataBase.query(
-            `
-                UPDATE user
-                SET email = ?
-                WHERE id = ? AND (email = ? AND id = ?) 
-            `,
-            [ req.body.email, req.params.id, req.body.oldMail, req.userId ],
-            function (error, results, fields) {
+        const results = await mysqlAsyncQuery(`
+            UPDATE user
+            SET email = ?
+            WHERE id = ? AND (email = ? AND id = ?) 
+        `,
+        [ req.body.email, req.params.id, req.body.oldMail, req.userId ]);
 
-                if (error) next(error);
-                else if(!results.affectedRows) next(createError.BadRequest("L'email ne correspond à celle que vous detenez actuellement"))
-                else res.status(200).send(results);
-            }
-        );        
+        
+        if(!results.affectedRows) next(createError.BadRequest("L'email ne correspond à celle que vous detenez actuellement"))
+        else res.status(200).send(results);
+
     }
     catch(e){
+        console.log('CODE', e.code)
+        if(e.code && e.code == 'ER_DUP_ENTRY') next(createError.BadRequest('Email already used'))
         next(e)
     }
 }

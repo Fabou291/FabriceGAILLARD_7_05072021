@@ -1,6 +1,6 @@
 const {mysqlDataBase} = require("../../config/mysqlConfig.js");
 const createError = require("http-errors");
-
+const xss = require("xss");
 
 /**
  * @name findAll
@@ -40,7 +40,7 @@ const findOne = (req,res,next) => {
 const create = (req,res,next) => {
     if(!req.isAdmin) next(createError.Unauthorized('Unauthorized to create a group channel'))
     else{
-        mysqlDataBase.query( "INSERT INTO channel_group (name) VALUES(?)", [req.body.name], function(error, results, fields){
+        mysqlDataBase.query( "INSERT INTO channel_group (name) VALUES(?)", [xss(req.body.name)], function(error, results, fields){
             if(error) next(error)
             else res.status(200).send(results)
         })        
@@ -55,7 +55,7 @@ const create = (req,res,next) => {
  * @param {Object} next 
  */
 const modify = (req,res,next) => {
-    mysqlDataBase.query( "UPDATE channel_group SET name = ? WHERE id = ? AND ?", [req.body.name,req.params.id, req.isAdmin], function(error, results, fields){
+    mysqlDataBase.query( "UPDATE channel_group SET name = ? WHERE id = ? AND ?", [xss(req.body.name),req.params.id, req.isAdmin], function(error, results, fields){
         if(error) next(error)
         else res.status(200).send(results)
     })

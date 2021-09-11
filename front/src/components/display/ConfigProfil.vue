@@ -82,7 +82,7 @@
 
                             <hr />
 
-                            <button type="button" class="link-btn link-btn--danger config-sidebar__btn" @click="remove">
+                            <button type="button" class="link-btn link-btn--danger config-sidebar__btn" @click="remove(); shutDownConfigDisplay() ">
                                 Supprimer le compte
                             </button>
                         </div>

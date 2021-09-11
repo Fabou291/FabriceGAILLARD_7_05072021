@@ -1,5 +1,7 @@
 const {mysqlDataBase} = require("../../config/mysqlConfig.js");
 const createError = require("http-errors");
+const xss = require("xss");
+
 /**
  * @name findAll
  * @description Récupère l'ensemble des rôles.
@@ -38,7 +40,7 @@ const findOne = (req,res,next) => {
 const create = (req,res,next) => {
     if(!req.isAdmin) next(createError.Unauthorized('Unauthorized to create a role'))
     else{
-        mysqlDataBase.query( "INSERT INTO role (name) VALUES(?)", [req.body.role.name], function(error, results, fields){
+        mysqlDataBase.query( "INSERT INTO role (name) VALUES(?)", [xss(req.body.role.name)], function(error, results, fields){
             if(error) next(error)
             else res.status(200).send(results)
         })
@@ -53,7 +55,7 @@ const create = (req,res,next) => {
  * @param {*} next 
  */
 const modify = (req,res,next) => {
-    mysqlDataBase.query( "UPDATE role SET name = ? WHERE id = ? AND ?", [req.body.role.name,req.params.id, req.isAdmin], function(error, results, fields){
+    mysqlDataBase.query( "UPDATE role SET name = ? WHERE id = ? AND ?", [xss(req.body.role.name),req.params.id, req.isAdmin], function(error, results, fields){
         if(error) next(error)
         else res.status(200).send(results)
     })

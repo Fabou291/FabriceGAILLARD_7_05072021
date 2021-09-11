@@ -102,7 +102,7 @@ export default {
          */
         parseContent() {
             let postParser = new PostParser(this.post.content);
-            return postParser.parseEmoji().parseUrl().content;
+            return postParser.parseContent().parseEmoji().parseUrl().content;
         },
 
         /**

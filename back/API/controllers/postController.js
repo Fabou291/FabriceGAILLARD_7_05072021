@@ -1,7 +1,7 @@
 const {mysqlDataBase, mysqlAsyncQuery} = require("../../config/mysqlConfig.js");
 const imageHelper = require("../helpers/ImageHelper.js");
 const createError = require("http-errors");
-
+const xss = require("xss")
 
 
 /**
@@ -41,7 +41,7 @@ const findOne = (req,res,next) => {
  */
 const create = (req,res,next) => {
     const imageUrl = req.file ? "http://localhost:3000/images/" + req.file.filename : null ;
-    mysqlDataBase.query( "INSERT INTO post (content, channel_id, post_id, image_url, user_id) VALUES(?,?,?,?,?)", [req.body.content, parseInt(req.body.channelId), JSON.parse(req.body.postId), imageUrl, req.userId], function(error, results, fields){
+    mysqlDataBase.query( "INSERT INTO post (content, channel_id, post_id, image_url, user_id) VALUES(?,?,?,?,?)", [xss(req.body.content), parseInt(req.body.channelId), JSON.parse(req.body.postId), imageUrl, req.userId], function(error, results, fields){
         if(error) next(error)
         else res.status(200).send({ id : results.insertId, imageUrl })
     })
@@ -55,7 +55,7 @@ const create = (req,res,next) => {
  * @param {Object} next 
  */
 const modify = (req,res,next) => {
-    mysqlDataBase.query( "UPDATE post SET content = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND (user_id = ? OR ?)", [req.body.content, req.params.id, req.userId, req.isAdmin], function(error, results, fields){
+    mysqlDataBase.query( "UPDATE post SET content = ?, updated_at = CURRENT_TIMESTAMP WHERE id = ? AND (user_id = ? OR ?)", [xss(req.body.content), req.params.id, req.userId, req.isAdmin], function(error, results, fields){
         if(error) next(error)
         else res.status(200).send(results)
     })

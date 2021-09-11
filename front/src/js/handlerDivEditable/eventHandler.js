@@ -56,7 +56,7 @@ export default class EventHandler{
      */
     pasteHandler = (e) => {
         e.preventDefault();
-        let paste = new PostParser(e.clipboardData.getData("text").trim()).parseEmoji().parseFakeUrl().content;
+        let paste = new PostParser(e.clipboardData.getData("text").trim()).parseContent().parseEmoji().parseFakeUrl().content;
         const selection = window.getSelection();
 
         const spanNode = document.createElement('span');
@@ -78,7 +78,6 @@ export default class EventHandler{
         
         this.parseImgHasTextAround();
 
-        console.log('e')
 
         lastNode = lastNode.nodeType == Node.TEXT_NODE 
         ? lastNode

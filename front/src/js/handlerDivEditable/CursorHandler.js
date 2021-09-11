@@ -71,13 +71,6 @@ class CursorHandler {
         this.temp.isCollapsed = true;
         this.temp.selection = { anchorOffset : null, focusOffset, anchorNode : null, focusNode };
 
-        console.log(
-            this.temp.textContentLength,
-            this.temp.textLengthFocusNode,
-            this.temp.focusNodeIndex,
-            this.temp.isCollapsed,
-            this.temp.selection
-        )
     }
 
     /**
@@ -186,9 +179,6 @@ class CursorHandler {
 
                 //-- Reajustement -  Gere la suppression touche suppr
 
-                console.log(this.temp.clonedNode.childNodes)
-                console.log(this.temp.focusNodeIndex)
-
                 if (
                     this.onDelete.direction == NEXT &&
                     selection.focusOffset == 1 &&
@@ -197,8 +187,6 @@ class CursorHandler {
                     this.temp.cursorPosition--;
                 }
 
-
-                    
                 if (
                     nodeToReplaceCursor &&
                     nodeToReplaceCursor.nextSibling &&
@@ -210,12 +198,6 @@ class CursorHandler {
                     this.temp.cursorPosition--;
                 }
 
-                /*console.log({
-                    temp: { ...this.temp },
-                    count,
-                    nbCharacterAfter,
-                    diff,
-                });*/
                 let offset = this.temp.cursorPosition - count + diff;
                 if(!nodeToReplaceCursor){
                     nodeToReplaceCursor = this.node.lastChild;

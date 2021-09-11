@@ -1,6 +1,7 @@
 const DateHandler = require("../helpers/DateHandler.js");
 const { mysqlDataBase, mysqlAsyncQuery } = require("../../config/mysqlConfig.js");
 const createHttpError = require("http-errors");
+const xss = require("xss");
 
 /**
  * @name findAll
@@ -155,14 +156,13 @@ const create = (req, res, next) => {
     else{
         mysqlDataBase.query(
             "INSERT INTO channel (name,description,channel_group_id) VALUES(?, ? ,?)",
-            [req.body.name, req.body.description, req.body.channelGroupId],
+            [xss(req.body.name), xss(req.body.description), req.body.channelGroupId],
             function(error, results, fields) {
                 if (error) next(error);
                 else res.status(200).json(results);
             }
         );        
     }
-
 };
 
 /**
@@ -175,7 +175,7 @@ const create = (req, res, next) => {
 const modify = (req, res, next) => {
     mysqlDataBase.query(
         `UPDATE channel SET name = ?, description = ?, channel_group_id = ? WHERE id = ? AND ?`,
-        [req.body.name, req.body.description, req.body.channelGroupId, req.params.id, req.isAdmin],
+        [xss(req.body.name), xss(req.body.description), req.body.channelGroupId, req.params.id, req.isAdmin],
         function(error, results, fields) {
             if (error) next(error);
             else res.status(200).json(results);
